@@ -105,7 +105,14 @@ const Preview = ({ designState }: PreviewProps) => {
       {/* MAIN CONTENT */}
       <div
         className="p-8 space-y-8"
-        style={{ backgroundColor: p.background, color: p.text }}
+        style={{
+          backgroundColor: p.background,
+          color: p.text,
+          backgroundImage:
+            vibe.id === "gradient-bloom"
+              ? `linear-gradient(135deg, ${colors.primary}15 0%, ${colors.secondary}15 50%, ${colors.accent}15 100%)`
+              : undefined,
+        }}
       >
         {/* HERO SECTION */}
         <div className="space-y-4">
@@ -197,6 +204,22 @@ const Preview = ({ designState }: PreviewProps) => {
             >
               Link
             </button>
+
+            {/* Gradient button (if gradient-bloom) */}
+            {vibe.id === "gradient-bloom" && (
+              <button
+                className="px-6 py-2.5 text-sm font-semibold rounded-lg"
+                style={{
+                  fontFamily: fontPair.heading,
+                  backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                  color: "#ffffff",
+                  border: "none",
+                  boxShadow: shadowMap[ui.buttonPrimary.shadow],
+                }}
+              >
+                Gradient
+              </button>
+            )}
           </div>
         </div>
 

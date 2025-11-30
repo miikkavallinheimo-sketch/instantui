@@ -24,9 +24,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#0F766E", "#0D9488", "#14B8A6", "#2DD4BF"],
-      secondary: ["#475569", "#64748B", "#78716C"],
-      accent: ["#F97316", "#FB923C", "#FDBA74"],
+      primary: ["#0F766E", "#0D9488", "#14B8A6", "#2DD4BF", "#06B6D4", "#0891B2"],
+      secondary: ["#475569", "#64748B", "#78716C", "#9CA3AF", "#6B7280", "#1E293B"],
+      accent: ["#F97316", "#FB923C", "#FDBA74", "#FCD34D", "#FBBF24", "#F59E0B"],
     },
   },
 
@@ -54,9 +54,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#2563EB", "#1D4ED8", "#1E40AF", "#3B82F6"],
-      secondary: ["#4F46E5", "#6366F1", "#818CF8"],
-      accent: ["#F97316", "#FB923C", "#FDBA74"],
+      primary: ["#2563EB", "#1D4ED8", "#1E40AF", "#3B82F6", "#60A5FA", "#0EA5E9"],
+      secondary: ["#4F46E5", "#6366F1", "#818CF8", "#A5B4FC", "#C4B5FD", "#7C3AED"],
+      accent: ["#F97316", "#FB923C", "#FDBA74", "#FCD34D", "#FBBF24", "#EF4444"],
     },
   },
 
@@ -83,9 +83,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "sm", shadow: "none", border: "strong" },
     },
     colorVariations: {
-      primary: ["#111827", "#1F2937", "#374151"],
-      secondary: ["#F97316", "#FB923C", "#FDBA74"],
-      accent: ["#EC4899", "#F472B6", "#F9A8D4"],
+      primary: ["#111827", "#1F2937", "#374151", "#0F172A", "#18181B", "#2D3748"],
+      secondary: ["#F97316", "#FB923C", "#FDBA74", "#FCD34D", "#EF4444", "#DC2626"],
+      accent: ["#EC4899", "#F472B6", "#F9A8D4", "#BE123C", "#7C2D12", "#E11D48"],
     },
   },
 
@@ -112,9 +112,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#FB7185", "#F472B6", "#F9A8D4"],
-      secondary: ["#38BDF8", "#7DD3FC", "#BAE6FD"],
-      accent: ["#A78BFA", "#C4B5FD", "#DDD6FE"],
+      primary: ["#FB7185", "#F472B6", "#F9A8D4", "#F87171", "#FCA5A5", "#FEE2E2"],
+      secondary: ["#38BDF8", "#7DD3FC", "#BAE6FD", "#0EA5E9", "#06B6D4", "#67E8F9"],
+      accent: ["#A78BFA", "#C4B5FD", "#DDD6FE", "#E9D5FF", "#F3E8FF", "#FECACA"],
     },
   },
 
@@ -141,9 +141,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#38BDF8", "#7DD3FC", "#BAE6FD"],
-      secondary: ["#6366F1", "#818CF8", "#A5B4FC"],
-      accent: ["#22C55E", "#4ADE80", "#86EFAC"],
+      primary: ["#38BDF8", "#7DD3FC", "#BAE6FD", "#0EA5E9", "#06B6D4", "#00D9FF"],
+      secondary: ["#6366F1", "#818CF8", "#A5B4FC", "#8B5CF6", "#A78BFA", "#C4B5FD"],
+      accent: ["#22C55E", "#4ADE80", "#86EFAC", "#10B981", "#34D399", "#6EE7B7"],
     },
   },
 
@@ -170,9 +170,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#D4AF37", "#EAB308", "#FBBF24"],
-      secondary: ["#F97316", "#FB923C", "#FDBA74"],
-      accent: ["#ECFEFF", "#CFFAFE", "#A5F3FC"],
+      primary: ["#D4AF37", "#EAB308", "#FBBF24", "#F59E0B", "#F78C6B", "#B8860B"],
+      secondary: ["#F97316", "#FB923C", "#FDBA74", "#FCD34D", "#DC2626", "#7C2D12"],
+      accent: ["#ECFEFF", "#CFFAFE", "#A5F3FC", "#06B6D4", "#0891B2", "#E0F2FE"],
     },
   },
 
@@ -199,9 +199,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#22D3EE", "#06B6D4", "#0891B2"],
-      secondary: ["#A855F7", "#C084FC", "#D8B4FE"],
-      accent: ["#67E8F9", "#22D3EE", "#06B6D4"],
+      primary: ["#22D3EE", "#06B6D4", "#0891B2", "#00D9FF", "#06F1FF", "#0E7490"],
+      secondary: ["#A855F7", "#C084FC", "#D8B4FE", "#8B5CF6", "#E879F9", "#D946EF"],
+      accent: ["#67E8F9", "#22D3EE", "#06B6D4", "#0EA5E9", "#00D9FF", "#14B8A6"],
     },
   },
 
@@ -228,9 +228,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#EC4899", "#F472B6", "#F9A8D4"],
-      secondary: ["#6366F1", "#818CF8", "#A5B4FC"],
-      accent: ["#F97316", "#FB923C", "#FDBA74"],
+      primary: ["#EC4899", "#F472B6", "#F9A8D4", "#F1679F", "#BE185D", "#DB2777"],
+      secondary: ["#6366F1", "#818CF8", "#A5B4FC", "#7C3AED", "#8B5CF6", "#60A5FA"],
+      accent: ["#F97316", "#FB923C", "#FDBA74", "#FCD34D", "#DC2626", "#EF4444"],
     },
   },
 
@@ -257,9 +257,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#D97706", "#F59E0B", "#FBBF24"],
-      secondary: ["#92400E", "#B45309", "#D97706"],
-      accent: ["#10B981", "#34D399", "#6EE7B7"],
+      primary: ["#D97706", "#F59E0B", "#FBBF24", "#78350F", "#B45309", "#CA8A04"],
+      secondary: ["#92400E", "#B45309", "#D97706", "#DC2626", "#7C2D12", "#EF4444"],
+      accent: ["#10B981", "#34D399", "#6EE7B7", "#059669", "#047857", "#14B8A6"],
     },
   },
 
@@ -286,9 +286,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "none", shadow: "none", border: "strong" },
     },
     colorVariations: {
-      primary: ["#F97316", "#FB923C", "#FDBA74"],
-      secondary: ["#22C55E", "#4ADE80", "#86EFAC"],
-      accent: ["#3B82F6", "#60A5FA", "#93C5FD"],
+      primary: ["#F97316", "#FB923C", "#FDBA74", "#EF4444", "#DC2626", "#92400E"],
+      secondary: ["#22C55E", "#4ADE80", "#86EFAC", "#14B8A6", "#10B981", "#047857"],
+      accent: ["#3B82F6", "#60A5FA", "#93C5FD", "#1D4ED8", "#1E40AF", "#3B82F6"],
     },
   },
 
@@ -315,9 +315,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "sm", shadow: "none", border: "strong" },
     },
     colorVariations: {
-      primary: ["#111827", "#1F2937", "#374151"],
-      secondary: ["#BE123C", "#DC2626", "#EF4444"],
-      accent: ["#F97316", "#FB923C", "#FDBA74"],
+      primary: ["#111827", "#1F2937", "#374151", "#0F172A", "#18181B", "#2D3748"],
+      secondary: ["#BE123C", "#DC2626", "#EF4444", "#991B1B", "#7C2D12", "#DC2626"],
+      accent: ["#F97316", "#FB923C", "#FDBA74", "#FCD34D", "#FBBF24", "#EF4444"],
     },
   },
 
@@ -344,9 +344,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
     colorVariations: {
-      primary: ["#22C55E", "#4ADE80", "#86EFAC"],
-      secondary: ["#2DD4BF", "#67E8F9", "#A5F3FC"],
-      accent: ["#38BDF8", "#7DD3FC", "#BAE6FD"],
+      primary: ["#22C55E", "#4ADE80", "#86EFAC", "#10B981", "#34D399", "#14B8A6"],
+      secondary: ["#2DD4BF", "#67E8F9", "#A5F3FC", "#06B6D4", "#0891B2", "#14B8A6"],
+      accent: ["#38BDF8", "#7DD3FC", "#BAE6FD", "#0EA5E9", "#06B6D4", "#0891B2"],
     },
   },
 };
