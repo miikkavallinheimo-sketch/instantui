@@ -20,6 +20,15 @@ const shadowMap = {
   strong: "0 22px 60px rgba(15,23,42,0.35)",
 } as const;
 
+const sizeMap = {
+  xs: "0.75rem",   // 12px
+  sm: "0.875rem",  // 14px
+  md: "1rem",      // 16px
+  lg: "1.125rem",  // 18px
+  xl: "1.25rem",   // 20px
+  "2xl": "1.5rem", // 24px
+} as const;
+
 const ensureReadable = (bg: string, preferred: string): string => {
   const black = "#000000";
   const white = "#ffffff";
@@ -46,6 +55,7 @@ const Preview = ({ designState }: PreviewProps) => {
   const { colors, fontPair, vibe } = designState;
   const p = vibe.palette;
   const ui = vibe.ui;
+  const typo = vibe.typography;
 
   const rootStyle: React.CSSProperties = {
     "--primary": colors.primary,
@@ -71,7 +81,7 @@ const Preview = ({ designState }: PreviewProps) => {
 
   return (
     <div
-      className="w-full h-full rounded-3xl bg-slate-950 border border-slate-800/50 overflow-hidden"
+      className="w-full min-h-[600px] rounded-3xl bg-slate-950 border border-slate-800/50 overflow-hidden"
       style={rootStyle}
     >
       {/* HEADER */}
@@ -117,12 +127,24 @@ const Preview = ({ designState }: PreviewProps) => {
         {/* HERO SECTION */}
         <div className="space-y-4">
           <h2
-            className="text-3xl font-bold"
-            style={{ fontFamily: fontPair.heading }}
+            style={{
+              fontFamily: fontPair.heading,
+              fontSize: sizeMap[typo.heading.size],
+              fontWeight: typo.heading.weight,
+              fontStyle: typo.heading.style,
+            }}
           >
             Design System
           </h2>
-          <p className="text-sm max-w-md opacity-80">
+          <p
+            className="max-w-md opacity-80"
+            style={{
+              fontFamily: fontPair.body,
+              fontSize: sizeMap[typo.body.size],
+              fontWeight: typo.body.weight,
+              fontStyle: typo.body.style,
+            }}
+          >
             Full color and typography system with UI tokens for consistent design
           </p>
         </div>
@@ -133,9 +155,12 @@ const Preview = ({ designState }: PreviewProps) => {
           <div className="flex gap-3 flex-wrap">
             {/* Primary button */}
             <button
-              className="px-6 py-2.5 text-sm font-semibold"
+              className="px-6 py-2.5"
               style={{
                 fontFamily: fontPair.heading,
+                fontSize: sizeMap[typo.accent.size],
+                fontWeight: typo.accent.weight,
+                fontStyle: typo.accent.style,
                 borderRadius: radiusMap[ui.buttonPrimary.radius],
                 boxShadow: shadowMap[ui.buttonPrimary.shadow],
                 borderWidth: ui.buttonPrimary.border === "none" ? 0 : 1,
@@ -154,9 +179,12 @@ const Preview = ({ designState }: PreviewProps) => {
 
             {/* Secondary button (outline) */}
             <button
-              className="px-6 py-2.5 text-sm font-semibold bg-transparent"
+              className="px-6 py-2.5 bg-transparent"
               style={{
                 fontFamily: fontPair.heading,
+                fontSize: sizeMap[typo.accent.size],
+                fontWeight: typo.accent.weight,
+                fontStyle: typo.accent.style,
                 borderRadius: radiusMap[ui.buttonSecondary.radius],
                 boxShadow: shadowMap[ui.buttonSecondary.shadow],
                 borderWidth:
@@ -170,9 +198,12 @@ const Preview = ({ designState }: PreviewProps) => {
 
             {/* Accent button */}
             <button
-              className="px-6 py-2.5 text-sm font-semibold"
+              className="px-6 py-2.5"
               style={{
                 fontFamily: fontPair.heading,
+                fontSize: sizeMap[typo.accent.size],
+                fontWeight: typo.accent.weight,
+                fontStyle: typo.accent.style,
                 borderRadius: radiusMap[ui.buttonPrimary.radius],
                 boxShadow: shadowMap[ui.buttonPrimary.shadow],
                 backgroundColor: colors.accent,
@@ -185,9 +216,12 @@ const Preview = ({ designState }: PreviewProps) => {
 
             {/* Ghost button */}
             <button
-              className="px-6 py-2.5 text-sm font-semibold"
+              className="px-6 py-2.5"
               style={{
                 fontFamily: fontPair.heading,
+                fontSize: sizeMap[typo.accent.size],
+                fontWeight: typo.accent.weight,
+                fontStyle: typo.accent.style,
                 borderRadius: radiusMap[ui.buttonPrimary.radius],
                 backgroundColor: "transparent",
                 color: colors.primary,
@@ -199,8 +233,14 @@ const Preview = ({ designState }: PreviewProps) => {
 
             {/* Text link */}
             <button
-              className="px-0 py-2 text-sm underline"
-              style={{ color: colors.primary, fontFamily: fontPair.body }}
+              className="px-0 py-2 underline"
+              style={{
+                color: colors.primary,
+                fontFamily: fontPair.body,
+                fontSize: sizeMap[typo.accent.size],
+                fontWeight: typo.accent.weight,
+                fontStyle: typo.accent.style,
+              }}
             >
               Link
             </button>
@@ -208,9 +248,12 @@ const Preview = ({ designState }: PreviewProps) => {
             {/* Gradient button (if gradient-bloom) */}
             {vibe.id === "gradient-bloom" && (
               <button
-                className="px-6 py-2.5 text-sm font-semibold rounded-lg"
+                className="px-6 py-2.5 rounded-lg"
                 style={{
                   fontFamily: fontPair.heading,
+                  fontSize: sizeMap[typo.accent.size],
+                  fontWeight: typo.accent.weight,
+                  fontStyle: typo.accent.style,
                   backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
                   color: "#ffffff",
                   border: "none",
@@ -239,12 +282,27 @@ const Preview = ({ designState }: PreviewProps) => {
               }}
             >
               <div
-                className="text-xs font-bold mb-1"
-                style={{ fontFamily: fontPair.heading, color: colors.primary }}
+                className="mb-1"
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap[typo.accent.size],
+                  fontWeight: typo.accent.weight,
+                  fontStyle: typo.accent.style,
+                  color: colors.primary,
+                }}
               >
                 Feature
               </div>
-              <div className="text-xs leading-relaxed" style={{ color: p.textMuted }}>
+              <div
+                className="leading-relaxed"
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap[typo.body.size],
+                  fontWeight: typo.body.weight,
+                  fontStyle: typo.body.style,
+                  color: p.textMuted,
+                }}
+              >
                 Primary colored border accent
               </div>
             </div>
@@ -261,12 +319,27 @@ const Preview = ({ designState }: PreviewProps) => {
               }}
             >
               <div
-                className="text-xs font-bold mb-1"
-                style={{ fontFamily: fontPair.heading, color: colors.secondary }}
+                className="mb-1"
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap[typo.accent.size],
+                  fontWeight: typo.accent.weight,
+                  fontStyle: typo.accent.style,
+                  color: colors.secondary,
+                }}
               >
                 Secondary
               </div>
-              <div className="text-xs leading-relaxed" style={{ color: p.textMuted }}>
+              <div
+                className="leading-relaxed"
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap[typo.body.size],
+                  fontWeight: typo.body.weight,
+                  fontStyle: typo.body.style,
+                  color: p.textMuted,
+                }}
+              >
                 Secondary color accent
               </div>
             </div>
@@ -283,12 +356,27 @@ const Preview = ({ designState }: PreviewProps) => {
               }}
             >
               <div
-                className="text-xs font-bold mb-1"
-                style={{ fontFamily: fontPair.heading, color: colors.accent }}
+                className="mb-1"
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap[typo.accent.size],
+                  fontWeight: typo.accent.weight,
+                  fontStyle: typo.accent.style,
+                  color: colors.accent,
+                }}
               >
                 Accent
               </div>
-              <div className="text-xs leading-relaxed" style={{ color: p.textMuted }}>
+              <div
+                className="leading-relaxed"
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap[typo.body.size],
+                  fontWeight: typo.body.weight,
+                  fontStyle: typo.body.style,
+                  color: p.textMuted,
+                }}
+              >
                 Highlight important content
               </div>
             </div>
@@ -304,10 +392,27 @@ const Preview = ({ designState }: PreviewProps) => {
                 borderColor: cardBorderColor,
               }}
             >
-              <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap[typo.heading.size],
+                  fontWeight: typo.heading.weight,
+                  fontStyle: typo.heading.style,
+                  color: colors.primary,
+                }}
+              >
                 42
               </div>
-              <div className="text-xs mt-1" style={{ color: p.textMuted }}>
+              <div
+                className="mt-1"
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap[typo.body.size],
+                  fontWeight: typo.body.weight,
+                  fontStyle: typo.body.style,
+                  color: p.textMuted,
+                }}
+              >
                 Stat label
               </div>
             </div>
@@ -346,14 +451,36 @@ const Preview = ({ designState }: PreviewProps) => {
         <div className="space-y-3">
           <div className="text-xs font-semibold opacity-60">Typography</div>
           <div className="space-y-2">
-            <div style={{ fontFamily: fontPair.heading, fontSize: "18px", fontWeight: 600 }}>
-              Heading (18px, 600 weight)
+            <div
+              style={{
+                fontFamily: fontPair.heading,
+                fontSize: sizeMap[typo.heading.size],
+                fontWeight: typo.heading.weight,
+                fontStyle: typo.heading.style,
+              }}
+            >
+              Heading ({sizeMap[typo.heading.size]}, {typo.heading.weight} weight)
             </div>
-            <div style={{ fontFamily: fontPair.body, fontSize: "14px" }}>
-              Body text (14px) - Main content runs here with comfortable line-height
+            <div
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap[typo.body.size],
+                fontWeight: typo.body.weight,
+                fontStyle: typo.body.style,
+              }}
+            >
+              Body text ({sizeMap[typo.body.size]}) - Main content runs here with comfortable line-height
             </div>
-            <div style={{ fontFamily: fontPair.body, fontSize: "12px", opacity: 0.7 }}>
-              Small / Muted (12px, 70% opacity)
+            <div
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap[typo.accent.size],
+                fontWeight: typo.accent.weight,
+                fontStyle: typo.accent.style,
+                opacity: 0.7,
+              }}
+            >
+              Small / Muted ({sizeMap[typo.accent.size]}, {typo.accent.weight} weight)
             </div>
           </div>
         </div>

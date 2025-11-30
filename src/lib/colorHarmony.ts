@@ -2,45 +2,14 @@
  * Väriharmonia-engine: generoi väriyhdistelmiä väriteorian perusteella
  */
 
+import { hslToHex } from "./colorUtils";
+
 export type HarmonyType = "tetradic" | "analogous" | "complementary" | "triadic" | "split-complementary";
 
 interface HarmonyConfig {
   type: HarmonyType;
   saturationVariation: number; // 0-20: kuinka paljon saturaatio vaihtelee
   lightnessVariation: number;  // 0-20: kuinka paljon lightness vaihtelee
-}
-
-function hslToHex(h: number, s: number, l: number): string {
-  h = h % 360;
-  s = Math.max(0, Math.min(100, s));
-  l = Math.max(0, Math.min(100, l));
-
-  const c = ((100 - Math.abs(2 * l - 100)) * s) / 100;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = l / 100 - c / 2;
-
-  let r = 0, g = 0, b = 0;
-
-  if (h >= 0 && h < 60) {
-    r = c; g = x; b = 0;
-  } else if (h >= 60 && h < 120) {
-    r = x; g = c; b = 0;
-  } else if (h >= 120 && h < 180) {
-    r = 0; g = c; b = x;
-  } else if (h >= 180 && h < 240) {
-    r = 0; g = x; b = c;
-  } else if (h >= 240 && h < 300) {
-    r = x; g = 0; b = c;
-  } else {
-    r = c; g = 0; b = x;
-  }
-
-  const toHex = (n: number) => {
-    const hex = Math.round((n + m) * 255).toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-  };
-
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
 }
 
 function randomInRange(min: number, max: number, seed: number): number {

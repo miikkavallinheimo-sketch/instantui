@@ -1,6 +1,12 @@
 import type { ColorSet, VibePreset, ColorLocks } from "./types";
-import { contrastRatio } from "./colorUtils";
-import { generateHarmony, randomHarmonyType } from "./colorHarmony";
+import { contrastRatio, hexToHsl } from "./colorUtils";
+import { generateHarmony, randomHarmonyType, type HarmonyType } from "./colorHarmony";
+
+function randomInRange(min: number, max: number, seed: number): number {
+  const x = Math.sin(seed) * 10000;
+  const frac = x - Math.floor(x);
+  return min + frac * (max - min);
+}
 
 /**
  * Valitsee tekstivärin taustalle niin, että kontrasti on riittävä.
@@ -32,7 +38,7 @@ function ensureReadableText(bg: string, preferred: string): string {
 }
 
 /**
- * Generoi värit vibe-paleteista käyttäen väriharmonia-algoritmia.
+ * Generoi värit käyttäen väriharmonia-algoritmia vibe:n base-väristä.
  * Jos lukittu, käytetään edellisen tilan arvoja.
  */
 export function generateColors(
@@ -53,23 +59,52 @@ export function generateColors(
   const background =
     l.background && prevColors ? prevColors.background : base.background;
 
-  // Käytä väriharmonia-algoritmia generoidaksesi harmoniset värit
+  // Jos kaikki värit on lukittu, käytetään edellisiä arvoja
+  if (
+    l.primary &&
+    l.secondary &&
+    l.accent &&
+    prevColors
+  ) {
+    const preferredText =
+      l.text && prevColors ? prevColors.text : base.text;
+    const text = ensureReadableText(background, preferredText);
+    return {
+      ...prevColors,
+      background,
+      text,
+    };
+  }
+
+  // Muunna vibe:n base-primary hex → HSL
+  const baseHsl = hexToHsl(base.primary);
+
+  // Valitse harmonia-tyyppi seedin perusteella
   const harmonyType = randomHarmonyType(seed);
+
+  // Generoi harmoniset värit käyttäen väriharmonia-algoritmia
   const harmony = generateHarmony(
-    220, // oletusarvo primaarille hue (voidaan optimoida vibelle)
-    65,  // saturaatio
-    50,  // lightness
+    baseHsl.h,
+    baseHsl.s,
+    baseHsl.l,
     harmonyType,
     seed,
     {
-      saturationVariation: 12,
-      lightnessVariation: 10,
+      type: harmonyType,
+      saturationVariation: 15, // Vaihtelua saturaatiossa
+      lightnessVariation: 12,  // Vaihtelua lightnessissä
     }
   );
 
-  const primary = l.primary && prevColors ? prevColors.primary : harmony.primary;
-  const secondary = l.secondary && prevColors ? prevColors.secondary : harmony.secondary;
-  const accent = l.accent && prevColors ? prevColors.accent : harmony.accent;
+  // Käytä lukituksia tai generoituja värejä
+  const primary =
+    l.primary && prevColors ? prevColors.primary : harmony.primary;
+
+  const secondary =
+    l.secondary && prevColors ? prevColors.secondary : harmony.secondary;
+
+  const accent =
+    l.accent && prevColors ? prevColors.accent : harmony.accent;
 
   const preferredText =
     l.text && prevColors ? prevColors.text : base.text;
