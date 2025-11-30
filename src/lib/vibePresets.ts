@@ -22,6 +22,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "lg", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
+      typography: {
+        heading: { size: "xl", weight: 600, style: "normal" },
+        body: { size: "sm", weight: 400, style: "normal" },
+        accent: { size: "xs", weight: 500, style: "italic" },
+      },
     },
     colorVariations: {
       primary: ["#0F766E", "#0D9488", "#14B8A6", "#2DD4BF", "#06B6D4", "#0891B2"],
@@ -52,6 +57,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "lg", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
+      typography: {
+        heading: { size: "2xl", weight: 700, style: "normal" },
+        body: { size: "md", weight: 400, style: "normal" },
+        accent: { size: "sm", weight: 600, style: "normal" },
+      },
     },
     colorVariations: {
       primary: ["#2563EB", "#1D4ED8", "#1E40AF", "#3B82F6", "#60A5FA", "#0EA5E9"],
@@ -81,6 +91,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "none", shadow: "none", border: "strong" },
       buttonSecondary: { radius: "none", shadow: "none", border: "strong" },
       card: { radius: "sm", shadow: "none", border: "strong" },
+      typography: {
+        heading: { size: "2xl", weight: 800, style: "normal" },
+        body: { size: "sm", weight: 400, style: "normal" },
+        accent: { size: "sm", weight: 700, style: "normal" },
+      },
     },
     colorVariations: {
       primary: ["#111827", "#1F2937", "#374151", "#0F172A", "#18181B", "#2D3748"],
@@ -110,6 +125,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "full", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "full", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
+      typography: {
+        heading: { size: "xl", weight: 700, style: "italic" },
+        body: { size: "md", weight: 400, style: "normal" },
+        accent: { size: "sm", weight: 500, style: "italic" },
+      },
     },
     colorVariations: {
       primary: ["#FB7185", "#F472B6", "#F9A8D4", "#F87171", "#FCA5A5", "#FEE2E2"],
@@ -139,6 +159,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
+      typography: {
+        heading: { size: "2xl", weight: 700, style: "normal" },
+        body: { size: "sm", weight: 400, style: "normal" },
+        accent: { size: "xs", weight: 600, style: "italic" },
+      },
     },
     colorVariations: {
       primary: ["#38BDF8", "#7DD3FC", "#BAE6FD", "#0EA5E9", "#06B6D4", "#00D9FF"],
@@ -226,6 +251,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "lg", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
+      typography: {
+        heading: { size: "2xl", weight: 800, style: "italic" },
+        body: { size: "md", weight: 500, style: "normal" },
+        accent: { size: "sm", weight: 700, style: "italic" },
+      },
     },
     colorVariations: {
       primary: ["#EC4899", "#F472B6", "#F9A8D4", "#F1679F", "#BE185D", "#DB2777"],
@@ -255,6 +285,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "sm", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "sm", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
+      typography: {
+        heading: { size: "2xl", weight: 700, style: "italic" },
+        body: { size: "md", weight: 400, style: "normal" },
+        accent: { size: "sm", weight: 600, style: "italic" },
+      },
     },
     colorVariations: {
       primary: ["#D97706", "#F59E0B", "#FBBF24", "#78350F", "#B45309", "#CA8A04"],

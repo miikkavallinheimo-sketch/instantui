@@ -35,10 +35,29 @@ export interface ComponentShape {
   border: BorderToken;
 }
 
+export interface TypographyTokens {
+  heading: {
+    size: "sm" | "md" | "lg" | "xl" | "2xl";
+    weight: number; // 400, 600, 700, 800
+    style: "normal" | "italic";
+  };
+  body: {
+    size: "xs" | "sm" | "md" | "lg";
+    weight: number;
+    style: "normal" | "italic";
+  };
+  accent: {
+    size: "xs" | "sm" | "md";
+    weight: number;
+    style: "normal" | "italic";
+  };
+}
+
 export interface VibeUiTokens {
   buttonPrimary: ComponentShape;
   buttonSecondary: ComponentShape;
   card: ComponentShape;
+  typography?: TypographyTokens;
 }
 
 export type VibeId =

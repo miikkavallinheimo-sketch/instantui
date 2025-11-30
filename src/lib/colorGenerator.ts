@@ -1,5 +1,6 @@
 import type { ColorSet, VibePreset, ColorLocks } from "./types";
 import { contrastRatio } from "./colorUtils";
+import { generateHarmony, randomHarmonyType } from "./colorHarmony";
 
 /**
  * Valitsee tekstivärin taustalle niin, että kontrasti on riittävä.
@@ -31,7 +32,7 @@ function ensureReadableText(bg: string, preferred: string): string {
 }
 
 /**
- * Värit tulevat vibe-paleteista, mutta käytetään colorVariations-variaatioita randomisointiin.
+ * Generoi värit vibe-paleteista käyttäen väriharmonia-algoritmia.
  * Jos lukittu, käytetään edellisen tilan arvoja.
  */
 export function generateColors(
@@ -49,43 +50,26 @@ export function generateColors(
   };
 
   const base = vibe.palette;
-  const variations = vibe.colorVariations;
-
   const background =
     l.background && prevColors ? prevColors.background : base.background;
 
-  // Valitse primary: jos locked, käytä prevColors; muuten käytä variaatioista tai base
-  let primary: string;
-  if (l.primary && prevColors) {
-    primary = prevColors.primary;
-  } else if (variations?.primary && variations.primary.length > 0) {
-    const index = Math.floor(Math.abs(Math.sin(seed) * 10) % variations.primary.length);
-    primary = variations.primary[index];
-  } else {
-    primary = base.primary;
-  }
+  // Käytä väriharmonia-algoritmia generoidaksesi harmoniset värit
+  const harmonyType = randomHarmonyType(seed);
+  const harmony = generateHarmony(
+    220, // oletusarvo primaarille hue (voidaan optimoida vibelle)
+    65,  // saturaatio
+    50,  // lightness
+    harmonyType,
+    seed,
+    {
+      saturationVariation: 12,
+      lightnessVariation: 10,
+    }
+  );
 
-  // Valitse secondary: jos locked, käytä prevColors; muuten käytä variaatioista tai base
-  let secondary: string;
-  if (l.secondary && prevColors) {
-    secondary = prevColors.secondary;
-  } else if (variations?.secondary && variations.secondary.length > 0) {
-    const index = Math.floor(Math.abs(Math.sin(seed * 1.5) * 10) % variations.secondary.length);
-    secondary = variations.secondary[index];
-  } else {
-    secondary = base.secondary;
-  }
-
-  // Valitse accent: jos locked, käytä prevColors; muuten käytä variaatioista tai base
-  let accent: string;
-  if (l.accent && prevColors) {
-    accent = prevColors.accent;
-  } else if (variations?.accent && variations.accent.length > 0) {
-    const index = Math.floor(Math.abs(Math.sin(seed * 2) * 10) % variations.accent.length);
-    accent = variations.accent[index];
-  } else {
-    accent = base.accent;
-  }
+  const primary = l.primary && prevColors ? prevColors.primary : harmony.primary;
+  const secondary = l.secondary && prevColors ? prevColors.secondary : harmony.secondary;
+  const accent = l.accent && prevColors ? prevColors.accent : harmony.accent;
 
   const preferredText =
     l.text && prevColors ? prevColors.text : base.text;
