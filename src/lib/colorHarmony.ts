@@ -122,7 +122,11 @@ export function randomHarmonyType(seed: number): HarmonyType {
     "triadic",
     "split-complementary",
   ];
-  const idx = Math.floor(Math.abs(Math.sin(seed) * 10) % types.length);
+
+  // Käytetään pientä LCG-sekvenssiä tasaisempaan jakautumiseen
+  const mixedSeed = (seed * 9301 + 49297) % 233280;
+  const frac = Math.abs(Math.sin(mixedSeed) * 0.5 + Math.sin(seed * 1.3) * 0.5);
+  const idx = Math.floor(frac * types.length) % types.length;
   return types[idx];
 }
 
