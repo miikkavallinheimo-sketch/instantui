@@ -1,20 +1,42 @@
 import type { ColorSet, VibePreset, ColorLocks } from "./types";
-import { hslToHex, contrastRatio } from "./colorUtils";
+import { contrastRatio } from "./colorUtils";
 
-function randomInRange(min: number, max: number, seed: number): number {
-  const x = Math.sin(seed) * 10000;
-  const frac = x - Math.floor(x);
-  return min + frac * (max - min);
+/**
+ * Valitsee tekstivärin taustalle niin, että kontrasti on riittävä.
+ * Jos preferred ei riitä, kokeillaan puhdasta mustaa ja valkoista.
+ */
+function ensureReadableText(bg: string, preferred: string): string {
+  const black = "#000000";
+  const white = "#ffffff";
+
+  const prefC = contrastRatio(bg, preferred);
+  const blackC = contrastRatio(bg, black);
+  const whiteC = contrastRatio(bg, white);
+
+  // pientä joustoa: priorisoidaan preferred, jos se on lähellä tavoitetta
+  const target = 4.5;
+
+  if (prefC >= target) return preferred;
+  if (blackC >= whiteC && blackC >= target) return black;
+  if (whiteC >= blackC && whiteC >= target) return white;
+
+  // jos mikään ei ylitä targettia, valitaan paras
+  const best =
+    prefC >= blackC && prefC >= whiteC
+      ? preferred
+      : blackC >= whiteC
+      ? black
+      : white;
+  return best;
 }
 
 /**
- * Väriharmonian algoritmi: käytämme tetradic väriskeemiä
- * (4 väriä tasaisesti ympäri väriympyrän)
- * Primary → +90° (Secondary) → +180° (Accent) → +270° (Tertiary)
+ * Ei mitään randomia: värit tulevat suoraan vibe-paleteista.
+ * Lukitukset tarkoittavat, että käytetään edellisen tilan arvoja, jos olemassa.
  */
 export function generateColors(
   vibe: VibePreset,
-  seed: number,
+  _seed: number,
   prevColors?: ColorSet,
   locks?: ColorLocks
 ): ColorSet {
@@ -26,61 +48,23 @@ export function generateColors(
     text: false,
   };
 
-  // Käytä primaryHueRange jos olemassa, muuten fallback primaryHue
-  const hueMin = vibe.primaryHueRange ? vibe.primaryHueRange[0] : vibe.primaryHue - 30;
-  const hueMax = vibe.primaryHueRange ? vibe.primaryHueRange[1] : vibe.primaryHue + 30;
-  const primaryHue = randomInRange(hueMin, hueMax, seed * 0.9);
+  const base = vibe.palette;
 
-  const s = randomInRange(
-    vibe.primarySatRange[0],
-    vibe.primarySatRange[1],
-    seed * 1.1
-  );
-  const light = randomInRange(
-    vibe.primaryLightRange[0],
-    vibe.primaryLightRange[1],
-    seed * 1.3
-  );
+  const background =
+    l.background && prevColors ? prevColors.background : base.background;
 
-  const newPrimary = hslToHex(primaryHue, s, light);
-  const primary = l.primary && prevColors ? prevColors.primary : newPrimary;
+  const primary =
+    l.primary && prevColors ? prevColors.primary : base.primary;
 
-  // SECONDARY: +90° hue offset (tetradic harmony)
-  // Alempi saturaatio ja lightness sekä-säilyttämiselle
-  const secondaryHue = (primaryHue + 90) % 360;
-  const secondarySat = Math.max(30, Math.min(100, s - 15)); // Hieman vähemmän saturated
-  const secondaryLight = Math.max(45, Math.min(85, light + 5)); // Hieman vaaleampi
-  const newSecondary = hslToHex(secondaryHue, secondarySat, secondaryLight);
-  const secondary = l.secondary && prevColors ? prevColors.secondary : newSecondary;
+  const secondary =
+    l.secondary && prevColors ? prevColors.secondary : base.secondary;
 
-  // ACCENT: +180° hue offset (vastakkainen primary) - complementary väri
-  // Korkea saturaatio, värillinen, näyttävä
-  const accentHue = (primaryHue + 180) % 360;
-  const accentSat = Math.min(100, s + 20); // Korkea saturaatio
-  const accentLight = Math.max(40, Math.min(70, light)); // Mid-range
-  const newAccent = hslToHex(accentHue, accentSat, accentLight);
-  const accent = l.accent && prevColors ? prevColors.accent : newAccent;
+  const accent = l.accent && prevColors ? prevColors.accent : base.accent;
 
-  // BACKGROUND: käytä primary-hue mutta neutraali saturaatio ja light
-  const newBackground = hslToHex(
-    primaryHue,
-    vibe.isDarkUi ? 15 : 8,
-    vibe.bgLightness
-  );
-  const background = l.background && prevColors ? prevColors.background : newBackground;
+  const preferredText =
+    l.text && prevColors ? prevColors.text : base.text;
 
-  // TEXT: automaattinen kontrasti background:n kanssa
-  const black = "#0a0a0a";
-  const white = "#ffffff";
-  const contrastWithBlack = contrastRatio(background, black);
-  const contrastWithWhite = contrastRatio(background, white);
-
-  const autoText =
-    contrastWithBlack >= contrastWithWhite && contrastWithBlack >= 4.0
-      ? black
-      : white;
-
-  const text = l.text && prevColors ? prevColors.text : autoText;
+  const text = ensureReadableText(background, preferredText);
 
   return {
     primary,

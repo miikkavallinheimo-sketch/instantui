@@ -1,3 +1,40 @@
+export interface ColorSet {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  text: string;
+}
+
+export interface VibePalette {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  surface: string;
+  surfaceAlt: string;
+  text: string;
+  textMuted: string;
+  borderSubtle: string;
+  borderStrong: string;
+}
+
+export type RadiusToken = "none" | "sm" | "md" | "lg" | "xl" | "full";
+export type ShadowToken = "none" | "soft" | "strong";
+export type BorderToken = "none" | "subtle" | "strong";
+
+export interface ComponentShape {
+  radius: RadiusToken;
+  shadow: ShadowToken;
+  border: BorderToken;
+}
+
+export interface VibeUiTokens {
+  buttonPrimary: ComponentShape;
+  buttonSecondary: ComponentShape;
+  card: ComponentShape;
+}
+
 export type VibeId =
   | "minimal"
   | "modern-saas"
@@ -16,30 +53,9 @@ export interface VibePreset {
   id: VibeId;
   label: string;
   description: string;
-  primaryHue: number;
-  primaryHueRange?: [number, number];
-  primarySatRange: [number, number];
-  primaryLightRange: [number, number];
-  bgLightness: number;
   isDarkUi: boolean;
-}
-
-export type ColorKey = "primary" | "secondary" | "accent" | "background" | "text";
-
-export interface ColorSet {
-  primary: string;
-  secondary: string;
-  accent: string;
-  background: string;
-  text: string;
-}
-
-export interface ColorLocks {
-  primary: boolean;
-  secondary: boolean;
-  accent: boolean;
-  background: boolean;
-  text: boolean;
+  palette: VibePalette;
+  ui: VibeUiTokens;
 }
 
 export type FontSource = "google" | "system" | "premium";
@@ -64,31 +80,10 @@ export interface DesignTokens {
   jsonTokens: string;
 }
 
-export interface GeneratedVibeColor {
-  name: string;
-  hex?: string | null;
-  role: ColorKey;
-}
-
-export interface GeneratedVibeOverrides {
-  primaryHue?: number | null;
-  saturationBias?: number | null;
-  lightnessBias?: number | null;
-  borderRadius?: "sharp" | "medium" | "rounded" | null;
-  useGradients?: boolean | null;
-}
-
-export interface GeneratedVibe {
-  name: string;
-  shortLabel: string;
-  description: string;
-  recommendedFonts: string[];
-  recommendedColors: GeneratedVibeColor[];
-  suitability: string[];
-  overrides: GeneratedVibeOverrides;
-}
-
-export interface GeneratedVibesResponse {
-  generatedAt: string;
-  vibes: GeneratedVibe[];
+export interface ColorLocks {
+  primary?: boolean;
+  secondary?: boolean;
+  accent?: boolean;
+  background?: boolean;
+  text?: boolean;
 }

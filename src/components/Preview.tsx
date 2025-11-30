@@ -5,16 +5,47 @@ interface PreviewProps {
   designState: DesignState;
 }
 
-const getContrastColor = (bgColor: string): string => {
-  const black = "#0a0a0a";
+const radiusMap = {
+  none: "0px",
+  sm: "6px",
+  md: "10px",
+  lg: "16px",
+  xl: "24px",
+  full: "9999px",
+} as const;
+
+const shadowMap = {
+  none: "none",
+  soft: "0 18px 45px rgba(15,23,42,0.12)",
+  strong: "0 22px 60px rgba(15,23,42,0.35)",
+} as const;
+
+const ensureReadable = (bg: string, preferred: string): string => {
+  const black = "#000000";
   const white = "#ffffff";
-  const contrastWithBlack = contrastRatio(bgColor, black);
-  const contrastWithWhite = contrastRatio(bgColor, white);
-  return contrastWithBlack >= contrastWithWhite ? black : white;
+
+  const prefC = contrastRatio(bg, preferred);
+  const blackC = contrastRatio(bg, black);
+  const whiteC = contrastRatio(bg, white);
+  const target = 4.5;
+
+  if (prefC >= target) return preferred;
+  if (blackC >= whiteC && blackC >= target) return black;
+  if (whiteC >= blackC && whiteC >= target) return white;
+
+  const best =
+    prefC >= blackC && prefC >= whiteC
+      ? preferred
+      : blackC >= whiteC
+      ? black
+      : white;
+  return best;
 };
 
 const Preview = ({ designState }: PreviewProps) => {
   const { colors, fontPair, vibe } = designState;
+  const p = vibe.palette;
+  const ui = vibe.ui;
 
   const rootStyle: React.CSSProperties = {
     "--primary": colors.primary,
@@ -24,140 +55,151 @@ const Preview = ({ designState }: PreviewProps) => {
     "--text": colors.text,
   } as React.CSSProperties;
 
+  const primaryTextColor = ensureReadable(colors.primary, p.text);
+  const secondaryTextColor = colors.primary; // ghost-nappi
+  const secondaryBorderColor =
+    ui.buttonSecondary.border === "none" ? "transparent" : p.borderSubtle;
+
+  const cardRadius = radiusMap[ui.card.radius];
+  const cardShadow = shadowMap[ui.card.shadow];
+  const cardBorderColor =
+    ui.card.border === "none"
+      ? "transparent"
+      : ui.card.border === "subtle"
+      ? p.borderSubtle
+      : p.borderStrong;
+
   return (
     <div
-      className="w-full h-full rounded-2xl border border-slate-800 overflow-hidden shadow-lg bg-slate-950"
+      className="w-full h-full rounded-3xl bg-slate-950 border border-slate-800/50 overflow-hidden"
       style={rootStyle}
     >
+      {/* HEADER */}
       <div
-        className="w-full h-full flex flex-col"
-        style={{
-          backgroundColor: "var(--bg)",
-          color: "var(--text)",
-          fontFamily: fontPair.body,
-        }}
+        className="flex items-center justify-between px-8 py-4 border-b border-slate-800/60"
+        style={{ backgroundColor: p.surfaceAlt }}
       >
-        <div className="px-6 py-3 flex items-center justify-between border-b border-black/10">
-          <div
-            className="text-sm font-semibold tracking-wide"
+        <div
+          className="text-sm font-semibold tracking-tight"
+          style={{ fontFamily: fontPair.heading, color: p.text }}
+        >
+          {vibe.label} Theme
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-slate-400">
+          <span>Press Space to shuffle</span>
+          <span
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors.primary }}
+          />
+          <span
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors.secondary }}
+          />
+          <span
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors.accent }}
+          />
+        </div>
+      </div>
+
+      {/* HERO + GRID */}
+      <div
+        className="px-8 py-12 flex flex-col lg:flex-row gap-10"
+        style={{ backgroundColor: p.background, color: p.text }}
+      >
+        {/* HERO TEXT */}
+        <div className="flex-1 space-y-6">
+          <h2
+            className="text-4xl lg:text-5xl font-semibold tracking-tight"
             style={{ fontFamily: fontPair.heading }}
           >
-            {vibe.label} Theme
-          </div>
-          <div className="flex gap-1 items-center text-[10px] text-slate-500">
-            <span className="mr-1">Press Space to shuffle</span>
-            <span
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colors.primary }}
-            />
-            <span
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colors.secondary }}
-            />
-            <span
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colors.accent }}
-            />
+            Design a complete style in seconds.
+          </h2>
+          <p className="text-sm lg:text-base max-w-xl opacity-80 leading-relaxed">
+            This live preview shows how your palette and typography behave
+            inside a real product hero section. No random colors, only
+            curated, contrast-safe combinations.
+          </p>
+
+          {/* BUTTON ROW */}
+          <div className="flex items-center gap-4 pt-2 flex-wrap">
+            <button
+              className="px-6 py-3 text-sm font-medium"
+              style={{
+                fontFamily: fontPair.heading,
+                borderRadius: radiusMap[ui.buttonPrimary.radius],
+                boxShadow: shadowMap[ui.buttonPrimary.shadow],
+                borderWidth: ui.buttonPrimary.border === "none" ? 0 : 1,
+                borderColor:
+                  ui.buttonPrimary.border === "strong"
+                    ? p.borderStrong
+                    : ui.buttonPrimary.border === "subtle"
+                    ? p.borderSubtle
+                    : "transparent",
+                backgroundColor: colors.primary,
+                color: primaryTextColor,
+              }}
+            >
+              Primary CTA
+            </button>
+
+            <button
+              className="px-6 py-3 text-sm font-medium bg-transparent"
+              style={{
+                fontFamily: fontPair.heading,
+                borderRadius: radiusMap[ui.buttonSecondary.radius],
+                boxShadow: shadowMap[ui.buttonSecondary.shadow],
+                borderWidth:
+                  ui.buttonSecondary.border === "none" ? 0 : 1,
+                borderColor: secondaryBorderColor,
+                color: secondaryTextColor,
+              }}
+            >
+              Secondary
+            </button>
+
+            <button
+              className="text-sm underline decoration-1 underline-offset-4"
+              style={{ color: p.accent, fontFamily: fontPair.body }}
+            >
+              Text link
+            </button>
           </div>
         </div>
 
-        <div className="flex-1 px-6 py-6 lg:px-10 lg:py-8 flex flex-col lg:flex-row gap-8">
-          <div className="flex-1 flex flex-col justify-center gap-4">
-            <h2
-              className="text-2xl lg:text-3xl font-bold"
-              style={{ fontFamily: fontPair.heading }}
+        {/* FEATURE CARDS */}
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ["Layout presets", "Layered surfaces and spacing you can reuse."],
+            ["Color tokens", "Systematic roles for backgrounds and accents."],
+            ["Font pairings", "Readable on all devices and densities."],
+            ["Export ready", "CSS, Tailwind and JSON tokens in one click."],
+          ].map(([title, desc]) => (
+            <div
+              key={title}
+              className="p-4"
+              style={{
+                backgroundColor: p.surface,
+                borderRadius: cardRadius,
+                boxShadow: cardShadow,
+                borderWidth: ui.card.border === "none" ? 0 : 1,
+                borderColor: cardBorderColor,
+              }}
             >
-              Design a complete style in seconds.
-            </h2>
-            <p className="text-sm leading-relaxed text-black/70">
-              This live preview shows how your colors and font pairing behave in
-              a typical hero section with a call to action and supporting cards.
-            </p>
-            <div className="flex items-center gap-3 mt-3 flex-wrap">
-              <button
-                className="text-sm px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-shadow"
-                style={{
-                  backgroundColor: colors.primary,
-                  color: "#ffffff",
-                  boxShadow: `0 4px 12px ${colors.primary}40`,
-                }}
+              <div
+                className="text-sm font-semibold mb-1"
+                style={{ fontFamily: fontPair.heading, color: p.text }}
               >
-                Primary CTA
-              </button>
-              <button
-                className="text-sm px-6 py-2.5 rounded-lg border-2 font-semibold transition-all hover:bg-opacity-10"
-                style={{
-                  borderColor: colors.primary,
-                  color: colors.primary,
-                  backgroundColor: `${colors.primary}08`,
-                }}
+                {title}
+              </div>
+              <div
+                className="text-xs leading-relaxed"
+                style={{ color: p.textMuted, fontFamily: fontPair.body }}
               >
-                Outline
-              </button>
-              <button
-                className="text-sm px-6 py-2.5 rounded-full font-semibold"
-                style={{
-                  backgroundColor: colors.secondary,
-                  color: "#ffffff",
-                  boxShadow: `0 2px 8px ${colors.secondary}30`,
-                }}
-              >
-                Secondary
-              </button>
-              <button
-                className="text-sm px-6 py-2.5 font-semibold transition-all"
-                style={{
-                  color: colors.accent,
-                  textDecoration: "underline",
-                  textUnderlineOffset: "4px",
-                }}
-              >
-                Text Link
-              </button>
+                {desc}
+              </div>
             </div>
-          </div>
-
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            {[
-              { title: "Layout presets", bgOpacity: 0.15 },
-              { title: "Color tokens", bgOpacity: 0.1 },
-              { title: "Font pairings", bgOpacity: 0.08 },
-              { title: "Export ready", bgOpacity: 0.05 },
-            ].map(
-              (item, idx) => {
-                const colors_arr = [colors.primary, colors.secondary, colors.accent, colors.accent];
-                const colorForCard = colors_arr[idx];
-                const bgHex = colorForCard + Math.round(item.bgOpacity * 255).toString(16).padStart(2, '0');
-                const textColor = getContrastColor(bgHex);
-                
-                return (
-                  <div
-                    key={item.title}
-                    className="rounded-lg border-2 shadow-md p-4 flex flex-col gap-2 transition-transform hover:scale-105"
-                    style={{
-                      borderColor: colorForCard,
-                      backgroundColor: bgHex,
-                      borderWidth: "2px",
-                      boxShadow: `0 4px 12px ${colorForCard}${Math.round(0.2 * 255).toString(16).padStart(2, '0')}`,
-                    }}
-                  >
-                    <div
-                      className="font-bold text-sm"
-                      style={{
-                        fontFamily: fontPair.heading,
-                        color: textColor,
-                      }}
-                    >
-                      {item.title}
-                    </div>
-                    <div className="text-[11px] leading-relaxed" style={{ color: textColor }}>
-                      Design with harmony and precision
-                    </div>
-                  </div>
-                );
-              }
-            )}
-          </div>
+          ))}
         </div>
       </div>
     </div>
