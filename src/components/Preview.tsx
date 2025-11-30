@@ -1,8 +1,17 @@
 import type { DesignState } from "../lib/types";
+import { contrastRatio } from "../lib/colorUtils";
 
 interface PreviewProps {
   designState: DesignState;
 }
+
+const getContrastColor = (bgColor: string): string => {
+  const black = "#0a0a0a";
+  const white = "#ffffff";
+  const contrastWithBlack = contrastRatio(bgColor, black);
+  const contrastWithWhite = contrastRatio(bgColor, white);
+  return contrastWithBlack >= contrastWithWhite ? black : white;
+};
 
 const Preview = ({ designState }: PreviewProps) => {
   const { colors, fontPair, vibe } = designState;
@@ -110,14 +119,16 @@ const Preview = ({ designState }: PreviewProps) => {
 
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             {[
-              { title: "Layout presets", bgOpacity: 0.15, borderOpacity: 0.3, icon: "📐" },
-              { title: "Color tokens", bgOpacity: 0.1, borderOpacity: 0.25, icon: "🎨" },
-              { title: "Font pairings", bgOpacity: 0.08, borderOpacity: 0.2, icon: "🔤" },
-              { title: "Export ready", bgOpacity: 0.05, borderOpacity: 0.1, icon: "📦" },
+              { title: "Layout presets", bgOpacity: 0.15 },
+              { title: "Color tokens", bgOpacity: 0.1 },
+              { title: "Font pairings", bgOpacity: 0.08 },
+              { title: "Export ready", bgOpacity: 0.05 },
             ].map(
               (item, idx) => {
                 const colors_arr = [colors.primary, colors.secondary, colors.accent, colors.accent];
                 const colorForCard = colors_arr[idx];
+                const bgHex = colorForCard + Math.round(item.bgOpacity * 255).toString(16).padStart(2, '0');
+                const textColor = getContrastColor(bgHex);
                 
                 return (
                   <div
@@ -125,24 +136,21 @@ const Preview = ({ designState }: PreviewProps) => {
                     className="rounded-lg border-2 shadow-md p-4 flex flex-col gap-2 transition-transform hover:scale-105"
                     style={{
                       borderColor: colorForCard,
-                      backgroundColor: colorForCard + Math.round(item.bgOpacity * 255).toString(16).padStart(2, '0'),
+                      backgroundColor: bgHex,
                       borderWidth: "2px",
                       boxShadow: `0 4px 12px ${colorForCard}${Math.round(0.2 * 255).toString(16).padStart(2, '0')}`,
                     }}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{item.icon}</span>
-                      <div
-                        className="font-bold text-sm"
-                        style={{
-                          fontFamily: fontPair.heading,
-                          color: colorForCard,
-                        }}
-                      >
-                        {item.title}
-                      </div>
+                    <div
+                      className="font-bold text-sm"
+                      style={{
+                        fontFamily: fontPair.heading,
+                        color: textColor,
+                      }}
+                    >
+                      {item.title}
                     </div>
-                    <div className="text-[11px] text-black/60 leading-relaxed">
+                    <div className="text-[11px] leading-relaxed" style={{ color: textColor }}>
                       Design with harmony and precision
                     </div>
                   </div>
