@@ -62,7 +62,11 @@ Return ONLY JSON, with no comments or additional text.
     ],
   });
 
-  const text = response.output_text;
+  let text = response.output_text;
+  
+  // Remove markdown backticks if present
+  text = text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+  
   let data: GeneratedVibesResponse = JSON.parse(text);
 
   data.generatedAt = new Date().toISOString();

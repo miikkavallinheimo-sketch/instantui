@@ -79,7 +79,11 @@ interface InstantUiTrends {
     ],
   });
 
-  const text = response.output_text;
+  let text = response.output_text;
+  
+  // Remove markdown backticks if present
+  text = text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+  
   let data: InstantUiTrends = JSON.parse(text);
 
   data.lastUpdated = new Date().toISOString();
