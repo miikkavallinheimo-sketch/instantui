@@ -64,24 +64,46 @@ const Preview = ({ designState }: PreviewProps) => {
               This live preview shows how your colors and font pairing behave in
               a typical hero section with a call to action and supporting cards.
             </p>
-            <div className="flex items-center gap-3 mt-1">
+            <div className="flex items-center gap-3 mt-3 flex-wrap">
               <button
-                className="text-sm px-4 py-2 rounded-full shadow-sm"
+                className="text-sm px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-shadow"
                 style={{
                   backgroundColor: colors.primary,
                   color: "#ffffff",
+                  boxShadow: `0 4px 12px ${colors.primary}40`,
                 }}
               >
                 Primary CTA
               </button>
               <button
-                className="text-sm px-4 py-2 rounded-full border"
+                className="text-sm px-6 py-2.5 rounded-lg border-2 font-semibold transition-all hover:bg-opacity-10"
                 style={{
                   borderColor: colors.primary,
                   color: colors.primary,
+                  backgroundColor: `${colors.primary}08`,
                 }}
               >
-                Ghost Button
+                Outline
+              </button>
+              <button
+                className="text-sm px-6 py-2.5 rounded-full font-semibold"
+                style={{
+                  backgroundColor: colors.secondary,
+                  color: "#ffffff",
+                  boxShadow: `0 2px 8px ${colors.secondary}30`,
+                }}
+              >
+                Secondary
+              </button>
+              <button
+                className="text-sm px-6 py-2.5 font-semibold transition-all"
+                style={{
+                  color: colors.accent,
+                  textDecoration: "underline",
+                  textUnderlineOffset: "4px",
+                }}
+              >
+                Text Link
               </button>
             </div>
           </div>

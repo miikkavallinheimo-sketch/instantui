@@ -21,6 +21,11 @@ export function generateColors(
     text: false,
   };
 
+  // Käytä primaryHueRange jos olemassa, muuten fallback primaryHue
+  const hueMin = vibe.primaryHueRange ? vibe.primaryHueRange[0] : vibe.primaryHue - 30;
+  const hueMax = vibe.primaryHueRange ? vibe.primaryHueRange[1] : vibe.primaryHue + 30;
+  const hue = randomInRange(hueMin, hueMax, seed * 0.9);
+
   const s = randomInRange(
     vibe.primarySatRange[0],
     vibe.primarySatRange[1],
@@ -32,7 +37,7 @@ export function generateColors(
     seed * 1.3
   );
 
-  const newPrimary = hslToHex(vibe.primaryHue, s, light);
+  const newPrimary = hslToHex(hue, s, light);
   const primary = l.primary && prevColors ? prevColors.primary : newPrimary;
 
   const secondaryHue =

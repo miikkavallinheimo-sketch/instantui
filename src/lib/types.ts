@@ -17,6 +17,7 @@ export interface VibePreset {
   label: string;
   description: string;
   primaryHue: number;
+  primaryHueRange?: [number, number];
   primarySatRange: [number, number];
   primaryLightRange: [number, number];
   bgLightness: number;
