@@ -109,36 +109,45 @@ const Preview = ({ designState }: PreviewProps) => {
           </div>
 
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            {["Layout presets", "Color tokens", "Font pairings", "Export ready"].map(
-              (title, idx) => (
-                <div
-                  key={title}
-                  className="rounded-xl border shadow-sm p-3 flex flex-col gap-1"
-                  style={{
-                    borderColor:
-                      idx === 0
-                        ? colors.primary + "40"
-                        : idx === 1
-                        ? colors.secondary + "40"
-                        : idx === 2
-                        ? colors.accent + "40"
-                        : "#00000010",
-                    backgroundColor:
-                      idx === 3 ? "#ffffff" : "rgba(255,255,255,0.9)",
-                  }}
-                >
+            {[
+              { title: "Layout presets", bgOpacity: 0.15, borderOpacity: 0.3, icon: "📐" },
+              { title: "Color tokens", bgOpacity: 0.1, borderOpacity: 0.25, icon: "🎨" },
+              { title: "Font pairings", bgOpacity: 0.08, borderOpacity: 0.2, icon: "🔤" },
+              { title: "Export ready", bgOpacity: 0.05, borderOpacity: 0.1, icon: "📦" },
+            ].map(
+              (item, idx) => {
+                const colors_arr = [colors.primary, colors.secondary, colors.accent, colors.accent];
+                const colorForCard = colors_arr[idx];
+                
+                return (
                   <div
-                    className="font-semibold text-sm"
-                    style={{ fontFamily: fontPair.heading }}
+                    key={item.title}
+                    className="rounded-lg border-2 shadow-md p-4 flex flex-col gap-2 transition-transform hover:scale-105"
+                    style={{
+                      borderColor: colorForCard,
+                      backgroundColor: colorForCard + Math.round(item.bgOpacity * 255).toString(16).padStart(2, '0'),
+                      borderWidth: "2px",
+                      boxShadow: `0 4px 12px ${colorForCard}${Math.round(0.2 * 255).toString(16).padStart(2, '0')}`,
+                    }}
                   >
-                    {title}
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{item.icon}</span>
+                      <div
+                        className="font-bold text-sm"
+                        style={{
+                          fontFamily: fontPair.heading,
+                          color: colorForCard,
+                        }}
+                      >
+                        {item.title}
+                      </div>
+                    </div>
+                    <div className="text-[11px] text-black/60 leading-relaxed">
+                      Design with harmony and precision
+                    </div>
                   </div>
-                  <div className="text-[11px] text-black/70">
-                    Generate tokens and preview them in a real UI layout before
-                    you copy them into your project.
-                  </div>
-                </div>
-              )
+                );
+              }
             )}
           </div>
         </div>

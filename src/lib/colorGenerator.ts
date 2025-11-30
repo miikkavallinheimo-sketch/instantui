@@ -7,6 +7,11 @@ function randomInRange(min: number, max: number, seed: number): number {
   return min + frac * (max - min);
 }
 
+/**
+ * Väriharmonian algoritmi: käytämme tetradic väriskeemiä
+ * (4 väriä tasaisesti ympäri väriympyrän)
+ * Primary → +90° (Secondary) → +180° (Accent) → +270° (Tertiary)
+ */
 export function generateColors(
   vibe: VibePreset,
   seed: number,
@@ -24,7 +29,7 @@ export function generateColors(
   // Käytä primaryHueRange jos olemassa, muuten fallback primaryHue
   const hueMin = vibe.primaryHueRange ? vibe.primaryHueRange[0] : vibe.primaryHue - 30;
   const hueMax = vibe.primaryHueRange ? vibe.primaryHueRange[1] : vibe.primaryHue + 30;
-  const hue = randomInRange(hueMin, hueMax, seed * 0.9);
+  const primaryHue = randomInRange(hueMin, hueMax, seed * 0.9);
 
   const s = randomInRange(
     vibe.primarySatRange[0],
@@ -37,36 +42,34 @@ export function generateColors(
     seed * 1.3
   );
 
-  const newPrimary = hslToHex(hue, s, light);
+  const newPrimary = hslToHex(primaryHue, s, light);
   const primary = l.primary && prevColors ? prevColors.primary : newPrimary;
 
-  const secondaryHue =
-    (vibe.primaryHue + 180 + randomInRange(-20, 20, seed * 2.1)) % 360;
-  const newSecondary = hslToHex(
-    secondaryHue,
-    Math.min(100, s + randomInRange(-10, 10, seed * 2.3)),
-    Math.max(10, Math.min(90, light + randomInRange(-10, 10, seed * 2.5)))
-  );
-  const secondary =
-    l.secondary && prevColors ? prevColors.secondary : newSecondary;
+  // SECONDARY: +90° hue offset (tetradic harmony)
+  // Alempi saturaatio ja lightness sekä-säilyttämiselle
+  const secondaryHue = (primaryHue + 90) % 360;
+  const secondarySat = Math.max(30, Math.min(100, s - 15)); // Hieman vähemmän saturated
+  const secondaryLight = Math.max(45, Math.min(85, light + 5)); // Hieman vaaleampi
+  const newSecondary = hslToHex(secondaryHue, secondarySat, secondaryLight);
+  const secondary = l.secondary && prevColors ? prevColors.secondary : newSecondary;
 
-  const accentHue =
-    (vibe.primaryHue + randomInRange(40, 120, seed * 3.1)) % 360;
-  const newAccent = hslToHex(
-    accentHue,
-    Math.min(100, s + 10),
-    Math.max(30, Math.min(80, light + 10))
-  );
+  // ACCENT: +180° hue offset (vastakkainen primary) - complementary väri
+  // Korkea saturaatio, värillinen, näyttävä
+  const accentHue = (primaryHue + 180) % 360;
+  const accentSat = Math.min(100, s + 20); // Korkea saturaatio
+  const accentLight = Math.max(40, Math.min(70, light)); // Mid-range
+  const newAccent = hslToHex(accentHue, accentSat, accentLight);
   const accent = l.accent && prevColors ? prevColors.accent : newAccent;
 
+  // BACKGROUND: käytä primary-hue mutta neutraali saturaatio ja light
   const newBackground = hslToHex(
-    vibe.primaryHue,
+    primaryHue,
     vibe.isDarkUi ? 15 : 8,
     vibe.bgLightness
   );
-  const background =
-    l.background && prevColors ? prevColors.background : newBackground;
+  const background = l.background && prevColors ? prevColors.background : newBackground;
 
+  // TEXT: automaattinen kontrasti background:n kanssa
   const black = "#0a0a0a";
   const white = "#ffffff";
   const contrastWithBlack = contrastRatio(background, black);
