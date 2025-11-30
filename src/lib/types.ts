@@ -19,6 +19,12 @@ export interface VibePalette {
   borderStrong: string;
 }
 
+export interface ColorVariations {
+  primary?: string[];
+  secondary?: string[];
+  accent?: string[];
+}
+
 export type RadiusToken = "none" | "sm" | "md" | "lg" | "xl" | "full";
 export type ShadowToken = "none" | "soft" | "strong";
 export type BorderToken = "none" | "subtle" | "strong";
@@ -56,6 +62,7 @@ export interface VibePreset {
   isDarkUi: boolean;
   palette: VibePalette;
   ui: VibeUiTokens;
+  colorVariations?: ColorVariations;
 }
 
 export type FontSource = "google" | "system" | "premium";

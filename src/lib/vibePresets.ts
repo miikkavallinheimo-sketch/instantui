@@ -23,6 +23,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
+    colorVariations: {
+      primary: ["#0F766E", "#0D9488", "#14B8A6", "#2DD4BF"],
+      secondary: ["#475569", "#64748B", "#78716C"],
+      accent: ["#F97316", "#FB923C", "#FDBA74"],
+    },
   },
 
   "modern-saas": {
@@ -48,6 +53,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
+    colorVariations: {
+      primary: ["#2563EB", "#1D4ED8", "#1E40AF", "#3B82F6"],
+      secondary: ["#4F46E5", "#6366F1", "#818CF8"],
+      accent: ["#F97316", "#FB923C", "#FDBA74"],
+    },
   },
 
   brutalist: {
@@ -71,6 +81,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "none", shadow: "none", border: "strong" },
       buttonSecondary: { radius: "none", shadow: "none", border: "strong" },
       card: { radius: "sm", shadow: "none", border: "strong" },
+    },
+    colorVariations: {
+      primary: ["#111827", "#1F2937", "#374151"],
+      secondary: ["#F97316", "#FB923C", "#FDBA74"],
+      accent: ["#EC4899", "#F472B6", "#F9A8D4"],
     },
   },
 
@@ -96,6 +111,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "full", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
+    colorVariations: {
+      primary: ["#FB7185", "#F472B6", "#F9A8D4"],
+      secondary: ["#38BDF8", "#7DD3FC", "#BAE6FD"],
+      accent: ["#A78BFA", "#C4B5FD", "#DDD6FE"],
+    },
   },
 
   "dark-tech": {
@@ -119,6 +139,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
+    },
+    colorVariations: {
+      primary: ["#38BDF8", "#7DD3FC", "#BAE6FD"],
+      secondary: ["#6366F1", "#818CF8", "#A5B4FC"],
+      accent: ["#22C55E", "#4ADE80", "#86EFAC"],
     },
   },
 
@@ -144,6 +169,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
     },
+    colorVariations: {
+      primary: ["#D4AF37", "#EAB308", "#FBBF24"],
+      secondary: ["#F97316", "#FB923C", "#FDBA74"],
+      accent: ["#ECFEFF", "#CFFAFE", "#A5F3FC"],
+    },
   },
 
   "soft-neo-tech": {
@@ -167,6 +197,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "lg", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
+    },
+    colorVariations: {
+      primary: ["#22D3EE", "#06B6D4", "#0891B2"],
+      secondary: ["#A855F7", "#C084FC", "#D8B4FE"],
+      accent: ["#67E8F9", "#22D3EE", "#06B6D4"],
     },
   },
 
@@ -192,6 +227,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
       card: { radius: "xl", shadow: "soft", border: "subtle" },
     },
+    colorVariations: {
+      primary: ["#EC4899", "#F472B6", "#F9A8D4"],
+      secondary: ["#6366F1", "#818CF8", "#A5B4FC"],
+      accent: ["#F97316", "#FB923C", "#FDBA74"],
+    },
   },
 
   "warm-editorial": {
@@ -215,6 +255,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "sm", shadow: "soft", border: "none" },
       buttonSecondary: { radius: "sm", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
+    },
+    colorVariations: {
+      primary: ["#D97706", "#F59E0B", "#FBBF24"],
+      secondary: ["#92400E", "#B45309", "#D97706"],
+      accent: ["#10B981", "#34D399", "#6EE7B7"],
     },
   },
 
@@ -240,6 +285,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "none", shadow: "none", border: "strong" },
       card: { radius: "none", shadow: "none", border: "strong" },
     },
+    colorVariations: {
+      primary: ["#F97316", "#FB923C", "#FDBA74"],
+      secondary: ["#22C55E", "#4ADE80", "#86EFAC"],
+      accent: ["#3B82F6", "#60A5FA", "#93C5FD"],
+    },
   },
 
   "magazine-brutalism": {
@@ -264,6 +314,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonSecondary: { radius: "sm", shadow: "none", border: "strong" },
       card: { radius: "sm", shadow: "none", border: "strong" },
     },
+    colorVariations: {
+      primary: ["#111827", "#1F2937", "#374151"],
+      secondary: ["#BE123C", "#DC2626", "#EF4444"],
+      accent: ["#F97316", "#FB923C", "#FDBA74"],
+    },
   },
 
   "cyber-mint": {
@@ -287,6 +342,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
       card: { radius: "lg", shadow: "soft", border: "subtle" },
+    },
+    colorVariations: {
+      primary: ["#22C55E", "#4ADE80", "#86EFAC"],
+      secondary: ["#2DD4BF", "#67E8F9", "#A5F3FC"],
+      accent: ["#38BDF8", "#7DD3FC", "#BAE6FD"],
     },
   },
 };

@@ -56,7 +56,7 @@ const Preview = ({ designState }: PreviewProps) => {
   } as React.CSSProperties;
 
   const primaryTextColor = ensureReadable(colors.primary, p.text);
-  const secondaryTextColor = colors.primary; // ghost-nappi
+  const secondaryTextColor = colors.primary;
   const secondaryBorderColor =
     ui.buttonSecondary.border === "none" ? "transparent" : p.borderSubtle;
 
@@ -83,48 +83,50 @@ const Preview = ({ designState }: PreviewProps) => {
           className="text-sm font-semibold tracking-tight"
           style={{ fontFamily: fontPair.heading, color: p.text }}
         >
-          {vibe.label} Theme
+          {vibe.label}
         </div>
         <div className="flex items-center gap-2 text-[11px] text-slate-400">
-          <span>Press Space to shuffle</span>
+          <span>Press Space</span>
           <span
-            className="w-3 h-3 rounded-full"
+            className="w-2.5 h-2.5 rounded-full"
             style={{ backgroundColor: colors.primary }}
           />
           <span
-            className="w-3 h-3 rounded-full"
+            className="w-2.5 h-2.5 rounded-full"
             style={{ backgroundColor: colors.secondary }}
           />
           <span
-            className="w-3 h-3 rounded-full"
+            className="w-2.5 h-2.5 rounded-full"
             style={{ backgroundColor: colors.accent }}
           />
         </div>
       </div>
 
-      {/* HERO + GRID */}
+      {/* MAIN CONTENT */}
       <div
-        className="px-8 py-12 flex flex-col lg:flex-row gap-10"
+        className="p-8 space-y-8"
         style={{ backgroundColor: p.background, color: p.text }}
       >
-        {/* HERO TEXT */}
-        <div className="flex-1 space-y-6">
+        {/* HERO SECTION */}
+        <div className="space-y-4">
           <h2
-            className="text-4xl lg:text-5xl font-semibold tracking-tight"
+            className="text-3xl font-bold"
             style={{ fontFamily: fontPair.heading }}
           >
-            Design a complete style in seconds.
+            Design System
           </h2>
-          <p className="text-sm lg:text-base max-w-xl opacity-80 leading-relaxed">
-            This live preview shows how your palette and typography behave
-            inside a real product hero section. No random colors, only
-            curated, contrast-safe combinations.
+          <p className="text-sm max-w-md opacity-80">
+            Full color and typography system with UI tokens for consistent design
           </p>
+        </div>
 
-          {/* BUTTON ROW */}
-          <div className="flex items-center gap-4 pt-2 flex-wrap">
+        {/* BUTTONS SECTION */}
+        <div className="space-y-3">
+          <div className="text-xs font-semibold opacity-60">Button Styles</div>
+          <div className="flex gap-3 flex-wrap">
+            {/* Primary button */}
             <button
-              className="px-6 py-3 text-sm font-medium"
+              className="px-6 py-2.5 text-sm font-semibold"
               style={{
                 fontFamily: fontPair.heading,
                 borderRadius: radiusMap[ui.buttonPrimary.radius],
@@ -140,11 +142,12 @@ const Preview = ({ designState }: PreviewProps) => {
                 color: primaryTextColor,
               }}
             >
-              Primary CTA
+              Primary
             </button>
 
+            {/* Secondary button (outline) */}
             <button
-              className="px-6 py-3 text-sm font-medium bg-transparent"
+              className="px-6 py-2.5 text-sm font-semibold bg-transparent"
               style={{
                 fontFamily: fontPair.heading,
                 borderRadius: radiusMap[ui.buttonSecondary.radius],
@@ -158,25 +161,51 @@ const Preview = ({ designState }: PreviewProps) => {
               Secondary
             </button>
 
+            {/* Accent button */}
             <button
-              className="text-sm underline decoration-1 underline-offset-4"
-              style={{ color: p.accent, fontFamily: fontPair.body }}
+              className="px-6 py-2.5 text-sm font-semibold"
+              style={{
+                fontFamily: fontPair.heading,
+                borderRadius: radiusMap[ui.buttonPrimary.radius],
+                boxShadow: shadowMap[ui.buttonPrimary.shadow],
+                backgroundColor: colors.accent,
+                color: ensureReadable(colors.accent, p.text),
+                border: "none",
+              }}
             >
-              Text link
+              Accent
+            </button>
+
+            {/* Ghost button */}
+            <button
+              className="px-6 py-2.5 text-sm font-semibold"
+              style={{
+                fontFamily: fontPair.heading,
+                borderRadius: radiusMap[ui.buttonPrimary.radius],
+                backgroundColor: "transparent",
+                color: colors.primary,
+                border: `2px solid ${colors.primary}`,
+              }}
+            >
+              Ghost
+            </button>
+
+            {/* Text link */}
+            <button
+              className="px-0 py-2 text-sm underline"
+              style={{ color: colors.primary, fontFamily: fontPair.body }}
+            >
+              Link
             </button>
           </div>
         </div>
 
-        {/* FEATURE CARDS */}
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            ["Layout presets", "Layered surfaces and spacing you can reuse."],
-            ["Color tokens", "Systematic roles for backgrounds and accents."],
-            ["Font pairings", "Readable on all devices and densities."],
-            ["Export ready", "CSS, Tailwind and JSON tokens in one click."],
-          ].map(([title, desc]) => (
+        {/* CARDS GRID */}
+        <div className="space-y-3">
+          <div className="text-xs font-semibold opacity-60">Card Styles</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Basic card */}
             <div
-              key={title}
               className="p-4"
               style={{
                 backgroundColor: p.surface,
@@ -187,19 +216,123 @@ const Preview = ({ designState }: PreviewProps) => {
               }}
             >
               <div
-                className="text-sm font-semibold mb-1"
-                style={{ fontFamily: fontPair.heading, color: p.text }}
+                className="text-xs font-bold mb-1"
+                style={{ fontFamily: fontPair.heading, color: colors.primary }}
               >
-                {title}
+                Feature
               </div>
-              <div
-                className="text-xs leading-relaxed"
-                style={{ color: p.textMuted, fontFamily: fontPair.body }}
-              >
-                {desc}
+              <div className="text-xs leading-relaxed" style={{ color: p.textMuted }}>
+                Primary colored border accent
               </div>
             </div>
-          ))}
+
+            {/* Secondary accent card */}
+            <div
+              className="p-4"
+              style={{
+                backgroundColor: p.surface,
+                borderRadius: cardRadius,
+                boxShadow: cardShadow,
+                borderWidth: ui.card.border === "none" ? 0 : 1,
+                borderColor: colors.secondary,
+              }}
+            >
+              <div
+                className="text-xs font-bold mb-1"
+                style={{ fontFamily: fontPair.heading, color: colors.secondary }}
+              >
+                Secondary
+              </div>
+              <div className="text-xs leading-relaxed" style={{ color: p.textMuted }}>
+                Secondary color accent
+              </div>
+            </div>
+
+            {/* Accent card */}
+            <div
+              className="p-4"
+              style={{
+                backgroundColor: p.surface,
+                borderRadius: cardRadius,
+                boxShadow: cardShadow,
+                borderWidth: ui.card.border === "none" ? 0 : 1,
+                borderColor: colors.accent,
+              }}
+            >
+              <div
+                className="text-xs font-bold mb-1"
+                style={{ fontFamily: fontPair.heading, color: colors.accent }}
+              >
+                Accent
+              </div>
+              <div className="text-xs leading-relaxed" style={{ color: p.textMuted }}>
+                Highlight important content
+              </div>
+            </div>
+
+            {/* Stat card */}
+            <div
+              className="p-4"
+              style={{
+                backgroundColor: p.surface,
+                borderRadius: cardRadius,
+                boxShadow: cardShadow,
+                borderWidth: ui.card.border === "none" ? 0 : 1,
+                borderColor: cardBorderColor,
+              }}
+            >
+              <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+                42
+              </div>
+              <div className="text-xs mt-1" style={{ color: p.textMuted }}>
+                Stat label
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* COLOR SWATCHES */}
+        <div className="space-y-3">
+          <div className="text-xs font-semibold opacity-60">Color Palette</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { name: "Primary", color: colors.primary },
+              { name: "Secondary", color: colors.secondary },
+              { name: "Accent", color: colors.accent },
+              { name: "Background", color: colors.background },
+              { name: "Surface", color: p.surface },
+              { name: "Text", color: colors.text },
+            ].map((swatch) => (
+              <div key={swatch.name} className="space-y-1">
+                <div
+                  className="w-full h-12 rounded border"
+                  style={{
+                    backgroundColor: swatch.color,
+                    borderColor: p.borderSubtle,
+                  }}
+                />
+                <div className="text-[10px] text-center opacity-60">
+                  {swatch.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* TYPOGRAPHY */}
+        <div className="space-y-3">
+          <div className="text-xs font-semibold opacity-60">Typography</div>
+          <div className="space-y-2">
+            <div style={{ fontFamily: fontPair.heading, fontSize: "18px", fontWeight: 600 }}>
+              Heading (18px, 600 weight)
+            </div>
+            <div style={{ fontFamily: fontPair.body, fontSize: "14px" }}>
+              Body text (14px) - Main content runs here with comfortable line-height
+            </div>
+            <div style={{ fontFamily: fontPair.body, fontSize: "12px", opacity: 0.7 }}>
+              Small / Muted (12px, 70% opacity)
+            </div>
+          </div>
         </div>
       </div>
     </div>

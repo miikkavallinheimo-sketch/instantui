@@ -31,12 +31,12 @@ function ensureReadableText(bg: string, preferred: string): string {
 }
 
 /**
- * Ei mitään randomia: värit tulevat suoraan vibe-paleteista.
- * Lukitukset tarkoittavat, että käytetään edellisen tilan arvoja, jos olemassa.
+ * Värit tulevat vibe-paleteista, mutta käytetään colorVariations-variaatioita randomisointiin.
+ * Jos lukittu, käytetään edellisen tilan arvoja.
  */
 export function generateColors(
   vibe: VibePreset,
-  _seed: number,
+  seed: number,
   prevColors?: ColorSet,
   locks?: ColorLocks
 ): ColorSet {
@@ -49,17 +49,43 @@ export function generateColors(
   };
 
   const base = vibe.palette;
+  const variations = vibe.colorVariations;
 
   const background =
     l.background && prevColors ? prevColors.background : base.background;
 
-  const primary =
-    l.primary && prevColors ? prevColors.primary : base.primary;
+  // Valitse primary: jos locked, käytä prevColors; muuten käytä variaatioista tai base
+  let primary: string;
+  if (l.primary && prevColors) {
+    primary = prevColors.primary;
+  } else if (variations?.primary && variations.primary.length > 0) {
+    const index = Math.floor(Math.abs(Math.sin(seed) * 10) % variations.primary.length);
+    primary = variations.primary[index];
+  } else {
+    primary = base.primary;
+  }
 
-  const secondary =
-    l.secondary && prevColors ? prevColors.secondary : base.secondary;
+  // Valitse secondary: jos locked, käytä prevColors; muuten käytä variaatioista tai base
+  let secondary: string;
+  if (l.secondary && prevColors) {
+    secondary = prevColors.secondary;
+  } else if (variations?.secondary && variations.secondary.length > 0) {
+    const index = Math.floor(Math.abs(Math.sin(seed * 1.5) * 10) % variations.secondary.length);
+    secondary = variations.secondary[index];
+  } else {
+    secondary = base.secondary;
+  }
 
-  const accent = l.accent && prevColors ? prevColors.accent : base.accent;
+  // Valitse accent: jos locked, käytä prevColors; muuten käytä variaatioista tai base
+  let accent: string;
+  if (l.accent && prevColors) {
+    accent = prevColors.accent;
+  } else if (variations?.accent && variations.accent.length > 0) {
+    const index = Math.floor(Math.abs(Math.sin(seed * 2) * 10) % variations.accent.length);
+    accent = variations.accent[index];
+  } else {
+    accent = base.accent;
+  }
 
   const preferredText =
     l.text && prevColors ? prevColors.text : base.text;
