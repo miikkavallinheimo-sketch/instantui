@@ -62,7 +62,7 @@ interface InstantUiTrends {
 `;
 
   const response = await openai.responses.create({
-    model: "gpt-5.1-mini",
+    model: "gpt-4o-mini",
     tools: [{ type: "web_search" }],
     input: [
       {
