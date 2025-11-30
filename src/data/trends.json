@@ -1,7 +1,75 @@
 {
-  "lastUpdated": "2025-01-01T00:00:00.000Z",
-  "yearFocus": "2025\u20132026",
-  "fontTrends": [],
-  "colorTrends": [],
-  "designNotes": []
+  "lastUpdated": "2025-11-30T10:41:42.879Z",
+  "yearFocus": "2025-2026",
+  "fontTrends": [
+    {
+      "name": "Inter",
+      "category": "Sans-serif",
+      "description": "A free, open-source neo-grotesque sans-serif typeface designed by Rasmus Andersson, optimized for on-screen readability, especially at small sizes. It includes a wide range of OpenType features and supports over 140 languages.",
+      "exampleUse": "Widely used in applications and websites, including GitLab, ISO, Mozilla, NASA, and Zurich Airport."
+    },
+    {
+      "name": "Roboto",
+      "category": "Sans-serif",
+      "description": "Developed by Google, Roboto is a versatile sans-serif typeface with a geometric structure and slightly rounded edges, offering a modern and friendly feel. It has a broad range of weights and styles, making it suitable for various applications.",
+      "exampleUse": "Utilized in Google Workspace, including Google Docs and Google Analytics, ensuring a consistent and polished look."
+    },
+    {
+      "name": "Satoshi",
+      "category": "Sans-serif",
+      "description": "A minimalist and open-source typeface with a geometric design and clean lines, offering excellent readability even at small sizes. Its neutral style allows it to adapt to various themes and design purposes.",
+      "exampleUse": "Ideal for modern web design, particularly in tech-driven platforms."
+    },
+    {
+      "name": "Overpass",
+      "category": "Sans-serif",
+      "description": "A geometric sans-serif typeface derived from Highway Gothic, designed for web use with a focus on digital screens for user interfaces and websites. It comprises 18 variants, including 9 font weights and corrected obliques for each weight.",
+      "exampleUse": "Commissioned by Red Hat for use in their software for UI elements."
+    },
+    {
+      "name": "Montserrat",
+      "category": "Sans-serif",
+      "description": "A geometric sans-serif typeface inspired by the signage of Buenos Aires, featuring a large x-height, short descenders, and wide apertures, achieving high legibility even in small sizes.",
+      "exampleUse": "Used on over 19 million websites, including portfolios, blogs, and SaaS platforms."
+    }
+  ],
+  "colorTrends": [
+    {
+      "name": "Vibrant Blues",
+      "hex": "#1E3A8A",
+      "roleHint": "Primary",
+      "description": "A deep, rich blue that conveys trust and professionalism, commonly used in SaaS and startup landing pages to establish credibility."
+    },
+    {
+      "name": "Soft Greens",
+      "hex": "#10B981",
+      "roleHint": "Secondary",
+      "description": "A calming green that suggests growth and stability, often paired with blues to create a harmonious and inviting design."
+    },
+    {
+      "name": "Warm Neutrals",
+      "hex": "#F3F4F6",
+      "roleHint": "Background",
+      "description": "Light, neutral tones that provide a clean and unobtrusive backdrop, allowing other design elements to stand out."
+    },
+    {
+      "name": "Accent Oranges",
+      "hex": "#FB923C",
+      "roleHint": "Accent",
+      "description": "A vibrant orange used sparingly to draw attention to key calls to action or important information."
+    },
+    {
+      "name": "Muted Purples",
+      "hex": "#6B21A8",
+      "roleHint": "Highlight",
+      "description": "A sophisticated purple that adds a touch of elegance and is often used for highlighting features or premium offerings."
+    }
+  ],
+  "designNotes": [
+    "Minimalism continues to dominate UI design, focusing on clean layouts and intuitive navigation.",
+    "Brutalism is emerging as a counter-trend, with raw, unpolished designs that challenge traditional aesthetics.",
+    "Gradients are making a comeback, adding depth and dimension to interfaces, often used subtly to enhance visual interest.",
+    "Dark mode interfaces are gaining popularity, providing a sleek and modern user experience while reducing eye strain.",
+    "Microinteractions are being integrated to provide feedback and enhance user engagement, making interfaces feel more responsive and dynamic."
+  ]
 }

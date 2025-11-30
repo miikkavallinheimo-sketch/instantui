@@ -1,4 +1,150 @@
 {
-  "generatedAt": "2025-01-01T00:00:00.000Z",
-  "vibes": []
+  "generatedAt": "2025-11-30T10:42:03.812Z",
+  "vibes": [
+    {
+      "name": "Sleek Integrity",
+      "shortLabel": "Sleek",
+      "description": "A sophisticated blend of trust and innovation, ideal for professional sites that require a polished aesthetic.",
+      "recommendedFonts": [
+        "Inter",
+        "Overpass",
+        "Roboto"
+      ],
+      "recommendedColors": [
+        {
+          "name": "Vibrant Blues",
+          "hex": "#1E3A8A",
+          "role": "primary"
+        },
+        {
+          "name": "Soft Greens",
+          "hex": "#10B981",
+          "role": "secondary"
+        },
+        {
+          "name": "Accent Oranges",
+          "hex": "#FB923C",
+          "role": "accent"
+        },
+        {
+          "name": "Warm Neutrals",
+          "hex": "#F3F4F6",
+          "role": "background"
+        },
+        {
+          "name": "Muted Purples",
+          "hex": "#6B21A8",
+          "role": "text"
+        }
+      ],
+      "suitability": [
+        "SaaS",
+        "Corporate Portfolio",
+        "Dashboard"
+      ],
+      "overrides": {
+        "primaryHue": null,
+        "saturationBias": null,
+        "lightnessBias": 10,
+        "borderRadius": "medium",
+        "useGradients": true
+      }
+    },
+    {
+      "name": "Bold Experiment",
+      "shortLabel": "Bold",
+      "description": "Emphasizing creativity and uniqueness, perfect for brands looking to stand out with impactful designs.",
+      "recommendedFonts": [
+        "Satoshi",
+        "Montserrat"
+      ],
+      "recommendedColors": [
+        {
+          "name": "Muted Purples",
+          "hex": "#6B21A8",
+          "role": "primary"
+        },
+        {
+          "name": "Accent Oranges",
+          "hex": "#FB923C",
+          "role": "secondary"
+        },
+        {
+          "name": "Vibrant Blues",
+          "hex": "#1E3A8A",
+          "role": "accent"
+        },
+        {
+          "name": "Warm Neutrals",
+          "hex": "#F3F4F6",
+          "role": "background"
+        },
+        {
+          "name": "Soft Greens",
+          "hex": "#10B981",
+          "role": "text"
+        }
+      ],
+      "suitability": [
+        "Ecommerce",
+        "Creative Portfolios",
+        "Blogs"
+      ],
+      "overrides": {
+        "primaryHue": 240,
+        "saturationBias": 20,
+        "lightnessBias": null,
+        "borderRadius": "rounded",
+        "useGradients": true
+      }
+    },
+    {
+      "name": "Dynamic Minimalism",
+      "shortLabel": "Dynamic",
+      "description": "A fresh take on minimalism with engaging elements that enhance user interaction and satisfaction.",
+      "recommendedFonts": [
+        "Roboto",
+        "Inter"
+      ],
+      "recommendedColors": [
+        {
+          "name": "Soft Greens",
+          "hex": "#10B981",
+          "role": "primary"
+        },
+        {
+          "name": "Warm Neutrals",
+          "hex": "#F3F4F6",
+          "role": "background"
+        },
+        {
+          "name": "Accent Oranges",
+          "hex": "#FB923C",
+          "role": "accent"
+        },
+        {
+          "name": "Vibrant Blues",
+          "hex": "#1E3A8A",
+          "role": "secondary"
+        },
+        {
+          "name": "Muted Purples",
+          "hex": "#6B21A8",
+          "role": "text"
+        }
+      ],
+      "suitability": [
+        "Dashboards",
+        "Web Applications",
+        "SaaS"
+      ],
+      "overrides": {
+        "primaryHue": null,
+        "saturationBias": null,
+        "lightnessBias": 5,
+        "borderRadius": "sharp",
+        "useGradients": false
+      }
+    }
+  ]
 }
