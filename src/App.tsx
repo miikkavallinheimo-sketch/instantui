@@ -12,7 +12,9 @@ import type {
   ColorLocks,
   DesignTokens,
   GeneratedVibe,
+  ColorSet,
 } from "./lib/types";
+import { hexToHsl, hslToHex } from "./lib/colorUtils";
 import SidebarControls from "./components/SidebarControls";
 import Preview from "./components/Preview";
 import ExportPanel from "./components/ExportPanel";
@@ -28,7 +30,41 @@ const DEFAULT_LOCKS: ColorLocks = {
   text: false,
 };
 
-type FontLockMode = "none" | "heading" | "body";
+type FontLockMode = "none" | "heading" | "body" | "both";
+
+const COLOR_FIELDS: (keyof ColorSet)[] = [
+  "primary",
+  "secondary",
+  "accent",
+  "background",
+  "surface",
+  "surfaceAlt",
+  "text",
+  "textMuted",
+  "borderSubtle",
+  "borderStrong",
+  "onPrimary",
+  "onSecondary",
+  "onAccent",
+];
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
+
+function applyColorAdjustments(
+  colors: ColorSet,
+  hueShift: number,
+  saturationShift: number
+): ColorSet {
+  const updated: Partial<ColorSet> = {};
+  for (const key of COLOR_FIELDS) {
+    const { h, s, l } = hexToHsl(colors[key]);
+    const newHue = (h + hueShift + 360) % 360;
+    const newSat = clamp(s + saturationShift, 0, 100);
+    updated[key] = hslToHex(newHue, newSat, l);
+  }
+  return { ...colors, ...(updated as ColorSet) };
+}
 
 function pickFontPairForVibe(
   vibeId: VibeId,
@@ -49,6 +85,8 @@ function buildDesignState(
   seed: number,
   locks: ColorLocks,
   fontLockMode: FontLockMode,
+  hueShift: number,
+  saturationShift: number,
   prev?: DesignState,
   freezeFonts = false
 ): DesignState {
@@ -59,7 +97,7 @@ function buildDesignState(
     fontLockMode === "heading" || fontLockMode === "both";
   const bodyLocked = fontLockMode === "body" || fontLockMode === "both";
 
-  const colors = generateColors(
+  const baseColors = generateColors(
     vibe,
     seed,
     previousState?.colors,
@@ -86,11 +124,18 @@ function buildDesignState(
     };
   }
 
+  const adjustedColors = applyColorAdjustments(
+    baseColors,
+    hueShift,
+    saturationShift
+  );
+
   const { uiTokens, typography } = generateStyleTokens(vibe, seed);
 
   return {
     vibe,
-    colors,
+    colors: adjustedColors,
+    originalColors: baseColors,
     fontPair: baseFontPair,
     uiTokens,
     typography,
@@ -102,9 +147,18 @@ function App() {
   const [seed, setSeed] = useState<number>(() => Math.random());
   const [colorLocks, setColorLocks] = useState<ColorLocks>(DEFAULT_LOCKS);
   const [fontLockMode, setFontLockMode] = useState<FontLockMode>("none");
+  const [hueShift, setHueShift] = useState(0);
+  const [saturationShift, setSaturationShift] = useState(0);
 
   const [designState, setDesignState] = useState<DesignState>(() =>
-    buildDesignState(DEFAULT_VIBE, seed, DEFAULT_LOCKS, "none")
+    buildDesignState(
+      DEFAULT_VIBE,
+      seed,
+      DEFAULT_LOCKS,
+      "none",
+      hueShift,
+      saturationShift
+    )
   );
 
   const [tokens, setTokens] = useState<DesignTokens>(() =>
@@ -133,18 +187,36 @@ function App() {
       setVibeId(newVibeId);
       setActiveGeneratedName(null);
       setDesignState((prev) =>
-        buildDesignState(newVibeId, seed, colorLocks, fontLockMode, prev)
+        buildDesignState(
+          newVibeId,
+          seed,
+          colorLocks,
+          fontLockMode,
+          hueShift,
+          saturationShift,
+          prev
+        )
       );
     },
-    [seed, colorLocks, fontLockMode]
+    [seed, colorLocks, fontLockMode, hueShift, saturationShift]
   );
 
   const spinAll = useCallback(() => {
     const newSeed = Math.random();
     setSeed(newSeed);
     setActiveGeneratedName(null);
+    setHueShift(0);
+    setSaturationShift(0);
     setDesignState((prev) =>
-      buildDesignState(vibeId, newSeed, colorLocks, fontLockMode, prev)
+      buildDesignState(
+        vibeId,
+        newSeed,
+        colorLocks,
+        fontLockMode,
+        0,
+        0,
+        prev
+      )
     );
   }, [vibeId, colorLocks, fontLockMode]);
 
@@ -152,9 +224,18 @@ function App() {
     const newSeed = Math.random();
     setSeed(newSeed);
     setDesignState((prev) =>
-      buildDesignState(vibeId, newSeed, colorLocks, fontLockMode, prev, true)
+      buildDesignState(
+        vibeId,
+        newSeed,
+        colorLocks,
+        fontLockMode,
+        hueShift,
+        saturationShift,
+        prev,
+        true
+      )
     );
-  }, [vibeId, colorLocks, fontLockMode]);
+  }, [vibeId, colorLocks, fontLockMode, hueShift, saturationShift]);
 
   const toggleColorLock = useCallback((key: keyof ColorLocks) => {
     setColorLocks((prev) => ({
@@ -177,18 +258,20 @@ function App() {
             Math.random(),
             colorLocks,
             fontLockMode,
+            hueShift,
+            saturationShift,
             prev
           );
 
-        const newColors = { ...base.colors };
+        const newRawColors = { ...base.originalColors };
 
         gv.recommendedColors?.forEach((c) => {
           if (!c.hex) return;
-          if (c.role === "primary") newColors.primary = c.hex;
-          if (c.role === "secondary") newColors.secondary = c.hex;
-          if (c.role === "accent") newColors.accent = c.hex;
-          if (c.role === "background") newColors.background = c.hex;
-          if (c.role === "text") newColors.text = c.hex;
+          if (c.role === "primary") newRawColors.primary = c.hex;
+          if (c.role === "secondary") newRawColors.secondary = c.hex;
+          if (c.role === "accent") newRawColors.accent = c.hex;
+          if (c.role === "background") newRawColors.background = c.hex;
+          if (c.role === "text") newRawColors.text = c.hex;
         });
 
         let newFontPair = base.fontPair;
@@ -226,15 +309,50 @@ function App() {
           }
         }
 
+        const adjusted = applyColorAdjustments(
+          newRawColors,
+          hueShift,
+          saturationShift
+        );
+
         return {
           ...base,
-          colors: newColors,
+          colors: adjusted,
+          originalColors: newRawColors,
           fontPair: newFontPair,
         };
       });
       setActiveGeneratedName(gv.name);
     },
-    [vibeId, colorLocks, fontLockMode]
+    [vibeId, colorLocks, fontLockMode, hueShift, saturationShift]
+  );
+
+  const handleHueShift = useCallback(
+    (value: number) => {
+      setHueShift(value);
+      setDesignState((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          colors: applyColorAdjustments(prev.originalColors, value, saturationShift),
+        };
+      });
+    },
+    [saturationShift]
+  );
+
+  const handleSaturationShift = useCallback(
+    (value: number) => {
+      setSaturationShift(value);
+      setDesignState((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          colors: applyColorAdjustments(prev.originalColors, hueShift, value),
+        };
+      });
+    },
+    [hueShift]
   );
 
   useEffect(() => {
@@ -288,6 +406,10 @@ function App() {
             onToggleColorLock={toggleColorLock}
             fontLockMode={fontLockMode}
             onChangeFontLock={setLockMode}
+            hueShift={hueShift}
+            saturationShift={saturationShift}
+            onHueShiftChange={handleHueShift}
+            onSaturationShiftChange={handleSaturationShift}
           />
 
           <div className="border-t border-slate-800 pt-4">

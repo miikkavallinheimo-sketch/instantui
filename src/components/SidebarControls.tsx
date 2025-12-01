@@ -4,6 +4,7 @@ import type {
   DesignState,
   ColorLocks,
   ColorKey,
+  FontLockMode,
 } from "../lib/types";
 
 interface SidebarControlsProps {
@@ -13,8 +14,12 @@ interface SidebarControlsProps {
   onRandomizeColors: () => void;
   colorLocks: ColorLocks;
   onToggleColorLock: (key: ColorKey) => void;
-  fontLockMode: "none" | "heading" | "body";
-  onChangeFontLock: (mode: "none" | "heading" | "body") => void;
+  fontLockMode: FontLockMode;
+  onChangeFontLock: (mode: FontLockMode) => void;
+  hueShift: number;
+  saturationShift: number;
+  onHueShiftChange: (value: number) => void;
+  onSaturationShiftChange: (value: number) => void;
 }
 
 const SidebarControls = ({
@@ -26,6 +31,10 @@ const SidebarControls = ({
   onToggleColorLock,
   fontLockMode,
   onChangeFontLock,
+  hueShift,
+  saturationShift,
+  onHueShiftChange,
+  onSaturationShiftChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -145,6 +154,38 @@ const SidebarControls = ({
               </span>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400 mb-2">
+          Tone
+        </h2>
+        <div className="space-y-3 bg-slate-900/60 rounded-md px-3 py-2 text-xs text-slate-300">
+          <label className="flex flex-col gap-1">
+            <span>Hue shift ({hueShift}°)</span>
+            <input
+              type="range"
+              min={-15}
+              max={15}
+              step={1}
+              value={hueShift}
+              onChange={(e) => onHueShiftChange(Number(e.target.value))}
+              className="w-full cursor-pointer"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            <span>Saturation ({saturationShift}%)</span>
+            <input
+              type="range"
+              min={-20}
+              max={20}
+              step={1}
+              value={saturationShift}
+              onChange={(e) => onSaturationShiftChange(Number(e.target.value))}
+              className="w-full cursor-pointer"
+            />
+          </label>
         </div>
       </div>
 
