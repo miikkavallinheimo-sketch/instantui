@@ -22,6 +22,9 @@ interface SidebarControlsProps {
   onAiRefresh: () => void;
   aiTuned: boolean;
   onCopyColor: (color: string) => void;
+  autoRefresh?: boolean;
+  onToggleAutoRefresh?: (enabled: boolean) => void;
+  isOptimizing?: boolean;
 }
 
 const SidebarControls = ({
@@ -39,6 +42,9 @@ const SidebarControls = ({
   onAiRefresh,
   aiTuned,
   onCopyColor,
+  autoRefresh = false,
+  onToggleAutoRefresh,
+  isOptimizing = false,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -49,15 +55,40 @@ const SidebarControls = ({
       <div className="space-y-2">
         <button
           onClick={onAiRefresh}
-          className="w-full py-3 px-4 rounded-xl border border-emerald-400 bg-emerald-400/10 text-emerald-100 text-sm font-semibold tracking-wide hover:bg-emerald-400/15 transition"
+          disabled={isOptimizing}
+          className={`w-full py-3 px-4 rounded-xl border border-emerald-400 text-emerald-100 text-sm font-semibold tracking-wide transition ${
+            isOptimizing
+              ? "bg-emerald-400/5 opacity-60 cursor-wait"
+              : "bg-emerald-400/10 hover:bg-emerald-400/15"
+          }`}
         >
-          AI refresh (BETA)
+          {isOptimizing ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="inline-block animate-spin">⚙️</span>
+              Optimizing...
+            </span>
+          ) : (
+            "AI refresh (BETA)"
+          )}
         </button>
         {aiTuned && (
           <div className="text-[10px] uppercase tracking-[0.2em] text-emerald-400 text-center">
             AI tuned
           </div>
         )}
+        <div className="flex items-center gap-2 px-2 py-2 rounded-lg bg-slate-900/50 border border-slate-700">
+          <input
+            type="checkbox"
+            id="autoRefresh"
+            checked={autoRefresh}
+            onChange={(e) => onToggleAutoRefresh?.(e.target.checked)}
+            className="w-4 h-4 rounded accent-emerald-400 cursor-pointer"
+          />
+          <label htmlFor="autoRefresh" className="text-xs text-slate-300 cursor-pointer flex-1">
+            Auto Refresh
+          </label>
+          <span className="text-[10px] text-slate-500">on vibe change</span>
+        </div>
       </div>
 
       <div>

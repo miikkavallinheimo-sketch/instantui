@@ -259,6 +259,8 @@ function App() {
   const [hueShift, setHueShift] = useState(initialAppState.hueShift);
   const [saturationShift, setSaturationShift] = useState(initialAppState.saturationShift);
   const [aiTuned, setAiTuned] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   const [designState, setDesignState] = useState<DesignState>(() =>
     buildDesignState(
@@ -302,6 +304,22 @@ function App() {
     designState.fontPair.body,
     designState.fontPair.source,
   ]);
+
+  // Auto-refresh typography after vibe change
+  useEffect(() => {
+    if (!autoRefresh || isOptimizing) return;
+
+    const timer = setTimeout(() => {
+      setIsOptimizing(true);
+      // Slight delay to show the "thinking" state
+      setTimeout(() => {
+        handleAiSuggestion();
+        setIsOptimizing(false);
+      }, 500);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [vibeId, autoRefresh]);
 
   // Update URL when state changes
   useEffect(() => {
@@ -757,6 +775,9 @@ function App() {
             onAiRefresh={handleAiSuggestion}
             aiTuned={aiTuned}
             onCopyColor={handleCopyColor}
+            autoRefresh={autoRefresh}
+            onToggleAutoRefresh={setAutoRefresh}
+            isOptimizing={isOptimizing}
           />
 
           <div className="border-t border-slate-800 pt-4">
