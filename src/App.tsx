@@ -55,6 +55,9 @@ function buildDesignState(
   const vibe = VIBE_PRESETS[vibeId];
   const previousState =
     prev && prev.vibe.id === vibeId ? prev : undefined;
+  const headingLocked =
+    fontLockMode === "heading" || fontLockMode === "both";
+  const bodyLocked = fontLockMode === "body" || fontLockMode === "both";
 
   const colors = generateColors(
     vibe,
@@ -73,13 +76,9 @@ function buildDesignState(
     baseFontPair = previousState.fontPair;
   } else if (previousState?.fontPair) {
     const heading =
-      fontLockMode === "heading"
-        ? previousState.fontPair.heading
-        : baseFontPair.heading;
+      headingLocked ? previousState.fontPair.heading : baseFontPair.heading;
     const body =
-      fontLockMode === "body"
-        ? previousState.fontPair.body
-        : baseFontPair.body;
+      bodyLocked ? previousState.fontPair.body : baseFontPair.body;
     baseFontPair = {
       ...baseFontPair,
       heading,
@@ -194,22 +193,25 @@ function App() {
 
         let newFontPair = base.fontPair;
         if (gv.recommendedFonts && gv.recommendedFonts.length) {
-          const headingFontCandidate = gv.recommendedFonts[0];
-          const bodyFontCandidate =
+          const headingCandidate = gv.recommendedFonts[0];
+          const bodyCandidate =
             gv.recommendedFonts[1] ?? gv.recommendedFonts[0];
 
+          const headingLocked =
+            fontLockMode === "heading" || fontLockMode === "both";
+          const bodyLocked =
+            fontLockMode === "body" || fontLockMode === "both";
+
           const headingFont =
-            fontLockMode === "heading" || !headingFontCandidate
+            headingLocked || !headingCandidate
               ? base.fontPair.heading
-              : headingFontCandidate;
+              : headingCandidate;
           const bodyFont =
-            fontLockMode === "body" || !bodyFontCandidate
+            bodyLocked || !bodyCandidate
               ? base.fontPair.body
-              : bodyFontCandidate;
+              : bodyCandidate;
 
           if (
-            fontLockMode !== "heading" ||
-            fontLockMode !== "body" ||
             headingFont !== base.fontPair.heading ||
             bodyFont !== base.fontPair.body
           ) {

@@ -74,8 +74,14 @@ const sizeMap = {
 
 const Preview = ({ designState }: PreviewProps) => {
   const { colors, fontPair, typography, uiTokens } = designState;
-  const navBg = adjustLightness(colors.secondary, designState.vibe.isDarkUi ? 4 : -8);
-  const navAccent = adjustLightness(colors.secondary, designState.vibe.isDarkUi ? 14 : -20);
+  const navBg = adjustLightness(
+    colors.primary,
+    designState.vibe.isDarkUi ? 2 : -14
+  );
+  const navAccent = adjustLightness(
+    colors.primary,
+    designState.vibe.isDarkUi ? 12 : -8
+  );
   const navText = "#ffffff";
   const navTextMuted = "rgba(255,255,255,0.75)";
   const surface = colors.surface;
@@ -117,8 +123,8 @@ const Preview = ({ designState }: PreviewProps) => {
       label: "Trial Conversion",
       value: "37%",
       note: "target 40%",
-      textColor: colors.onAccent,
-      background: colors.accent,
+      textColor: colors.onSecondary,
+      background: colors.secondary,
     },
     {
       label: "Churn",

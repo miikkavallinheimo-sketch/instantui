@@ -122,7 +122,10 @@ const SidebarControls = ({
             ["Text Muted", colors.textMuted],
             ["Border Subtle", colors.borderSubtle],
             ["Border Strong", colors.borderStrong],
-          ].map(([label, value]) => (
+            ["On Primary", colors.onPrimary, colors.primary],
+            ["On Secondary", colors.onSecondary, colors.secondary],
+            ["On Accent", colors.onAccent, colors.accent],
+          ].map(([label, value, bg]) => (
             <div
               key={label}
               className="flex items-center justify-between bg-slate-900/30 rounded-md px-2 py-1.5"
@@ -130,7 +133,10 @@ const SidebarControls = ({
               <div className="flex items-center gap-2">
                 <span
                   className="w-4 h-4 rounded-sm border border-slate-700"
-                  style={{ backgroundColor: value }}
+                  style={{
+                    backgroundColor: bg ?? value,
+                    color: bg ? value : undefined,
+                  }}
                 />
                 <span className="text-slate-300">{label}</span>
               </div>
@@ -152,6 +158,7 @@ const SidebarControls = ({
               ["none", "Free"],
               ["heading", "Lock H"],
               ["body", "Lock Body"],
+              ["both", "Lock Both"],
             ].map(([mode, label]) => (
               <button
                 key={mode}
