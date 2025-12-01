@@ -276,9 +276,11 @@ const Preview = ({ designState, isAnalyzing = false }: PreviewProps) => {
           <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div
-              className="text-2xl font-semibold"
               style={{
                 fontFamily: fontPair.heading,
+                fontSize: sizeMap[typography.heading.size],
+                fontWeight: typography.heading.weight,
+                fontStyle: typography.heading.style,
                 textTransform: headingTransform,
                 color: typography.heading.color ?? colors.text
               }}
@@ -286,8 +288,7 @@ const Preview = ({ designState, isAnalyzing = false }: PreviewProps) => {
               Command Center
             </div>
               <p
-                className="text-sm"
-                style={{ fontFamily: fontPair.body, color: bodyTextColor }}
+                style={{ fontFamily: fontPair.body, fontSize: sizeMap[typography.body.size], fontWeight: typography.body.weight, fontStyle: typography.body.style, color: bodyTextColor }}
               >
                 Monitor health metrics and content performance.
               </p>
