@@ -57,18 +57,19 @@ export function optimizeTypography(
     optimized.body.size as typeof SIZE_ORDER[number]
   );
 
-  if (headingIdx - bodyIdx < 2) {
-    // Korjaa aina: kasvata headingia
-    const newHeadingIdx = Math.min(bodyIdx + 2, SIZE_ORDER.length - 1);
+  if (headingIdx - bodyIdx < 3) {
+    // Korjaa aina: kasvata headingia - vähintään 3 kokoa eri
+    const newHeadingIdx = Math.min(bodyIdx + 3, SIZE_ORDER.length - 1);
     optimized.heading.size = SIZE_ORDER[newHeadingIdx];
   }
 
-  // Subheading tasan 1 kokoa pienempi kuin heading
+  // Subheading 1-2 kokoa pienempi kuin heading
   if (optimized.subheading) {
     const subIdx = SIZE_ORDER.indexOf(
       optimized.subheading.size as typeof SIZE_ORDER[number]
     );
-    const targetSubIdx = Math.max(0, headingIdx - 1);
+    // Aseta subheading 2 kokoa pienemmäksi (tai enemmän jos se on liian suuri)
+    const targetSubIdx = Math.max(0, headingIdx - 2);
     if (subIdx !== targetSubIdx) {
       optimized.subheading.size = SIZE_ORDER[targetSubIdx];
     }
