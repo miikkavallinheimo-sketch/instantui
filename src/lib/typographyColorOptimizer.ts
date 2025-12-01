@@ -1,6 +1,12 @@
 import type { ColorSet } from "./types";
 import { hexToHsl, hslToHex } from "./colorUtils";
 
+// Helper: Add slight randomization while maintaining bounds
+const randomizeValue = (base: number, variance: number, min: number, max: number): number => {
+  const offset = (Math.random() - 0.5) * 2 * variance;
+  return Math.max(min, Math.min(max, base + offset));
+};
+
 /**
  * Optimizes typography colors by adjusting lightness/saturation of text elements
  * Creates visual hierarchy through color variation while maintaining readability
@@ -19,10 +25,10 @@ export function optimizeTypographyColors(
   // H1: Base text color (full contrast)
   const headingColor = colors.text;
 
-  // H2/Subheading: Visually lighter for hierarchy
-  // Increase lightness by 15-20% and reduce saturation slightly
-  const subheadingLightness = Math.min(textHsl.l + 18, 85);
-  const subheadingSaturation = Math.max(textHsl.s - 15, 15);
+  // H2/Subheading: Visually lighter for hierarchy with slight variation
+  // Base: lightness +18, saturation -15, with ±5 point variance
+  const subheadingLightness = randomizeValue(textHsl.l + 18, 5, 60, 85);
+  const subheadingSaturation = randomizeValue(textHsl.s - 15, 4, 10, 40);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
@@ -33,12 +39,14 @@ export function optimizeTypographyColors(
   const bodyColor = colors.text;
 
   // Accent: More saturated and contrasting for call-to-action
-  // Use accent color's hue but adjust for prominence
+  // Use accent color's hue but adjust for prominence with variation
   const accentHsl = hexToHsl(colors.accent);
+  const accentSaturation = randomizeValue(accentHsl.s + 10, 5, 60, 100);
+  const accentLightness = randomizeValue(accentHsl.l - 8, 4, 20, 60);
   const accentColor = hslToHex(
     accentHsl.h,
-    Math.min(accentHsl.s + 10, 100), // More saturated
-    Math.max(accentHsl.l - 8, 25) // Darker for contrast
+    accentSaturation,
+    accentLightness
   );
 
   return {
@@ -66,9 +74,9 @@ export function optimizeTypographyColorsDark(
   // For dark backgrounds, create hierarchy by adjusting lightness
   const headingColor = colors.text;
 
-  // H2: Make lighter for hierarchy on dark backgrounds
-  const subheadingLightness = Math.min(textHsl.l + 15, 90); // Lighter for hierarchy
-  const subheadingSaturation = Math.max(textHsl.s - 10, 10); // Slightly less saturated
+  // H2: Make lighter for hierarchy on dark backgrounds with variation
+  const subheadingLightness = randomizeValue(textHsl.l + 15, 5, 70, 90);
+  const subheadingSaturation = randomizeValue(textHsl.s - 10, 4, 5, 30);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
@@ -78,10 +86,12 @@ export function optimizeTypographyColorsDark(
   const bodyColor = colors.text;
 
   const accentHsl = hexToHsl(colors.accent);
+  const accentSaturation = randomizeValue(accentHsl.s + 12, 5, 70, 100);
+  const accentLightness = randomizeValue(accentHsl.l + 12, 5, 60, 90);
   const accentColor = hslToHex(
     accentHsl.h,
-    Math.min(accentHsl.s + 12, 100),
-    Math.min(accentHsl.l + 12, 90) // Lighter for visibility on dark
+    accentSaturation,
+    accentLightness
   );
 
   return {
