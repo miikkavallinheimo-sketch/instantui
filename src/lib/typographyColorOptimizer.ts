@@ -14,16 +14,15 @@ export function optimizeTypographyColors(
   accent: string;
 } {
   const textHsl = hexToHsl(colors.text);
-  const muteHsl = hexToHsl(colors.textMuted);
 
   // Create hierarchy through lightness adjustments
   // H1: Base text color (full contrast)
   const headingColor = colors.text;
 
-  // H2/Subheading: Slightly lighter/desaturated for visual hierarchy
-  // Reduce saturation by 10% and increase lightness by 8%
-  const subheadingLightness = Math.min(textHsl.l + 8, 95);
-  const subheadingSaturation = Math.max(textHsl.s - 10, 20);
+  // H2/Subheading: Visually lighter for hierarchy
+  // Increase lightness by 15-20% and reduce saturation slightly
+  const subheadingLightness = Math.min(textHsl.l + 18, 85);
+  const subheadingSaturation = Math.max(textHsl.s - 15, 15);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
@@ -38,8 +37,8 @@ export function optimizeTypographyColors(
   const accentHsl = hexToHsl(colors.accent);
   const accentColor = hslToHex(
     accentHsl.h,
-    Math.min(accentHsl.s + 5, 100), // Slightly more saturated
-    Math.max(accentHsl.l - 5, 30) // Slightly darker for contrast
+    Math.min(accentHsl.s + 10, 100), // More saturated
+    Math.max(accentHsl.l - 8, 25) // Darker for contrast
   );
 
   return {
@@ -64,12 +63,12 @@ export function optimizeTypographyColorsDark(
 } {
   const textHsl = hexToHsl(colors.text);
 
-  // For dark backgrounds, create hierarchy by reducing saturation
+  // For dark backgrounds, create hierarchy by adjusting lightness
   const headingColor = colors.text;
 
-  // H2: Keep same hue but reduce saturation for subtlety
-  const subheadingLightness = Math.max(textHsl.l - 5, 40); // Slightly darker
-  const subheadingSaturation = Math.max(textHsl.s - 15, 10); // Much less saturated
+  // H2: Make lighter for hierarchy on dark backgrounds
+  const subheadingLightness = Math.min(textHsl.l + 15, 90); // Lighter for hierarchy
+  const subheadingSaturation = Math.max(textHsl.s - 10, 10); // Slightly less saturated
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
@@ -81,8 +80,8 @@ export function optimizeTypographyColorsDark(
   const accentHsl = hexToHsl(colors.accent);
   const accentColor = hslToHex(
     accentHsl.h,
-    Math.min(accentHsl.s + 10, 100),
-    Math.min(accentHsl.l + 10, 90) // Lighter for visibility on dark
+    Math.min(accentHsl.s + 12, 100),
+    Math.min(accentHsl.l + 12, 90) // Lighter for visibility on dark
   );
 
   return {
