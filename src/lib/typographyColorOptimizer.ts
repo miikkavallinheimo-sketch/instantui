@@ -33,8 +33,8 @@ export function optimizeTypographyColors(
   let subheadingSaturation: number;
 
   if (isLightText) {
-    // For light text: reduce saturation to make it more gray/muted
-    subheadingLightness = randomizeValue(textHsl.l - 5, 3, 70, 100); // Slightly darker
+    // For light text: keep lightness same, reduce saturation to make it more gray/muted
+    subheadingLightness = randomizeValue(textHsl.l, 2, 70, 100); // Keep same lightness
     subheadingSaturation = randomizeValue(textHsl.s - 50, 5, 0, 20); // Much less saturated (more gray)
   } else {
     // For dark text: increase lightness
@@ -53,8 +53,8 @@ export function optimizeTypographyColors(
   let bodySaturation: number;
 
   if (isLightText) {
-    // For light text: reduce saturation more than subheading
-    bodyLightness = randomizeValue(textHsl.l - 10, 4, 60, 100); // More noticeably darker
+    // For light text: keep lightness same, reduce saturation more than subheading
+    bodyLightness = randomizeValue(textHsl.l, 2, 60, 100); // Keep same lightness
     bodySaturation = randomizeValue(textHsl.s - 70, 5, 0, 15); // Even more gray
   } else {
     // For dark text: increase lightness less than subheading
@@ -113,8 +113,8 @@ export function optimizeTypographyColorsDark(
   let subheadingSaturation: number;
 
   if (isLightText) {
-    // For light text on dark bg: reduce saturation
-    subheadingLightness = randomizeValue(textHsl.l - 8, 4, 70, 100);
+    // For light text on dark bg: keep lightness same, reduce saturation
+    subheadingLightness = randomizeValue(textHsl.l, 2, 70, 100);
     subheadingSaturation = randomizeValue(textHsl.s - 50, 5, 0, 20);
   } else {
     // For dark text: increase lightness
@@ -133,8 +133,8 @@ export function optimizeTypographyColorsDark(
   let bodySaturation: number;
 
   if (isLightText) {
-    // For light text on dark bg: reduce saturation more
-    bodyLightness = randomizeValue(textHsl.l - 15, 4, 60, 100);
+    // For light text on dark bg: keep lightness same, reduce saturation more
+    bodyLightness = randomizeValue(textHsl.l, 2, 60, 100);
     bodySaturation = randomizeValue(textHsl.s - 70, 5, 0, 15);
   } else {
     // For dark text: increase lightness less
