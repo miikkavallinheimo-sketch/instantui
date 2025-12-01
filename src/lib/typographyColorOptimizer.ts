@@ -26,9 +26,9 @@ export function optimizeTypographyColors(
   const headingColor = colors.text;
 
   // H2/Subheading: Visually lighter for hierarchy with slight variation
-  // Base: lightness +18, saturation -15, with ±5 point variance
-  const subheadingLightness = randomizeValue(textHsl.l + 18, 5, 60, 85);
-  const subheadingSaturation = randomizeValue(textHsl.s - 15, 4, 10, 40);
+  // Base: lightness +30, saturation -20, with ±5 point variance
+  const subheadingLightness = randomizeValue(textHsl.l + 30, 5, 60, 95);
+  const subheadingSaturation = randomizeValue(textHsl.s - 20, 4, 5, 40);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
@@ -75,8 +75,8 @@ export function optimizeTypographyColorsDark(
   const headingColor = colors.text;
 
   // H2: Make lighter for hierarchy on dark backgrounds with variation
-  const subheadingLightness = randomizeValue(textHsl.l + 15, 5, 70, 90);
-  const subheadingSaturation = randomizeValue(textHsl.s - 10, 4, 5, 30);
+  const subheadingLightness = randomizeValue(textHsl.l + 25, 5, 70, 98);
+  const subheadingSaturation = randomizeValue(textHsl.s - 15, 4, 5, 30);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
