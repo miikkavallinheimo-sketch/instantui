@@ -204,11 +204,19 @@ const Preview = ({ designState, isAnalyzing = false }: PreviewProps) => {
       style={rootStyle}
     >
       {isAnalyzing && (
-        <div className="absolute inset-0 bg-black/40 rounded-3xl flex items-center justify-center backdrop-blur-sm z-50">
-          <div className="flex flex-col items-center gap-3">
-            <div className="inline-block animate-spin text-4xl">⚙️</div>
-            <div className="text-lg font-semibold text-white tracking-wide">Analyzing...</div>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm z-50">
+          <div className="text-6xl font-bold text-white tracking-wider select-none"
+               style={{
+                 animation: `fadeInOut ${400 + Math.random() * 200}ms ease-in-out forwards`
+               }}>
+            Analyzing...
           </div>
+          <style>{`
+            @keyframes fadeInOut {
+              0% { opacity: 1; }
+              100% { opacity: 1; }
+            }
+          `}</style>
         </div>
       )}
       <div className="flex flex-col lg:flex-row min-h-[640px]">
