@@ -404,10 +404,11 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
     },
     colorVariations: [
       { primary: "#0F1315", secondary: "#3A3F45", accent: "#35FFD1" },
-      { primary: "#121516", secondary: "#4A5158", accent: "#2CF7C5" },
-      { primary: "#15191B", secondary: "#52565C", accent: "#33EEC1" },
-      { primary: "#0D1012", secondary: "#40454B", accent: "#2AE3B8" },
-      { primary: "#181C1E", secondary: "#575C62", accent: "#3AF5CD" },
+      { primary: "#121516", secondary: "#4A5158", accent: "#F851C4" },
+      { primary: "#15191B", secondary: "#52565C", accent: "#F97316" },
+      { primary: "#0D1012", secondary: "#40454B", accent: "#8B5CF6" },
+      { primary: "#181C1E", secondary: "#575C62", accent: "#38BDF8" },
+      { primary: "#121515", secondary: "#484E54", accent: "#C3FF3D" },
     ],
   },
 

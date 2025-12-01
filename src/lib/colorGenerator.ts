@@ -754,6 +754,8 @@ export function generateColors(
 
   return vibe.id === "luxury"
     ? enforceLuxuryDiscipline(generated)
+    : vibe.id === "dark"
+    ? enforceDarkDiscipline(generated)
     : generated;
 }
 
@@ -847,3 +849,114 @@ export function enforceLuxuryDiscipline(colors: ColorSet): ColorSet {
     onAccent,
   };
 }
+
+export function enforceDarkDiscipline(colors: ColorSet): ColorSet {
+  const greyHue = 220;
+  const clampLight = (value: number, min: number, max: number) =>
+    clamp(value, min, max);
+
+  const toTintedNeutral = (
+    hex: string,
+    minL: number,
+    maxL: number,
+    saturation: number,
+    fallbackHue: number
+  ) => {
+    const { h, l } = hexToHsl(hex);
+    const hue = Number.isFinite(h) ? h : fallbackHue;
+    const light = clampLight(l, minL, maxL);
+    const sat = clampLight(saturation, 6, 38);
+    return hslToHex((hue + 360) % 360, sat, light);
+  };
+
+  const originalBg = hexToHsl(colors.background);
+  const background = hslToHex(
+    greyHue,
+    clampLight(originalBg.s, 2, 12),
+    clampLight(originalBg.l, 1.5, 7)
+  );
+  const bg = hexToHsl(background);
+
+  const accentHsl = hexToHsl(colors.accent);
+  const accent = hslToHex(
+    accentHsl.h,
+    clampLight(accentHsl.s, 75, 100),
+    clampLight(accentHsl.l, 45, 68)
+  );
+
+  const allowedPrimaryBands: [number, number][] = [
+    [150, 210],
+    [210, 260],
+  ];
+  const allowedSecondaryBands: [number, number][] = [
+    [150, 210],
+    [210, 260],
+  ];
+
+  const primaryHue = clampHueToBand(
+    hexToHsl(colors.primary).h,
+    allowedPrimaryBands,
+    (accentHsl.h + 210) % 360
+  );
+  const secondaryHue = clampHueToBand(
+    hexToHsl(colors.secondary).h,
+    allowedSecondaryBands,
+    (accentHsl.h + 60) % 360
+  );
+
+  const primary = toTintedNeutral(
+    colors.primary,
+    18,
+    32,
+    22,
+    primaryHue
+  );
+  const secondary = toTintedNeutral(
+    colors.secondary,
+    32,
+    48,
+    16,
+    secondaryHue
+  );
+
+  const makeSurface = (delta: number, sat = 6) =>
+    hslToHex(greyHue, sat, clampLight(bg.l + delta, 8, 32));
+
+  const surface = makeSurface(8);
+  const surfaceAlt = makeSurface(14);
+  const borderSubtle = makeSurface(4, 5);
+  const borderStrong = makeSurface(20, 8);
+  const textMuted = mixHex(colors.textMuted, background, 0.55);
+
+  const text = ensureReadableText(background, colors.text);
+  const onPrimary = ensureReadableText(primary, text);
+  const onSecondary = ensureReadableText(secondary, text);
+  const onAccent = ensureReadableText(accent, text);
+
+  return {
+    ...colors,
+    background,
+    primary,
+    secondary,
+    accent,
+    surface,
+    surfaceAlt,
+    borderSubtle,
+    borderStrong,
+    textMuted,
+    onPrimary,
+    onSecondary,
+    onAccent,
+    text,
+  };
+}
+const clampHueToBand = (
+  hue: number,
+  allowed: [number, number][],
+  fallback: number
+) => {
+  for (const [min, max] of allowed) {
+    if (hue >= min && hue <= max) return hue;
+  }
+  return fallback;
+};

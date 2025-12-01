@@ -2,7 +2,11 @@ import { useEffect, useState, useCallback } from "react";
 import { VIBE_PRESETS } from "./lib/vibePresets";
 import { FONT_PAIRS } from "./lib/fontPairs";
 import { FONT_SETTINGS } from "./lib/config";
-import { generateColors, enforceLuxuryDiscipline } from "./lib/colorGenerator";
+import {
+  generateColors,
+  enforceLuxuryDiscipline,
+  enforceDarkDiscipline,
+} from "./lib/colorGenerator";
 import { buildDesignTokens } from "./lib/designTokens";
 import { generateStyleTokens } from "./lib/styleVariations";
 import { ensureFontLoaded } from "./lib/fontLoader";
@@ -125,7 +129,11 @@ const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"
 const applyVibeColorRules = (
   vibe: VibePreset,
   colors: DesignState["colors"]
-) => (vibe.id === "luxury" ? enforceLuxuryDiscipline(colors) : colors);
+) => {
+  if (vibe.id === "luxury") return enforceLuxuryDiscipline(colors);
+  if (vibe.id === "dark") return enforceDarkDiscipline(colors);
+  return colors;
+};
 
 function pickFontPairForVibe(
   vibeId: VibeId,

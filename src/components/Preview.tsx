@@ -82,6 +82,7 @@ const Preview = ({ designState }: PreviewProps) => {
   const surfaceAlt = colors.surfaceAlt;
   const subtle = colors.borderSubtle;
   const textMuted = colors.textMuted;
+  const searchTextColor = ensureReadableColor(surface, textMuted);
   const subheadingTokens =
     typography.subheading ?? {
       size: typography.heading.size === "2xl" ? "xl" : "lg",
@@ -287,7 +288,7 @@ const Preview = ({ designState }: PreviewProps) => {
                 backgroundColor: surface,
                   border: `1px solid ${subtle}`,
                   fontFamily: fontPair.body,
-                  color: textMuted,
+                  color: searchTextColor,
                 }}
               >
                 Search transactions...
