@@ -55,11 +55,11 @@ const SidebarControls = ({
       <div className="space-y-2">
         <button
           onClick={onAiRefresh}
-          disabled={isOptimizing}
+          disabled={isOptimizing || aiTuned}
           className={`w-full py-3 px-4 rounded-xl border border-emerald-400 text-emerald-100 text-sm font-semibold tracking-wide transition ${
-            isOptimizing
-              ? "bg-emerald-400/5 opacity-60 cursor-wait"
-              : "bg-emerald-400/10 hover:bg-emerald-400/15"
+            isOptimizing || aiTuned
+              ? "bg-emerald-400/5 opacity-60 cursor-not-allowed"
+              : "bg-emerald-400/10 hover:bg-emerald-400/15 cursor-pointer"
           }`}
         >
           {isOptimizing ? (
@@ -67,15 +67,15 @@ const SidebarControls = ({
               <span className="inline-block animate-spin">⚙️</span>
               Optimizing...
             </span>
+          ) : aiTuned ? (
+            <span className="inline-flex items-center gap-2">
+              <span>✓</span>
+              AI tuned
+            </span>
           ) : (
             "AI refresh (BETA)"
           )}
         </button>
-        {aiTuned && (
-          <div className="text-[10px] uppercase tracking-[0.2em] text-emerald-400 text-center">
-            AI tuned
-          </div>
-        )}
         <div className="flex items-center gap-2 px-2 py-2 rounded-lg bg-slate-900/50 border border-slate-700">
           <input
             type="checkbox"
