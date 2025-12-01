@@ -8,9 +8,15 @@ export const FONT_PAIRS: FontPair[] = [
     source: "google",
   },
   {
+    heading: "Space Mono",
+    body: "Inter",
+    vibes: ["dark", "dark-tech"],
+    source: "google",
+  },
+  {
     heading: "Space Grotesk",
     body: "Inter",
-    vibes: ["modern-saas", "dark-tech", "soft-neo-tech"],
+    vibes: ["modern-saas", "dark-tech", "soft-neo-tech", "brutalist"],
     source: "google",
   },
   {
@@ -52,7 +58,7 @@ export const FONT_PAIRS: FontPair[] = [
   {
     heading: "Work Sans",
     body: "Source Sans Pro",
-    vibes: ["modern-saas", "dark-tech", "cyber-mint"],
+    vibes: ["modern-saas", "dark-tech", "cyber-mint", "brutalist"],
     source: "google",
   },
   {
@@ -82,7 +88,7 @@ export const FONT_PAIRS: FontPair[] = [
   {
     heading: "Source Code Pro",
     body: "Inter",
-    vibes: ["dark-tech", "minimal", "retro-pixel"],
+    vibes: ["dark-tech", "minimal", "retro-pixel", "brutalist"],
     source: "google",
   },
   {
@@ -161,19 +167,19 @@ export const FONT_PAIRS: FontPair[] = [
   {
     heading: "Archivo",
     body: "Archivo",
-    vibes: ["modern-saas", "dark-tech", "soft-neo-tech"],
+    vibes: ["modern-saas", "dark-tech", "soft-neo-tech", "brutalist", "dark"],
     source: "google",
   },
   {
     heading: "Exo",
     body: "Exo",
-    vibes: ["dark-tech", "retro-pixel", "soft-neo-tech"],
+    vibes: ["dark-tech", "retro-pixel", "soft-neo-tech", "brutalist", "dark"],
     source: "google",
   },
   {
     heading: "JetBrains Mono",
     body: "JetBrains Mono",
-    vibes: ["dark-tech", "minimal", "retro-pixel"],
+    vibes: ["dark-tech", "minimal", "retro-pixel", "dark"],
     source: "google",
   },
   {

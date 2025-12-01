@@ -1,97 +1,97 @@
-/**
- * Väriharmonia-engine: generoi väriyhdistelmiä väriteorian perusteella
- */
-
 import { hslToHex } from "./colorUtils";
 
-export type HarmonyType = "tetradic" | "analogous" | "complementary" | "triadic" | "split-complementary";
+export type HarmonyType =
+  | "analogous"
+  | "split-complementary"
+  | "triadic"
+  | "tetradic"
+  | "complementary";
 
-interface HarmonyConfig {
-  type: HarmonyType;
-  saturationVariation: number; // 0-20: kuinka paljon saturaatio vaihtelee
-  lightnessVariation: number;  // 0-20: kuinka paljon lightness vaihtelee
+const HARMONY_TYPES: HarmonyType[] = [
+  "analogous",
+  "split-complementary",
+  "triadic",
+  "tetradic",
+  "complementary",
+];
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
+
+const rotateHue = (hue: number, delta: number) =>
+  (hue + delta + 360) % 360;
+
+export const randomHarmonyType = (seed: number): HarmonyType => {
+  const index = Math.floor(Math.abs(Math.sin(seed * 7919)) * HARMONY_TYPES.length);
+  return HARMONY_TYPES[index % HARMONY_TYPES.length];
+};
+
+interface HarmonyOptions {
+  saturationVariation?: number;
+  lightnessVariation?: number;
 }
 
-function randomInRange(min: number, max: number, seed: number): number {
-  const x = Math.sin(seed) * 10000;
-  const frac = x - Math.floor(x);
-  return min + frac * (max - min);
-}
+const withVariation = (
+  base: number,
+  maxDelta: number,
+  seed: number,
+  offset: number,
+  min = 0,
+  max = 100
+) => {
+  if (maxDelta <= 0) return clamp(base, min, max);
+  const delta = (Math.sin(seed * 9973 + offset * 53) * maxDelta) / 2;
+  return clamp(base + delta, min, max);
+};
 
-/**
- * Generoi väriyhdistelmiä valitun harmonia-tyypin perusteella
- */
-export function generateHarmony(
-  primaryHue: number,
-  primarySat: number,
-  primaryLight: number,
+export const generateHarmony = (
+  hue: number,
+  saturation: number,
+  lightness: number,
   harmonyType: HarmonyType,
   seed: number,
-  config: HarmonyConfig
-): { primary: string; secondary: string; accent: string } {
-  // Lisää pieni saturaation ja lightnesin variaatio
-  const satVar = randomInRange(-config.saturationVariation, config.saturationVariation, seed * 0.7);
-  const lightVar = randomInRange(-config.lightnessVariation, config.lightnessVariation, seed * 0.8);
+  options: HarmonyOptions = {}
+) => {
+  const satVar = options.saturationVariation ?? 10;
+  const lightVar = options.lightnessVariation ?? 8;
 
-  const variedSat = Math.max(30, Math.min(100, primarySat + satVar));
-  const variedLight = Math.max(25, Math.min(75, primaryLight + lightVar));
+  const buildColor = (h: number, idx: number) =>
+    hslToHex(
+      (h + 360) % 360,
+      withVariation(saturation, satVar, seed, idx * 0.31, 15, 95),
+      withVariation(lightness, lightVar, seed, idx * 0.47, 8, 92)
+    );
 
-  const primary = hslToHex(primaryHue, variedSat, variedLight);
-
-  let secondaryHue: number;
-  let accentHue: number;
+  let h2 = hue;
+  let h3 = hue;
 
   switch (harmonyType) {
-    case "tetradic":
-      secondaryHue = (primaryHue + 90) % 360;
-      accentHue = (primaryHue + 180) % 360;
-      break;
     case "analogous":
-      secondaryHue = (primaryHue + 30) % 360;
-      accentHue = (primaryHue + 60) % 360;
-      break;
-    case "complementary":
-      secondaryHue = (primaryHue + 180) % 360;
-      accentHue = (primaryHue + 180 + randomInRange(-30, 30, seed * 1.5)) % 360;
-      break;
-    case "triadic":
-      secondaryHue = (primaryHue + 120) % 360;
-      accentHue = (primaryHue + 240) % 360;
+      h2 = rotateHue(hue, 20 + Math.sin(seed * 13) * 18);
+      h3 = rotateHue(hue, -25 + Math.sin(seed * 29) * 18);
       break;
     case "split-complementary":
-      secondaryHue = (primaryHue + 150) % 360;
-      accentHue = (primaryHue + 210) % 360;
+      h2 = rotateHue(hue, 150 + Math.sin(seed * 11) * 10);
+      h3 = rotateHue(hue, -150 + Math.sin(seed * 17) * 10);
       break;
+    case "triadic":
+      h2 = rotateHue(hue, 120);
+      h3 = rotateHue(hue, -120);
+      break;
+    case "tetradic":
+      h2 = rotateHue(hue, 90);
+      h3 = rotateHue(hue, 180);
+      break;
+    case "complementary":
     default:
-      secondaryHue = (primaryHue + 90) % 360;
-      accentHue = (primaryHue + 180) % 360;
+      h2 = rotateHue(hue, 180);
+      h3 = rotateHue(hue, 30 + Math.sin(seed * 23) * 15);
+      break;
   }
 
-  // Secondary: hieman erilainen saturaatio ja lightness
-  const secondarySat = Math.max(30, Math.min(100, variedSat - 10));
-  const secondaryLight = Math.max(25, Math.min(75, variedLight + 5));
-  const secondary = hslToHex(secondaryHue, secondarySat, secondaryLight);
-
-  // Accent: korkea saturaatio, näyttävä
-  const accentSat = Math.min(100, variedSat + 15);
-  const accentLight = Math.max(25, Math.min(75, variedLight));
-  const accent = hslToHex(accentHue, accentSat, accentLight);
-
-  return { primary, secondary, accent };
-}
-
-/**
- * Valitse satunnainen harmonia-tyyppi, preferoidaan tietyt
- */
-export function randomHarmonyType(seed: number): HarmonyType {
-  const types: HarmonyType[] = [
-    "tetradic",
-    "analogous",
-    "complementary",
-    "triadic",
-    "split-complementary",
-  ];
-  const idx = Math.floor(Math.abs(Math.sin(seed) * 10) % types.length);
-  return types[idx];
-}
-
+  return {
+    primary: buildColor(hue, 0),
+    secondary: buildColor(h2, 1),
+    accent: buildColor(h3, 2),
+  };
+};

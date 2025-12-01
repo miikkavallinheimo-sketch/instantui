@@ -3,7 +3,15 @@ export interface ColorSet {
   secondary: string;
   accent: string;
   background: string;
+  surface: string;
+  surfaceAlt: string;
   text: string;
+  textMuted: string;
+  borderSubtle: string;
+  borderStrong: string;
+  onPrimary: string;
+  onSecondary: string;
+  onAccent: string;
 }
 
 export interface VibePalette {
@@ -19,11 +27,20 @@ export interface VibePalette {
   borderStrong: string;
 }
 
-export interface ColorVariations {
-  primary?: string[];
-  secondary?: string[];
-  accent?: string[];
+export interface PaletteVariation {
+  primary?: string;
+  secondary?: string;
+  accent?: string;
+  background?: string;
+  text?: string;
+  surface?: string;
+  surfaceAlt?: string;
+  borderSubtle?: string;
+  borderStrong?: string;
+  textMuted?: string;
 }
+
+export type ColorVariations = PaletteVariation[];
 
 export type RadiusToken = "none" | "sm" | "md" | "lg" | "xl" | "full";
 export type ShadowToken = "none" | "soft" | "strong";
@@ -40,16 +57,25 @@ export interface TypographyTokens {
     size: "sm" | "md" | "lg" | "xl" | "2xl";
     weight: number; // 400, 600, 700, 800
     style: "normal" | "italic";
+    transform?: "none" | "uppercase";
+  };
+  subheading?: {
+    size: "sm" | "md" | "lg" | "xl";
+    weight: number;
+    style: "normal" | "italic";
+    transform?: "none" | "uppercase";
   };
   body: {
     size: "xs" | "sm" | "md" | "lg";
     weight: number;
     style: "normal" | "italic";
+    transform?: "none" | "uppercase";
   };
   accent: {
     size: "xs" | "sm" | "md";
     weight: number;
     style: "normal" | "italic";
+    transform?: "none" | "uppercase";
   };
 }
 
@@ -72,7 +98,8 @@ export type VibeId =
   | "warm-editorial"
   | "retro-pixel"
   | "magazine-brutalism"
-  | "cyber-mint";
+  | "cyber-mint"
+  | "dark";
 
 export interface VibePreset {
   id: VibeId;
@@ -98,6 +125,8 @@ export interface DesignState {
   vibe: VibePreset;
   colors: ColorSet;
   fontPair: FontPair;
+  uiTokens: VibeUiTokens;
+  typography: TypographyTokens;
 }
 
 export interface DesignTokens {

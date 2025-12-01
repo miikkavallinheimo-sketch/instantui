@@ -4,6 +4,8 @@ import { FONT_PAIRS } from "./lib/fontPairs";
 import { FONT_SETTINGS } from "./lib/config";
 import { generateColors } from "./lib/colorGenerator";
 import { buildDesignTokens } from "./lib/designTokens";
+import { generateStyleTokens } from "./lib/styleVariations";
+import { ensureFontLoaded } from "./lib/fontLoader";
 import type {
   VibeId,
   DesignState,
@@ -26,6 +28,8 @@ const DEFAULT_LOCKS: ColorLocks = {
   text: false,
 };
 
+type FontLockMode = "none" | "heading" | "body";
+
 function pickFontPairForVibe(
   vibeId: VibeId,
   seed: number,
@@ -44,27 +48,53 @@ function buildDesignState(
   vibeId: VibeId,
   seed: number,
   locks: ColorLocks,
-  fontLocked: boolean,
-  prev?: DesignState
+  fontLockMode: FontLockMode,
+  prev?: DesignState,
+  freezeFonts = false
 ): DesignState {
   const vibe = VIBE_PRESETS[vibeId];
+  const previousState =
+    prev && prev.vibe.id === vibeId ? prev : undefined;
 
   const colors = generateColors(
     vibe,
     seed,
-    prev?.colors,
+    previousState?.colors,
     locks
   );
 
-  const fontPair =
-    fontLocked && prev?.fontPair
-      ? prev.fontPair
-      : pickFontPairForVibe(vibeId, seed, FONT_SETTINGS.allowPremiumFonts);
+  let baseFontPair = pickFontPairForVibe(
+    vibeId,
+    seed,
+    FONT_SETTINGS.allowPremiumFonts
+  );
+
+  if (freezeFonts && previousState?.fontPair) {
+    baseFontPair = previousState.fontPair;
+  } else if (previousState?.fontPair) {
+    const heading =
+      fontLockMode === "heading"
+        ? previousState.fontPair.heading
+        : baseFontPair.heading;
+    const body =
+      fontLockMode === "body"
+        ? previousState.fontPair.body
+        : baseFontPair.body;
+    baseFontPair = {
+      ...baseFontPair,
+      heading,
+      body,
+    };
+  }
+
+  const { uiTokens, typography } = generateStyleTokens(vibe, seed);
 
   return {
     vibe,
     colors,
-    fontPair,
+    fontPair: baseFontPair,
+    uiTokens,
+    typography,
   };
 }
 
@@ -72,10 +102,10 @@ function App() {
   const [vibeId, setVibeId] = useState<VibeId>(DEFAULT_VIBE);
   const [seed, setSeed] = useState<number>(() => Math.random());
   const [colorLocks, setColorLocks] = useState<ColorLocks>(DEFAULT_LOCKS);
-  const [fontLocked, setFontLocked] = useState<boolean>(false);
+  const [fontLockMode, setFontLockMode] = useState<FontLockMode>("none");
 
   const [designState, setDesignState] = useState<DesignState>(() =>
-    buildDesignState(DEFAULT_VIBE, seed, DEFAULT_LOCKS, false)
+    buildDesignState(DEFAULT_VIBE, seed, DEFAULT_LOCKS, "none")
   );
 
   const [tokens, setTokens] = useState<DesignTokens>(() =>
@@ -90,15 +120,24 @@ function App() {
     setTokens(buildDesignTokens(designState));
   }, [designState]);
 
+  useEffect(() => {
+    ensureFontLoaded(designState.fontPair.heading, designState.fontPair.source);
+    ensureFontLoaded(designState.fontPair.body, designState.fontPair.source);
+  }, [
+    designState.fontPair.heading,
+    designState.fontPair.body,
+    designState.fontPair.source,
+  ]);
+
   const applyVibe = useCallback(
     (newVibeId: VibeId) => {
       setVibeId(newVibeId);
       setActiveGeneratedName(null);
       setDesignState((prev) =>
-        buildDesignState(newVibeId, seed, colorLocks, fontLocked, prev)
+        buildDesignState(newVibeId, seed, colorLocks, fontLockMode, prev)
       );
     },
-    [seed, colorLocks, fontLocked]
+    [seed, colorLocks, fontLockMode]
   );
 
   const spinAll = useCallback(() => {
@@ -106,17 +145,17 @@ function App() {
     setSeed(newSeed);
     setActiveGeneratedName(null);
     setDesignState((prev) =>
-      buildDesignState(vibeId, newSeed, colorLocks, fontLocked, prev)
+      buildDesignState(vibeId, newSeed, colorLocks, fontLockMode, prev)
     );
-  }, [vibeId, colorLocks, fontLocked]);
+  }, [vibeId, colorLocks, fontLockMode]);
 
   const spinColorsOnly = useCallback(() => {
     const newSeed = Math.random();
     setSeed(newSeed);
     setDesignState((prev) =>
-      buildDesignState(vibeId, newSeed, colorLocks, true, prev)
+      buildDesignState(vibeId, newSeed, colorLocks, fontLockMode, prev, true)
     );
-  }, [vibeId, colorLocks]);
+  }, [vibeId, colorLocks, fontLockMode]);
 
   const toggleColorLock = useCallback((key: keyof ColorLocks) => {
     setColorLocks((prev) => ({
@@ -125,8 +164,8 @@ function App() {
     }));
   }, []);
 
-  const toggleFontLock = useCallback(() => {
-    setFontLocked((prev) => !prev);
+  const setLockMode = useCallback((mode: FontLockMode) => {
+    setFontLockMode(mode);
   }, []);
 
   const applyGeneratedVibe = useCallback(
@@ -134,7 +173,13 @@ function App() {
       setDesignState((prev) => {
         const base =
           prev ||
-          buildDesignState(vibeId, Math.random(), colorLocks, fontLocked, prev);
+          buildDesignState(
+            vibeId,
+            Math.random(),
+            colorLocks,
+            fontLockMode,
+            prev
+          );
 
         const newColors = { ...base.colors };
 
@@ -148,20 +193,35 @@ function App() {
         });
 
         let newFontPair = base.fontPair;
-        if (!fontLocked && gv.recommendedFonts && gv.recommendedFonts.length) {
-          const headingFont = gv.recommendedFonts[0];
-          const bodyFont =
-            gv.recommendedFonts[1] ??
-            gv.recommendedFonts[0] ??
-            base.fontPair.body;
+        if (gv.recommendedFonts && gv.recommendedFonts.length) {
+          const headingFontCandidate = gv.recommendedFonts[0];
+          const bodyFontCandidate =
+            gv.recommendedFonts[1] ?? gv.recommendedFonts[0];
 
-          newFontPair = {
-            heading: headingFont,
-            body: bodyFont,
-            source: "premium",
-            notes: "From AI-generated vibe suggestion.",
-            vibes: [],
-          };
+          const headingFont =
+            fontLockMode === "heading" || !headingFontCandidate
+              ? base.fontPair.heading
+              : headingFontCandidate;
+          const bodyFont =
+            fontLockMode === "body" || !bodyFontCandidate
+              ? base.fontPair.body
+              : bodyFontCandidate;
+
+          if (
+            fontLockMode !== "heading" ||
+            fontLockMode !== "body" ||
+            headingFont !== base.fontPair.heading ||
+            bodyFont !== base.fontPair.body
+          ) {
+            newFontPair = {
+              ...base.fontPair,
+              heading: headingFont,
+              body: bodyFont,
+              source: "premium",
+              notes: "From AI-generated vibe suggestion.",
+              vibes: [],
+            };
+          }
         }
 
         return {
@@ -172,7 +232,7 @@ function App() {
       });
       setActiveGeneratedName(gv.name);
     },
-    [vibeId, colorLocks, fontLocked]
+    [vibeId, colorLocks, fontLockMode]
   );
 
   useEffect(() => {
@@ -224,8 +284,8 @@ function App() {
             onRandomizeColors={spinColorsOnly}
             colorLocks={colorLocks}
             onToggleColorLock={toggleColorLock}
-            fontLocked={fontLocked}
-            onToggleFontLock={toggleFontLock}
+            fontLockMode={fontLockMode}
+            onChangeFontLock={setLockMode}
           />
 
           <div className="border-t border-slate-800 pt-4">

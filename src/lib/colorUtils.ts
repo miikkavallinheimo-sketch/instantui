@@ -64,9 +64,7 @@ export function contrastRatio(hex1: string, hex2: string): number {
 }
 
 /**
- * Muuntaa hex-värin HSL:ksi
- * @param hex Hex-väri (esim. "#FF0000" tai "FF0000")
- * @returns HSL-arvot: h (0-360), s (0-100), l (0-100)
+ * Muuntaa hex-värin HSL:ksi.
  */
 export function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const clean = hex.replace("#", "");
@@ -93,6 +91,8 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number } {
         break;
       case b:
         h = ((r - g) / d + 4) / 6;
+        break;
+      default:
         break;
     }
   }

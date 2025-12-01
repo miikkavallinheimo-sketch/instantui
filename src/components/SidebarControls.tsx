@@ -13,8 +13,8 @@ interface SidebarControlsProps {
   onRandomizeColors: () => void;
   colorLocks: ColorLocks;
   onToggleColorLock: (key: ColorKey) => void;
-  fontLocked: boolean;
-  onToggleFontLock: () => void;
+  fontLockMode: "none" | "heading" | "body";
+  onChangeFontLock: (mode: "none" | "heading" | "body") => void;
 }
 
 const SidebarControls = ({
@@ -24,8 +24,8 @@ const SidebarControls = ({
   onRandomizeColors,
   colorLocks,
   onToggleColorLock,
-  fontLocked,
-  onToggleFontLock,
+  fontLockMode,
+  onChangeFontLock,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -112,47 +112,96 @@ const SidebarControls = ({
       </div>
 
       <div>
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mt-3">
+          Extended tokens
+        </h3>
+        <div className="mt-2 grid grid-cols-1 gap-1 text-xs">
+          {[
+            ["Surface", colors.surface],
+            ["Surface Alt", colors.surfaceAlt],
+            ["Text Muted", colors.textMuted],
+            ["Border Subtle", colors.borderSubtle],
+            ["Border Strong", colors.borderStrong],
+          ].map(([label, value]) => (
+            <div
+              key={label}
+              className="flex items-center justify-between bg-slate-900/30 rounded-md px-2 py-1.5"
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-4 h-4 rounded-sm border border-slate-700"
+                  style={{ backgroundColor: value }}
+                />
+                <span className="text-slate-300">{label}</span>
+              </div>
+              <span className="font-mono text-[11px] text-slate-500">
+                {value.toUpperCase()}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
             Fonts
           </h2>
-          <button
-            onClick={onToggleFontLock}
-            className={`text-[11px] px-2 py-1 rounded-full border ${
-              fontLocked
-                ? "border-emerald-400 text-emerald-300 bg-emerald-400/10"
-                : "border-slate-600 text-slate-300 hover:bg-slate-800"
-            }`}
-          >
-            {fontLocked ? "Font locked" : "Lock font"}
-          </button>
+          <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden">
+            {[
+              ["none", "Free"],
+              ["heading", "Lock H"],
+              ["body", "Lock Body"],
+            ].map(([mode, label]) => (
+              <button
+                key={mode}
+                onClick={() => onChangeFontLock(mode as typeof fontLockMode)}
+                className={`px-2 py-1 ${
+                  fontLockMode === mode
+                    ? "bg-slate-700 text-slate-50"
+                    : "text-slate-300"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="bg-slate-900/60 rounded-md px-3 py-2 text-xs space-y-1">
+        <div className="bg-slate-900/60 rounded-md px-3 py-2 text-xs space-y-3">
           <div>
-            <span className="text-slate-400 mr-1">Heading:</span>
-            <span className="text-slate-100">{fontPair.heading}</span>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
+              Heading font (H1/H2)
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-100">{fontPair.heading}</span>
+              <span className="text-[10px] text-slate-400">weight {designState.typography.heading.weight}</span>
+            </div>
+            <div className="text-[11px] text-slate-500 mt-1">
+              {fontPair.source === "google"
+                ? "Google Fonts"
+                : fontPair.source === "system"
+                ? "System font"
+                : "Premium / licensed"}
+            </div>
           </div>
-          <div>
-            <span className="text-slate-400 mr-1">Body:</span>
-            <span className="text-slate-100">{fontPair.body}</span>
+          <div className="space-y-1">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
+              Body font
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-100">{fontPair.body}</span>
+              <span className="text-[10px] text-slate-400">weight {designState.typography.body.weight}</span>
+            </div>
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">
-            Source:{" "}
-            {fontPair.source === "google"
-              ? "Google Fonts"
-              : fontPair.source === "system"
-              ? "System font"
-              : "Premium / licensed"}
-          </div>
-          {fontPair.notes && (
-            <div className="mt-1 text-[11px] text-amber-300">{fontPair.notes}</div>
-          )}
 
-          <div className="mt-2 border-t border-slate-800 pt-2 text-[11px] text-slate-400">
-            <div style={{ fontFamily: fontPair.heading }}>Heading Preview</div>
+          <div className="mt-2 border-t border-slate-800 pt-2 text-[11px] text-slate-400 space-y-2">
+            <div style={{ fontFamily: fontPair.heading }}>Heading sample</div>
+            <div style={{ fontFamily: fontPair.heading, fontWeight: Math.max(designState.typography.heading.weight - 200, 300) }}>
+              Secondary heading tone
+            </div>
             <div style={{ fontFamily: fontPair.body }}>
-              The quick brown fox jumps over the lazy dog.
+              Body copy preview demonstrates paragraph text for this palette.
             </div>
           </div>
         </div>
