@@ -22,21 +22,28 @@ export function optimizeTypographyColors(
   const textHsl = hexToHsl(colors.text);
 
   // Create hierarchy through lightness adjustments
-  // H1: Base text color (full contrast)
+  // H1: Darkest - base text color for maximum contrast
   const headingColor = colors.text;
 
-  // H2/Subheading: Visually lighter for hierarchy with slight variation
-  // Base: lightness +30, saturation -20, with ±5 point variance
-  const subheadingLightness = randomizeValue(textHsl.l + 30, 5, 60, 95);
-  const subheadingSaturation = randomizeValue(textHsl.s - 20, 4, 5, 40);
+  // H2/Subheading: Lighter - creates visual hierarchy
+  // Make it noticeably lighter by +35-40 points
+  const subheadingLightness = randomizeValue(textHsl.l + 35, 5, 60, 95);
+  const subheadingSaturation = randomizeValue(textHsl.s - 15, 4, 10, 50);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
     subheadingLightness
   );
 
-  // Body: Standard text color (same as heading for readability)
-  const bodyColor = colors.text;
+  // Body: Medium contrast - slightly lighter than heading but darker than subheading
+  // Add lightness but not as much as subheading
+  const bodyLightness = randomizeValue(textHsl.l + 15, 4, 20, 70);
+  const bodySaturation = randomizeValue(textHsl.s - 8, 3, 10, 50);
+  const bodyColor = hslToHex(
+    textHsl.h,
+    bodySaturation,
+    bodyLightness
+  );
 
   // Accent: More saturated and contrasting for call-to-action
   // Use accent color's hue but adjust for prominence with variation
@@ -72,18 +79,26 @@ export function optimizeTypographyColorsDark(
   const textHsl = hexToHsl(colors.text);
 
   // For dark backgrounds, create hierarchy by adjusting lightness
+  // H1: Lightest/brightest for maximum contrast on dark bg
   const headingColor = colors.text;
 
-  // H2: Make lighter for hierarchy on dark backgrounds with variation
-  const subheadingLightness = randomizeValue(textHsl.l + 25, 5, 70, 98);
-  const subheadingSaturation = randomizeValue(textHsl.s - 15, 4, 5, 30);
+  // H2: Make noticeably lighter for hierarchy on dark backgrounds
+  const subheadingLightness = randomizeValue(textHsl.l + 30, 5, 75, 98);
+  const subheadingSaturation = randomizeValue(textHsl.s - 10, 4, 10, 40);
   const subheadingColor = hslToHex(
     textHsl.h,
     subheadingSaturation,
     subheadingLightness
   );
 
-  const bodyColor = colors.text;
+  // Body: Medium lightness - between heading and subheading
+  const bodyLightness = randomizeValue(textHsl.l + 12, 4, 50, 85);
+  const bodySaturation = randomizeValue(textHsl.s - 5, 3, 10, 40);
+  const bodyColor = hslToHex(
+    textHsl.h,
+    bodySaturation,
+    bodyLightness
+  );
 
   const accentHsl = hexToHsl(colors.accent);
   const accentSaturation = randomizeValue(accentHsl.s + 12, 5, 70, 100);
