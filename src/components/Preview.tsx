@@ -204,17 +204,20 @@ const Preview = ({ designState, isAnalyzing = false }: PreviewProps) => {
       style={rootStyle}
     >
       {isAnalyzing && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm z-50">
-          <div className="text-6xl font-bold text-white tracking-wider select-none"
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div className="text-6xl font-bold text-white/80 tracking-wider select-none"
                style={{
-                 animation: `fadeInOut ${400 + Math.random() * 200}ms ease-in-out forwards`
+                 animation: `fadeInOutGentle 800ms ease-in-out forwards`,
+                 textShadow: '0 4px 24px rgba(0,0,0,0.2)',
                }}>
             Analyzing...
           </div>
           <style>{`
-            @keyframes fadeInOut {
-              0% { opacity: 1; }
-              100% { opacity: 1; }
+            @keyframes fadeInOutGentle {
+              0% { opacity: 0; }
+              25% { opacity: 0.6; }
+              75% { opacity: 0.6; }
+              100% { opacity: 0; }
             }
           `}</style>
         </div>
