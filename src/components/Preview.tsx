@@ -4,6 +4,7 @@ import { contrastRatio, hexToHsl, hslToHex } from "../lib/colorUtils";
 
 interface PreviewProps {
   designState: DesignState;
+  isAnalyzing?: boolean;
 }
 
 const clamp = (value: number, min: number, max: number) =>
@@ -72,7 +73,7 @@ const sizeMap = {
   "2xl": "1.5rem",
 } as const;
 
-const Preview = ({ designState }: PreviewProps) => {
+const Preview = ({ designState, isAnalyzing = false }: PreviewProps) => {
   const { colors, fontPair, typography, uiTokens } = designState;
   const navBg = adjustLightness(colors.primary, designState.vibe.isDarkUi ? 6 : -10);
   const navAccent = adjustLightness(colors.primary, designState.vibe.isDarkUi ? 16 : -22);
@@ -199,9 +200,17 @@ const Preview = ({ designState }: PreviewProps) => {
 
   return (
     <div
-      className="w-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg"
+      className="w-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative"
       style={rootStyle}
     >
+      {isAnalyzing && (
+        <div className="absolute inset-0 bg-black/40 rounded-3xl flex items-center justify-center backdrop-blur-sm z-50">
+          <div className="flex flex-col items-center gap-3">
+            <div className="inline-block animate-spin text-4xl">⚙️</div>
+            <div className="text-lg font-semibold text-white tracking-wide">Analyzing...</div>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col lg:flex-row min-h-[640px]">
         <aside
           className="w-full lg:w-64 p-6 flex flex-col gap-6"

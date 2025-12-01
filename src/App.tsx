@@ -306,21 +306,6 @@ function App() {
     designState.fontPair.source,
   ]);
 
-  // Auto-refresh typography after vibe change
-  useEffect(() => {
-    if (!autoRefresh || isOptimizing) return;
-
-    const timer = setTimeout(() => {
-      setIsOptimizing(true);
-      // Slight delay to show the "thinking" state
-      setTimeout(() => {
-        handleAiSuggestion();
-        setIsOptimizing(false);
-      }, 500);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [vibeId, autoRefresh]);
 
   // Update URL when state changes
   useEffect(() => {
@@ -417,7 +402,16 @@ function App() {
         prev
       )
     );
-  }, [vibeId, colorLocks, fontLockMode]);
+
+    // Trigger auto-refresh if enabled
+    if (autoRefresh) {
+      setIsOptimizing(true);
+      setTimeout(() => {
+        handleAiSuggestion();
+        setIsOptimizing(false);
+      }, 500);
+    }
+  }, [vibeId, colorLocks, fontLockMode, autoRefresh, handleAiSuggestion]);
 
   const spinColorsOnly = useCallback(() => {
     const newSeed = Math.random();
@@ -828,8 +822,8 @@ function App() {
         </aside>
 
         <section className="flex-1 flex flex-col">
-          <div className="flex-1 p-4 lg:p-6">
-            <Preview designState={designState} />
+          <div className="flex-1 p-4 lg:p-6 relative">
+            <Preview designState={designState} isAnalyzing={isOptimizing} />
           </div>
 
           <div className="border-t border-slate-800 p-4 lg:p-6 bg-slate-950/60">
