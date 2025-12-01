@@ -58,24 +58,28 @@ export interface TypographyTokens {
     weight: number; // 400, 600, 700, 800
     style: "normal" | "italic";
     transform?: "none" | "uppercase";
+    color?: string;
   };
   subheading?: {
     size: "sm" | "md" | "lg" | "xl";
     weight: number;
     style: "normal" | "italic";
     transform?: "none" | "uppercase";
+    color?: string;
   };
   body: {
     size: "xs" | "sm" | "md" | "lg";
     weight: number;
     style: "normal" | "italic";
     transform?: "none" | "uppercase";
+    color?: string;
   };
   accent: {
     size: "xs" | "sm" | "md";
     weight: number;
     style: "normal" | "italic";
     transform?: "none" | "uppercase";
+    color?: string;
   };
 }
 

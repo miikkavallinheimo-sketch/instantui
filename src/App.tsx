@@ -11,6 +11,7 @@ import { buildDesignTokens } from "./lib/designTokens";
 import { generateStyleTokens } from "./lib/styleVariations";
 import { ensureFontLoaded } from "./lib/fontLoader";
 import { optimizeTypography } from "./lib/typographyOptimizer";
+import { getOptimizedTypographyColors } from "./lib/typographyColorOptimizer";
 import trendsData from "./data/trends.json";
 import type {
   VibeId,
@@ -607,11 +608,35 @@ function App() {
         trendsData
       );
 
+      // Optimoi typografian värit luomaan hierarkiaa
+      const typographyColors = getOptimizedTypographyColors(adjusted);
+
+      // Lisää värit optimoituun typografiaan
+      const typographyWithColors = {
+        ...optimizedTypography,
+        heading: {
+          ...optimizedTypography.heading,
+          color: typographyColors.heading,
+        },
+        subheading: optimizedTypography.subheading ? {
+          ...optimizedTypography.subheading,
+          color: typographyColors.subheading,
+        } : undefined,
+        body: {
+          ...optimizedTypography.body,
+          color: typographyColors.body,
+        },
+        accent: {
+          ...optimizedTypography.accent,
+          color: typographyColors.accent,
+        },
+      };
+
       return {
         ...prev,
         colors: applyVibeColorRules(prev.vibe, adjusted),
         originalColors: disciplinedBase,
-        typography: optimizedTypography,
+        typography: typographyWithColors,
       };
     });
     setActiveGeneratedName(null);

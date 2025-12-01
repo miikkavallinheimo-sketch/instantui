@@ -91,9 +91,11 @@ const Preview = ({ designState }: PreviewProps) => {
       transform: typography.heading.transform ?? "none",
     };
   const accentReadableOnSurface =
-    contrastRatio(surface, colors.accent) >= 3.2 ? colors.accent : colors.primary;
+    typography.accent.color ??
+    (contrastRatio(surface, colors.accent) >= 3.2 ? colors.accent : colors.primary);
   const bodyTextColor =
-    contrastRatio(surface, colors.text) >= 4.5 ? colors.text : colors.onAccent;
+    typography.body.color ??
+    (contrastRatio(surface, colors.text) >= 4.5 ? colors.text : colors.onAccent);
   const headingTransform = typography.heading.transform ?? "none";
   const subheadingTransform = subheadingTokens.transform ?? "none";
   const bodyTransform = typography.body.transform ?? "none";
@@ -258,7 +260,11 @@ const Preview = ({ designState }: PreviewProps) => {
             <div>
               <div
               className="text-2xl font-semibold"
-              style={{ fontFamily: fontPair.heading, textTransform: headingTransform }}
+              style={{
+                fontFamily: fontPair.heading,
+                textTransform: headingTransform,
+                color: typography.heading.color ?? colors.text
+              }}
             >
               Command Center
             </div>
@@ -276,6 +282,7 @@ const Preview = ({ designState }: PreviewProps) => {
                   fontWeight: subheadingTokens.weight,
                   fontStyle: subheadingTokens.style,
                   textTransform: subheadingTransform,
+                  color: typography.subheading?.color ?? subheadingTokens.color ?? colors.text,
                 }}
               >
                 Latest Release Summary
