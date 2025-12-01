@@ -43,7 +43,6 @@ export function optimizeTypography(
   colors: ColorSet,
   trends?: TypographyTrendData
 ): TypographyTokens {
-  console.log("📝 Input typography:", current);
   let optimized = { ...current };
   optimized.subheading = optimized.subheading ? { ...optimized.subheading } : undefined;
   optimized.heading = { ...optimized.heading };
@@ -213,6 +212,5 @@ export function optimizeTypography(
     jittered.heading.weight = jittered.body.weight + 200;
   }
 
-  console.log("📝 Output typography:", jittered);
   return jittered;
 }

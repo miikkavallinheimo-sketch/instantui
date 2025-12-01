@@ -588,7 +588,6 @@ function App() {
   );
 
   const handleAiSuggestion = useCallback(() => {
-    console.log("🔄 AI refresh triggered!");
     setDesignState((prev) => {
       if (!prev) return prev;
       const tuning = computeAiTuning(prev.colors, prev.vibe);
@@ -609,11 +608,9 @@ function App() {
         adjusted,
         trendsData
       );
-      console.log("🎨 Optimized typography:", optimizedTypography);
 
       // Optimoi typografian värit luomaan hierarkiaa
       const typographyColors = getOptimizedTypographyColors(adjusted);
-      console.log("🎨 Typography colors:", typographyColors);
 
       // Lisää värit optimoituun typografiaan
       const typographyWithColors = {
