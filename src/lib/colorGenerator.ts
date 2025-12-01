@@ -81,6 +81,66 @@ const midpointHue = (a: number, b: number) => {
   return (a + diff / 2 + 360) % 360;
 };
 
+const adjustLightness = (hex: string, delta: number) => {
+  const { h, s, l } = hexToHsl(hex);
+  return hslToHex(h, s, clamp(l + delta, 0, 100));
+};
+
+const hueDistanceToRange = (hue: number, range: [number, number]) => {
+  const [min, max] = range;
+  if (hue < min) return min - hue;
+  if (hue > max) return hue - max;
+  return 0;
+};
+
+const alignHueToRange = (
+  hex: string,
+  range: [number, number],
+  satClamp?: [number, number],
+  lightClamp?: [number, number]
+) => {
+  const { h, s, l } = hexToHsl(hex);
+  const [min, max] = range;
+  const inside = h >= min && h <= max;
+  const targetHue = inside ? h : clamp(h, min, max);
+  const nextSat = satClamp ? clamp(s, satClamp[0], satClamp[1]) : s;
+  const nextLight = lightClamp ? clamp(l, lightClamp[0], lightClamp[1]) : l;
+  return hslToHex(targetHue, nextSat, nextLight);
+};
+
+const setHueWithJitter = (
+  hex: string,
+  targetHue: number,
+  jitter: number,
+  seed: number,
+  offset: number,
+  satClamp?: [number, number]
+) => {
+  const { s, l } = hexToHsl(hex);
+  const jittered =
+    (targetHue + jitterValue(jitter, seed, offset) + 360) % 360;
+  const nextSat = satClamp
+    ? clamp(s, satClamp[0], satClamp[1])
+    : s;
+  return hslToHex(jittered, nextSat, l);
+};
+
+const forceHueIntoRange = (
+  hex: string,
+  range: [number, number],
+  seed: number,
+  offset: number
+) => {
+  const { h, s, l } = hexToHsl(hex);
+  const [min, max] = range;
+  if (h >= min && h <= max) {
+    return hex;
+  }
+  const target = min + (max - min) * seededRandom(seed, offset);
+  const adjusted = moveHueTowards(target, h, 0.85);
+  return hslToHex(adjusted, s, l);
+};
+
 const ensureSaturation = (hex: string, minSat: number) => {
   if (minSat <= 0) return hex;
   const hsl = hexToHsl(hex);
@@ -505,10 +565,22 @@ export function generateColors(
   const backgroundLightRange =
     behavior.backgroundLightRange ??
     (vibe.isDarkUi ? [8, 24] : [80, 95]);
-  const backgroundFinal = ensureLightnessRange(
+  let backgroundFinal = ensureLightnessRange(
     backgroundSat,
     backgroundLightRange
   );
+  if (vibe.id === "luxury" && !l.background) {
+    const bgChoice = seededRandom(seed, 0.913) > 0.5 ? "emerald" : "indigo";
+    const targetHue = bgChoice === "emerald" ? 155 : 220;
+    backgroundFinal = setHueWithJitter(
+      backgroundFinal,
+      targetHue,
+      bgChoice === "emerald" ? 6 : 5,
+      seed,
+      0.914,
+      [18, 52]
+    );
+  }
 
   // Jos kaikki päävärit on lukittu, pidetään edelliset ja huolehditaan luettavasta tekstistä
   if (l.primary && l.secondary && l.accent && prevColors) {
@@ -587,6 +659,27 @@ export function generateColors(
     if (!l.accent) {
       accent = mixHex(paletteAccent, accent, 0.25);
     }
+    const paletteMode =
+      seededRandom(seed, 0.731) > 0.45 ? "emerald" : "amethyst";
+    const greenBandPrimary: [number, number] = [140, 170];
+    const greenBandSecondary: [number, number] = [142, 176];
+    const violetBandPrimary: [number, number] = [265, 295];
+    const violetBandSecondary: [number, number] = [268, 300];
+    const primaryBand =
+      paletteMode === "emerald" ? greenBandPrimary : violetBandPrimary;
+    const secondaryBand =
+      paletteMode === "emerald" ? greenBandSecondary : violetBandSecondary;
+    if (!l.primary) {
+      primary = forceHueIntoRange(primary, primaryBand, seed, 0.734);
+    }
+    if (!l.secondary) {
+      secondary = forceHueIntoRange(secondary, secondaryBand, seed, 0.736);
+    }
+    if (!l.accent) {
+      const copperVsGold: [number, number] =
+        seededRandom(seed, 0.742) > 0.4 ? [26, 34] : [34, 46];
+      accent = forceHueIntoRange(accent, copperVsGold, seed, 0.744);
+    }
   }
 
   primary = ensureSaturation(primary, behavior.minSatPrimary);
@@ -643,7 +736,7 @@ export function generateColors(
       variation
     );
 
-  return {
+  const generated = {
     primary,
     secondary,
     accent,
@@ -654,6 +747,101 @@ export function generateColors(
     textMuted,
     borderSubtle,
     borderStrong,
+    onPrimary,
+    onSecondary,
+    onAccent,
+  };
+
+  return vibe.id === "luxury"
+    ? enforceLuxuryDiscipline(generated)
+    : generated;
+}
+
+const GREEN_PRIMARY_RANGE: [number, number] = [140, 175];
+const GREEN_SECONDARY_RANGE: [number, number] = [142, 180];
+const VIOLET_PRIMARY_RANGE: [number, number] = [258, 302];
+const VIOLET_SECONDARY_RANGE: [number, number] = [262, 306];
+const GOLD_RANGE: [number, number] = [26, 44];
+
+const pickBand = (
+  hue: number,
+  preferred: [number, number],
+  alternate: [number, number]
+) => {
+  const preferredDist = hueDistanceToRange(hue, preferred);
+  const alternateDist = hueDistanceToRange(hue, alternate);
+  return preferredDist <= alternateDist ? preferred : alternate;
+};
+
+export function enforceLuxuryDiscipline(colors: ColorSet): ColorSet {
+  const bgHue = hexToHsl(colors.background).h;
+  const mode = bgHue >= 200 ? "indigo" : "emerald";
+  const backgroundRange = mode === "emerald" ? [145, 175] : [210, 235];
+  const primaryPref = mode === "emerald" ? GREEN_PRIMARY_RANGE : VIOLET_PRIMARY_RANGE;
+  const secondaryPref =
+    mode === "emerald" ? GREEN_SECONDARY_RANGE : VIOLET_SECONDARY_RANGE;
+
+  const background = alignHueToRange(
+    colors.background,
+    backgroundRange,
+    [20, 65],
+    [6, 26]
+  );
+  const { h: bgH, s: bgS, l: bgL } = hexToHsl(background);
+
+  const ensureBand = (
+    hex: string,
+    preferred: [number, number],
+    alternate: [number, number],
+    sat: [number, number],
+    light?: [number, number]
+  ) => {
+    const { h } = hexToHsl(hex);
+    const targetRange = pickBand(h, preferred, alternate);
+    return alignHueToRange(hex, targetRange, sat, light);
+  };
+
+  const primary = ensureBand(
+    colors.primary,
+    primaryPref,
+    mode === "emerald" ? VIOLET_PRIMARY_RANGE : GREEN_PRIMARY_RANGE,
+    [48, 88],
+    [26, 55]
+  );
+  const secondary = ensureBand(
+    colors.secondary,
+    secondaryPref,
+    mode === "emerald" ? VIOLET_SECONDARY_RANGE : GREEN_SECONDARY_RANGE,
+    [42, 84],
+    [24, 58]
+  );
+  const accent = alignHueToRange(colors.accent, GOLD_RANGE, [55, 95], [38, 68]);
+
+  const makeSurface = (delta: number) =>
+    hslToHex(bgH, clamp(bgS, 22, 65), clamp(bgL + delta, 6, 60));
+
+  const surface = makeSurface(mode === "emerald" ? 6 : 8);
+  const surfaceAlt = makeSurface(mode === "emerald" ? 12 : 14);
+  const borderSubtle = makeSurface(mode === "emerald" ? 2 : 3);
+  const borderStrong = makeSurface(mode === "emerald" ? 18 : 20);
+  const textMuted = mixHex(colors.textMuted, background, 0.45);
+
+  const text = ensureReadableText(background, colors.text);
+  const onPrimary = ensureReadableText(primary, text);
+  const onSecondary = ensureReadableText(secondary, text);
+  const onAccent = ensureReadableText(accent, text);
+
+  return {
+    ...colors,
+    background,
+    primary,
+    secondary,
+    accent,
+    surface,
+    surfaceAlt,
+    borderSubtle,
+    borderStrong,
+    textMuted,
     onPrimary,
     onSecondary,
     onAccent,

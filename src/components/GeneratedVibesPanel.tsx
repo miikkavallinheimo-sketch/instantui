@@ -1,17 +1,34 @@
-import type { GeneratedVibe } from "../lib/types";
-import vibesData from "../data/generatedVibes.json";
+import { VIBE_PRESETS } from "../lib/vibePresets";
+import type { GeneratedVibe, VibeId } from "../lib/types";
 
 interface GeneratedVibesPanelProps {
   onApply: (vibe: GeneratedVibe) => void;
+  vibes: GeneratedVibe[];
+  generatedAt?: string;
+  currentVibeId: VibeId;
 }
 
-const GeneratedVibesPanel = ({ onApply }: GeneratedVibesPanelProps) => {
-  const { generatedAt, vibes } = vibesData as {
-    generatedAt: string;
-    vibes: GeneratedVibe[];
+const GeneratedVibesPanel = ({
+  onApply,
+  vibes,
+  generatedAt,
+  currentVibeId,
+}: GeneratedVibesPanelProps) => {
+  if (!vibes || vibes.length === 0) return null;
+
+  const currentVibe = VIBE_PRESETS[currentVibeId];
+  const matchScore = (vibe: GeneratedVibe) => {
+    if (!vibe.suitability || vibe.suitability.length === 0) return 0;
+    const target = `${currentVibe.label} ${currentVibe.description}`.toLowerCase();
+    return vibe.suitability.some((tag) =>
+      target.includes(tag.toLowerCase())
+    )
+      ? 1
+      : 0;
   };
 
-  if (!vibes || vibes.length === 0) return null;
+  const sorted = [...vibes].sort((a, b) => matchScore(b) - matchScore(a));
+  const shortlist = sorted.slice(0, 6);
 
   return (
     <div className="space-y-2">
@@ -19,13 +36,15 @@ const GeneratedVibesPanel = ({ onApply }: GeneratedVibesPanelProps) => {
         <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
           AI-generated vibes
         </h2>
-        <span className="text-[10px] text-slate-500">
-          updated {new Date(generatedAt).toLocaleDateString()}
-        </span>
+        {generatedAt && (
+          <span className="text-[10px] text-slate-500">
+            updated {new Date(generatedAt).toLocaleDateString()}
+          </span>
+        )}
       </div>
 
       <div className="space-y-2 max-h-52 overflow-auto pr-1">
-        {vibes.slice(0, 6).map((vibe) => (
+        {shortlist.map((vibe) => (
           <div
             key={vibe.name}
             className="bg-slate-900/70 border border-slate-800 rounded-md px-3 py-2 text-[11px] space-y-1"
@@ -44,6 +63,30 @@ const GeneratedVibesPanel = ({ onApply }: GeneratedVibesPanelProps) => {
             <div className="text-slate-400 line-clamp-2">
               {vibe.description}
             </div>
+            {vibe.overrides && (
+              <div className="text-slate-500 text-[10px]">
+                Tone tweaks:{" "}
+                {[
+                  vibe.overrides.hueShift
+                    ? `Hue ${vibe.overrides.hueShift > 0 ? "+" : ""}${
+                        vibe.overrides.hueShift
+                      }°`
+                    : null,
+                  vibe.overrides.saturationShift
+                    ? `Sat ${
+                        vibe.overrides.saturationShift > 0 ? "+" : ""
+                      }${vibe.overrides.saturationShift}%`
+                    : null,
+                  vibe.overrides.surfaceShade
+                    ? `Surface ${vibe.overrides.surfaceShade > 0 ? "+" : ""}${
+                        vibe.overrides.surfaceShade
+                      }L`
+                    : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </div>
+            )}
             {vibe.recommendedFonts && vibe.recommendedFonts.length > 0 && (
               <div className="text-slate-500">
                 Fonts: {vibe.recommendedFonts.join(", ")}

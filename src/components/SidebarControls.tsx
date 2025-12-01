@@ -4,6 +4,7 @@ import type {
   DesignState,
   ColorLocks,
   ColorKey,
+  FontLockMode,
 } from "../lib/types";
 
 interface SidebarControlsProps {
@@ -13,8 +14,13 @@ interface SidebarControlsProps {
   onRandomizeColors: () => void;
   colorLocks: ColorLocks;
   onToggleColorLock: (key: ColorKey) => void;
-  fontLockMode: "none" | "heading" | "body";
-  onChangeFontLock: (mode: "none" | "heading" | "body") => void;
+  fontLockMode: FontLockMode;
+  onChangeFontLock: (mode: FontLockMode) => void;
+  hueShift: number;
+  saturationShift: number;
+  onToneChange: (type: "hue" | "saturation", value: number) => void;
+  onAiRefresh: () => void;
+  aiTuned: boolean;
 }
 
 const SidebarControls = ({
@@ -26,6 +32,11 @@ const SidebarControls = ({
   onToggleColorLock,
   fontLockMode,
   onChangeFontLock,
+  hueShift,
+  saturationShift,
+  onToneChange,
+  onAiRefresh,
+  aiTuned,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -34,9 +45,24 @@ const SidebarControls = ({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400 mb-2">
-          Vibe
-        </h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
+            Vibe
+          </h2>
+          <div className="flex items-center gap-1">
+            {aiTuned && (
+              <span className="text-[10px] text-emerald-400 uppercase tracking-[0.2em]">
+                AI tuned
+              </span>
+            )}
+            <button
+              onClick={onAiRefresh}
+              className="text-[10px] px-2 py-1 rounded-full border border-emerald-400 text-emerald-300 hover:bg-emerald-400/10"
+            >
+              AI refresh (BETA)
+            </button>
+          </div>
+        </div>
         <div className="space-y-1 max-h-48 overflow-auto pr-1">
           {vibes.map(([id, vibe]) => (
             <button
@@ -111,6 +137,55 @@ const SidebarControls = ({
         </div>
       </div>
 
+      <div className="space-y-3">
+        <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
+          Tone trims
+        </div>
+        {[
+          {
+            label: "Hue trim",
+            value: hueShift,
+            min: -15,
+            max: 15,
+            unit: "°",
+            type: "hue",
+          },
+          {
+            label: "Saturation trim",
+            value: saturationShift,
+            min: -20,
+            max: 20,
+            unit: "%",
+            type: "saturation",
+          },
+        ].map((tone) => (
+          <div key={tone.label} className="text-xs space-y-1">
+            <div className="flex items-center justify-between text-slate-300">
+              <span>{tone.label}</span>
+              <span className="font-mono text-[11px] text-slate-400">
+                {tone.value > 0 ? "+" : ""}
+                {tone.value}
+                {tone.unit}
+              </span>
+            </div>
+            <input
+              type="range"
+              min={tone.min}
+              max={tone.max}
+              step={1}
+              value={tone.value}
+              onChange={(e) =>
+                onToneChange(
+                  tone.type as "hue" | "saturation",
+                  Number(e.target.value)
+                )
+              }
+              className="w-full accent-emerald-300"
+            />
+          </div>
+        ))}
+      </div>
+
       <div>
         <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mt-3">
           Extended tokens
@@ -152,6 +227,7 @@ const SidebarControls = ({
               ["none", "Free"],
               ["heading", "Lock H"],
               ["body", "Lock Body"],
+              ["both", "Lock Both"],
             ].map(([mode, label]) => (
               <button
                 key={mode}

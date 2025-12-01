@@ -124,6 +124,7 @@ export interface FontPair {
 export interface DesignState {
   vibe: VibePreset;
   colors: ColorSet;
+  originalColors: ColorSet;
   fontPair: FontPair;
   uiTokens: VibeUiTokens;
   typography: TypographyTokens;
@@ -141,4 +142,36 @@ export interface ColorLocks {
   accent?: boolean;
   background?: boolean;
   text?: boolean;
+}
+
+export type ColorKey = keyof ColorLocks;
+
+export type FontLockMode = "none" | "heading" | "body" | "both";
+
+export interface GeneratedVibe {
+  name: string;
+  shortLabel?: string;
+  description: string;
+  recommendedFonts?: string[];
+  recommendedColors?: {
+    name: string;
+    hex?: string | null;
+    role: "primary" | "secondary" | "accent" | "background" | "text";
+  }[];
+  suitability?: string[];
+  overrides?: {
+    primaryHue?: number | null;
+    saturationBias?: number | null;
+    lightnessBias?: number | null;
+    borderRadius?: "sharp" | "medium" | "rounded" | null;
+    useGradients?: boolean | null;
+    hueShift?: number | null;
+    saturationShift?: number | null;
+    surfaceShade?: number | null;
+  };
+}
+
+export interface GeneratedVibesResponse {
+  generatedAt: string;
+  vibes: GeneratedVibe[];
 }
