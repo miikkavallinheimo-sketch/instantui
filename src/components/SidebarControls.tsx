@@ -21,6 +21,7 @@ interface SidebarControlsProps {
   onToneChange: (type: "hue" | "saturation", value: number) => void;
   onAiRefresh: () => void;
   aiTuned: boolean;
+  onCopyColor: (color: string) => void;
 }
 
 const SidebarControls = ({
@@ -37,6 +38,7 @@ const SidebarControls = ({
   onToneChange,
   onAiRefresh,
   aiTuned,
+  onCopyColor,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -44,26 +46,27 @@ const SidebarControls = ({
 
   return (
     <div className="space-y-6">
+      <div className="space-y-2">
+        <button
+          onClick={onAiRefresh}
+          className="w-full py-3 px-4 rounded-xl border border-emerald-400 bg-emerald-400/10 text-emerald-100 text-sm font-semibold tracking-wide hover:bg-emerald-400/15 transition"
+        >
+          AI refresh (BETA)
+        </button>
+        {aiTuned && (
+          <div className="text-[10px] uppercase tracking-[0.2em] text-emerald-400 text-center">
+            AI tuned
+          </div>
+        )}
+      </div>
+
       <div>
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
             Vibe
           </h2>
-          <div className="flex items-center gap-1">
-            {aiTuned && (
-              <span className="text-[10px] text-emerald-400 uppercase tracking-[0.2em]">
-                AI tuned
-              </span>
-            )}
-            <button
-              onClick={onAiRefresh}
-              className="text-[10px] px-2 py-1 rounded-full border border-emerald-400 text-emerald-300 hover:bg-emerald-400/10"
-            >
-              AI refresh (BETA)
-            </button>
-          </div>
         </div>
-        <div className="space-y-1 max-h-48 overflow-auto pr-1">
+        <div className="space-y-1 max-h-72 overflow-auto pr-1">
           {vibes.map(([id, vibe]) => (
             <button
               key={id}
@@ -111,12 +114,21 @@ const SidebarControls = ({
             >
               <div className="flex items-center gap-2">
                 <span
-                  className="w-4 h-4 rounded-sm border border-slate-700"
+                  className="w-4 h-4 rounded-sm border border-slate-700 cursor-pointer"
                   style={{ backgroundColor: value }}
+                  onClick={() => onCopyColor(value)}
+                  title="Click to copy color"
                 />
                 <span className="text-slate-300">{label}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => onCopyColor(value)}
+                  className="text-[10px] px-1.5 py-0.5 rounded border border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                  title="Copy color"
+                >
+                  Copy
+                </button>
                 <span className="font-mono text-[11px] text-slate-400">
                   {value.toUpperCase()}
                 </span>
@@ -204,14 +216,25 @@ const SidebarControls = ({
             >
               <div className="flex items-center gap-2">
                 <span
-                  className="w-4 h-4 rounded-sm border border-slate-700"
+                  className="w-4 h-4 rounded-sm border border-slate-700 cursor-pointer"
                   style={{ backgroundColor: value }}
+                  onClick={() => onCopyColor(value)}
+                  title="Click to copy color"
                 />
                 <span className="text-slate-300">{label}</span>
               </div>
-              <span className="font-mono text-[11px] text-slate-500">
-                {value.toUpperCase()}
-              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => onCopyColor(value)}
+                  className="text-[10px] px-1.5 py-0.5 rounded border border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                  title="Copy color"
+                >
+                  Copy
+                </button>
+                <span className="font-mono text-[11px] text-slate-500">
+                  {value.toUpperCase()}
+                </span>
+              </div>
             </div>
           ))}
         </div>

@@ -175,3 +175,29 @@ export interface GeneratedVibesResponse {
   generatedAt: string;
   vibes: GeneratedVibe[];
 }
+
+export interface SavedFavorite {
+  id: string;
+  name: string;
+  vibeId: VibeId;
+  seed: number;
+  colorLocks: ColorLocks;
+  fontLockMode: FontLockMode;
+  hueShift: number;
+  saturationShift: number;
+  colors: ColorSet;
+  fontPair: FontPair;
+  createdAt: string;
+}
+
+export interface TypographyTrend {
+  rule: string;
+  rationale: string;
+  context: string;
+  exampleSizes?: string;
+  recommendedScaleRatio?: number;
+  recommendedWeightPairs?: Array<{
+    body: number;
+    heading: number;
+  }>;
+}

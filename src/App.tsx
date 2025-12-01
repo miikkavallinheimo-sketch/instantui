@@ -10,6 +10,8 @@ import {
 import { buildDesignTokens } from "./lib/designTokens";
 import { generateStyleTokens } from "./lib/styleVariations";
 import { ensureFontLoaded } from "./lib/fontLoader";
+import { optimizeTypography } from "./lib/typographyOptimizer";
+import trendsData from "./data/trends.json";
 import type {
   VibeId,
   VibePreset,
@@ -19,6 +21,7 @@ import type {
   GeneratedVibe,
   FontLockMode,
   GeneratedVibesResponse,
+  SavedFavorite,
 } from "./lib/types";
 import { hexToHsl, hslToHex, contrastRatio } from "./lib/colorUtils";
 import aiVibesData from "./data/generatedVibes.json";
@@ -26,6 +29,10 @@ import SidebarControls from "./components/SidebarControls";
 import Preview from "./components/Preview";
 import ExportPanel from "./components/ExportPanel";
 import GeneratedVibesPanel from "./components/GeneratedVibesPanel";
+import FavoritesPanel from "./components/FavoritesPanel";
+import { useToast } from "./components/Toast";
+import { useHistory } from "./hooks/useHistory";
+import { saveFavorite } from "./lib/favoritesManager";
 
 const DEFAULT_VIBE: VibeId = "modern-saas";
 const AI_DATA = aiVibesData as GeneratedVibesResponse;
@@ -216,17 +223,52 @@ function buildDesignState(
   };
 }
 
+interface AppState {
+  vibeId: VibeId;
+  seed: number;
+  colorLocks: ColorLocks;
+  fontLockMode: FontLockMode;
+  hueShift: number;
+  saturationShift: number;
+  aiTuned: boolean;
+}
+
 function App() {
-  const [vibeId, setVibeId] = useState<VibeId>(DEFAULT_VIBE);
-  const [seed, setSeed] = useState<number>(() => Math.random());
+  const { showToast, ToastContainer } = useToast();
+
+  // Initialize from URL params if available
+  const initStateFromURL = (): AppState => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      vibeId: (params.get("vibe") as VibeId) || DEFAULT_VIBE,
+      seed: parseFloat(params.get("seed") || String(Math.random())),
+      colorLocks: DEFAULT_LOCKS,
+      fontLockMode: (params.get("fontLock") as FontLockMode) || "none",
+      hueShift: parseInt(params.get("hue") || "0"),
+      saturationShift: parseInt(params.get("sat") || "0"),
+      aiTuned: false,
+    };
+  };
+
+  const initialAppState = initStateFromURL();
+
+  const [vibeId, setVibeId] = useState<VibeId>(initialAppState.vibeId);
+  const [seed, setSeed] = useState<number>(initialAppState.seed);
   const [colorLocks, setColorLocks] = useState<ColorLocks>(DEFAULT_LOCKS);
-  const [fontLockMode, setFontLockMode] = useState<FontLockMode>("none");
-  const [hueShift, setHueShift] = useState(0);
-  const [saturationShift, setSaturationShift] = useState(0);
+  const [fontLockMode, setFontLockMode] = useState<FontLockMode>(initialAppState.fontLockMode);
+  const [hueShift, setHueShift] = useState(initialAppState.hueShift);
+  const [saturationShift, setSaturationShift] = useState(initialAppState.saturationShift);
   const [aiTuned, setAiTuned] = useState(false);
 
   const [designState, setDesignState] = useState<DesignState>(() =>
-    buildDesignState(DEFAULT_VIBE, seed, DEFAULT_LOCKS, "none", 0, 0)
+    buildDesignState(
+      initialAppState.vibeId,
+      initialAppState.seed,
+      DEFAULT_LOCKS,
+      initialAppState.fontLockMode,
+      initialAppState.hueShift,
+      initialAppState.saturationShift
+    )
   );
 
   const [tokens, setTokens] = useState<DesignTokens>(() =>
@@ -236,6 +278,17 @@ function App() {
   const [activeGeneratedName, setActiveGeneratedName] = useState<string | null>(
     null
   );
+
+  // History for undo/redo
+  const history = useHistory<AppState>({
+    vibeId: initialAppState.vibeId,
+    seed: initialAppState.seed,
+    colorLocks: DEFAULT_LOCKS,
+    fontLockMode: initialAppState.fontLockMode,
+    hueShift: initialAppState.hueShift,
+    saturationShift: initialAppState.saturationShift,
+    aiTuned: false,
+  });
 
   useEffect(() => {
     setTokens(buildDesignTokens(designState));
@@ -249,6 +302,63 @@ function App() {
     designState.fontPair.body,
     designState.fontPair.source,
   ]);
+
+  // Update URL when state changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set("vibe", vibeId);
+    params.set("seed", seed.toFixed(6));
+    if (fontLockMode !== "none") params.set("fontLock", fontLockMode);
+    if (hueShift !== 0) params.set("hue", hueShift.toString());
+    if (saturationShift !== 0) params.set("sat", saturationShift.toString());
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, "", newUrl);
+  }, [vibeId, seed, fontLockMode, hueShift, saturationShift]);
+
+  // Save to history when state changes
+  useEffect(() => {
+    history.set({
+      vibeId,
+      seed,
+      colorLocks,
+      fontLockMode,
+      hueShift,
+      saturationShift,
+      aiTuned,
+    });
+  }, [history, vibeId, seed, colorLocks, fontLockMode, hueShift, saturationShift, aiTuned]);
+
+  // Handle undo/redo
+  useEffect(() => {
+    const state = history.state;
+    if (
+      state.vibeId !== vibeId ||
+      state.seed !== seed ||
+      state.fontLockMode !== fontLockMode ||
+      state.hueShift !== hueShift ||
+      state.saturationShift !== saturationShift
+    ) {
+      setVibeId(state.vibeId);
+      setSeed(state.seed);
+      setColorLocks(state.colorLocks);
+      setFontLockMode(state.fontLockMode);
+      setHueShift(state.hueShift);
+      setSaturationShift(state.saturationShift);
+      setAiTuned(state.aiTuned);
+      setDesignState((prev) =>
+        buildDesignState(
+          state.vibeId,
+          state.seed,
+          state.colorLocks,
+          state.fontLockMode,
+          state.hueShift,
+          state.saturationShift,
+          prev
+        )
+      );
+    }
+  }, [history.state]);
 
   const applyVibe = useCallback(
     (newVibeId: VibeId) => {
@@ -470,14 +580,92 @@ function App() {
         tuning.hueShift,
         tuning.saturationShift
       );
+
+      // Optimoi typografia algoritmisesti
+      const optimizedTypography = optimizeTypography(
+        prev.typography,
+        prev.vibe,
+        adjusted,
+        trendsData
+      );
+
       return {
         ...prev,
         colors: applyVibeColorRules(prev.vibe, adjusted),
         originalColors: disciplinedBase,
+        typography: optimizedTypography,
       };
     });
     setActiveGeneratedName(null);
   }, []);
+
+  const handleCopyColor = useCallback((color: string) => {
+    navigator.clipboard.writeText(color).then(
+      () => {
+        showToast(`Copied ${color.toUpperCase()}`);
+      },
+      () => {
+        showToast("Failed to copy color");
+      }
+    );
+  }, [showToast]);
+
+  const handleShareLink = useCallback(() => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(
+      () => {
+        showToast("Link copied to clipboard!");
+      },
+      () => {
+        showToast("Failed to copy link");
+      }
+    );
+  }, [showToast]);
+
+  const handleSaveFavorite = useCallback(() => {
+    const name = prompt("Enter a name for this favorite:");
+    if (!name) return;
+
+    try {
+      saveFavorite({
+        name,
+        vibeId,
+        seed,
+        colorLocks,
+        fontLockMode,
+        hueShift,
+        saturationShift,
+        colors: designState.colors,
+        fontPair: designState.fontPair,
+      });
+      showToast("Favorite saved!");
+    } catch (error) {
+      showToast("Failed to save favorite");
+    }
+  }, [vibeId, seed, colorLocks, fontLockMode, hueShift, saturationShift, designState, showToast]);
+
+  const handleApplyFavorite = useCallback((fav: SavedFavorite) => {
+    setVibeId(fav.vibeId);
+    setSeed(fav.seed);
+    setColorLocks(fav.colorLocks);
+    setFontLockMode(fav.fontLockMode);
+    setHueShift(fav.hueShift);
+    setSaturationShift(fav.saturationShift);
+    setAiTuned(false);
+    setActiveGeneratedName(null);
+    setDesignState((prev) =>
+      buildDesignState(
+        fav.vibeId,
+        fav.seed,
+        fav.colorLocks,
+        fav.fontLockMode,
+        fav.hueShift,
+        fav.saturationShift,
+        prev
+      )
+    );
+    showToast(`Applied favorite: ${fav.name}`);
+  }, [showToast]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -502,6 +690,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-50 flex flex-col">
+      <ToastContainer />
       <header className="border-b border-slate-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-baseline gap-2">
           <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
@@ -511,12 +700,44 @@ function App() {
             InstantUI – Design Style Generator
           </h1>
         </div>
-        <button
-          onClick={spinAll}
-          className="text-sm px-3 py-1.5 rounded-full border border-slate-600 hover:bg-slate-800"
-        >
-          Randomize all (Space)
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={history.undo}
+            disabled={!history.canUndo}
+            className="text-sm px-3 py-1.5 rounded-full border border-slate-600 hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed"
+            title="Undo (Cmd/Ctrl+Z)"
+          >
+            ↶ Undo
+          </button>
+          <button
+            onClick={history.redo}
+            disabled={!history.canRedo}
+            className="text-sm px-3 py-1.5 rounded-full border border-slate-600 hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed"
+            title="Redo (Cmd/Ctrl+Shift+Z)"
+          >
+            ↷ Redo
+          </button>
+          <button
+            onClick={handleShareLink}
+            className="text-sm px-3 py-1.5 rounded-full border border-slate-600 hover:bg-slate-800"
+            title="Copy shareable link"
+          >
+            🔗 Share
+          </button>
+          <button
+            onClick={handleSaveFavorite}
+            className="text-sm px-3 py-1.5 rounded-full border border-emerald-600 text-emerald-400 hover:bg-emerald-600/10"
+            title="Save as favorite"
+          >
+            ⭐ Save
+          </button>
+          <button
+            onClick={spinAll}
+            className="text-sm px-3 py-1.5 rounded-full border border-slate-600 hover:bg-slate-800"
+          >
+            Randomize all (Space)
+          </button>
+        </div>
       </header>
 
       <main className="flex-1 flex flex-col lg:flex-row">
@@ -535,7 +756,15 @@ function App() {
             onToneChange={updateToneShift}
             onAiRefresh={handleAiSuggestion}
             aiTuned={aiTuned}
+            onCopyColor={handleCopyColor}
           />
+
+          <div className="border-t border-slate-800 pt-4">
+            <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400 mb-3">
+              Favorites
+            </h2>
+            <FavoritesPanel onApply={handleApplyFavorite} />
+          </div>
 
           <div className="border-t border-slate-800 pt-4">
             <GeneratedVibesPanel

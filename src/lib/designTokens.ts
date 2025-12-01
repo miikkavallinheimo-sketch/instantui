@@ -25,8 +25,28 @@ const getBorderStyle = (
   return `1px solid ${color}`;
 };
 
+const fontSizeMap = {
+  xs: "0.75rem",
+  sm: "0.875rem",
+  md: "1rem",
+  lg: "1.125rem",
+  xl: "1.25rem",
+  "2xl": "1.5rem",
+} as const;
+
+const getFontSizeValue = (
+  size: keyof typeof fontSizeMap
+): string => fontSizeMap[size];
+
 export function buildDesignTokens(state: DesignState): DesignTokens {
   const { colors, fontPair, vibe, uiTokens, typography } = state;
+  const subheadingTokens =
+    typography.subheading ?? typography.heading;
+
+  const headingSize = getFontSizeValue(typography.heading.size);
+  const subheadingSize = getFontSizeValue(subheadingTokens.size as keyof typeof fontSizeMap);
+  const bodySize = getFontSizeValue(typography.body.size);
+  const accentSize = getFontSizeValue(typography.accent.size);
 
   const cssVariables = `:root {
   --primary: ${colors.primary};
@@ -58,6 +78,18 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
   --subheading-transform: ${typography.subheading?.transform ?? "none"};
   --body-transform: ${typography.body.transform ?? "none"};
   --accent-transform: ${typography.accent.transform ?? "none"};
+  --heading-font-size: ${headingSize};
+  --heading-font-weight: ${typography.heading.weight};
+  --heading-font-style: ${typography.heading.style};
+  --subheading-font-size: ${subheadingSize};
+  --subheading-font-weight: ${subheadingTokens.weight};
+  --subheading-font-style: ${subheadingTokens.style ?? "normal"};
+  --body-font-size: ${bodySize};
+  --body-font-weight: ${typography.body.weight};
+  --body-font-style: ${typography.body.style};
+  --accent-font-size: ${accentSize};
+  --accent-font-weight: ${typography.accent.weight};
+  --accent-font-style: ${typography.accent.style};
 }
 
 /* Example usage:
@@ -97,6 +129,18 @@ theme: {
     fontFamily: {
       heading: ["${fontPair.heading}", "system-ui", "sans-serif"],
       body: ["${fontPair.body}", "system-ui", "sans-serif"],
+    },
+    fontSize: {
+      heading: "${headingSize}",
+      subheading: "${subheadingSize}",
+      body: "${bodySize}",
+      accent: "${accentSize}",
+    },
+    fontWeight: {
+      heading: "${typography.heading.weight}",
+      subheading: "${subheadingTokens.weight}",
+      body: "${typography.body.weight}",
+      accent: "${typography.accent.weight}",
     },
     borderRadius: {
       card: "var(--radius-card)",
@@ -160,6 +204,36 @@ theme: {
       subheading: typography.subheading,
       body: typography.body,
       accent: typography.accent,
+    },
+    typographyValues: {
+      heading: {
+        sizeToken: typography.heading.size,
+        sizeRem: headingSize,
+        weight: typography.heading.weight,
+        style: typography.heading.style,
+        transform: typography.heading.transform ?? "none",
+      },
+      subheading: {
+        sizeToken: subheadingTokens.size,
+        sizeRem: subheadingSize,
+        weight: subheadingTokens.weight,
+        style: subheadingTokens.style ?? "normal",
+        transform: subheadingTokens.transform ?? "none",
+      },
+      body: {
+        sizeToken: typography.body.size,
+        sizeRem: bodySize,
+        weight: typography.body.weight,
+        style: typography.body.style,
+        transform: typography.body.transform ?? "none",
+      },
+      accent: {
+        sizeToken: typography.accent.size,
+        sizeRem: accentSize,
+        weight: typography.accent.weight,
+        style: typography.accent.style,
+        transform: typography.accent.transform ?? "none",
+      },
     },
   };
 

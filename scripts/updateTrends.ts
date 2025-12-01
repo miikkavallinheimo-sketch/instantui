@@ -22,6 +22,17 @@ interface InstantUiTrends {
     roleHint: string;
     description: string;
   }[];
+  typographyTrends?: {
+    rule: string;
+    rationale: string;
+    context: string;
+    exampleSizes?: string;
+    recommendedScaleRatio?: number;
+    recommendedWeightPairs?: Array<{
+      body: number;
+      heading: number;
+    }>;
+  }[];
   designNotes: string[];
   queriesUsed?: string[]; // lisätään mukaan, debugiin ja läpinäkyvyyteen
 }
@@ -40,6 +51,12 @@ const BASE_QUERY_GROUPS: Record<string, string[]> = {
     "trending colors in web design 2025 and 2026",
     "popular color palettes for SaaS and startup landing pages 2025",
     "3 color palette trends for dashboards and admin UI 2025",
+  ],
+  typography: [
+    "font size hierarchy and scale ratios for web UI 2025",
+    "font weight pairing best practices for web design 2025",
+    "optimal body text and heading font sizes for readability 2025",
+    "typographic spacing and line height trends 2025",
   ],
   uiTrends: [
     "modern UI design trends: minimalism, neo-brutalism, gradients 2025",
@@ -144,12 +161,14 @@ ${JSON.stringify(allQueries, null, 2)}
 1. Use web search to find CURRENT and NEAR-FUTURE trends (2025–2026) in:
    - UI/web fonts
    - UI/web color palettes
+   - typography: font sizes, hierarchies, scale ratios, font weights
    - layout and UI patterns
    - branding/visual identity for digital products
 
 2. Focus on:
    - Fonts that are practical for real UIs (products, dashboards, marketing sites).
    - Colors and palettes that are common on real websites (SaaS, portfolios, blogs, ecommerce).
+   - Typography best practices: How font sizes should scale (1.2x, 1.25x, 1.5x), recommended body/heading/accent weights, optimal sizing for readability.
    - Layout and interaction patterns actually used in production sites.
 
 3. Return STRICT JSON that matches this TypeScript interface:
@@ -157,17 +176,15 @@ ${JSON.stringify(allQueries, null, 2)}
 interface InstantUiTrends {
   lastUpdated: string;
   yearFocus: string;
-  fontTrends: {
-    name: string;
-    category: string;
-    description: string;
-    exampleUse: string;
-  }[];
-  colorTrends: {
-    name: string;
-    hex?: string;
-    roleHint: string;
-    description: string;
+  fontTrends: { name: string; category: string; description: string; exampleUse: string; }[];
+  colorTrends: { name: string; hex?: string; roleHint: string; description: string; }[];
+  typographyTrends?: {
+    rule: string;
+    rationale: string;
+    context: string;
+    exampleSizes?: string;
+    recommendedScaleRatio?: number;
+    recommendedWeightPairs?: Array<{ body: number; heading: number; }>;
   }[];
   designNotes: string[];
   queriesUsed?: string[];
@@ -176,6 +193,7 @@ interface InstantUiTrends {
 4. VERY IMPORTANT:
    - Output ONLY valid JSON. No comments, no markdown, no explanation text.
    - If you are unsure of exact HEX codes, omit them or keep them approximate but realistic.
+   - For typography trends, provide at least 2-3 concrete rules (e.g., "1.25x scale ratio", "Body weight 400, heading weight 700", etc).
    - Prefer concrete, widely used trends instead of super niche things.
 `;
 
