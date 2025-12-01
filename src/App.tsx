@@ -262,6 +262,7 @@ function App() {
   const [aiTuned, setAiTuned] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [triggerAutoRefresh, setTriggerAutoRefresh] = useState(false);
 
   const [designState, setDesignState] = useState<DesignState>(() =>
     buildDesignState(
@@ -333,6 +334,17 @@ function App() {
     });
   }, [history, vibeId, seed, colorLocks, fontLockMode, hueShift, saturationShift, aiTuned]);
 
+  // Auto-refresh trigger after spin
+  useEffect(() => {
+    if (!triggerAutoRefresh) return;
+    setIsOptimizing(true);
+    setTimeout(() => {
+      handleAiSuggestion();
+      setIsOptimizing(false);
+      setTriggerAutoRefresh(false);
+    }, 500);
+  }, [triggerAutoRefresh]);
+
   // Handle undo/redo
   useEffect(() => {
     const state = history.state;
@@ -402,16 +414,11 @@ function App() {
         prev
       )
     );
-
     // Trigger auto-refresh if enabled
     if (autoRefresh) {
-      setIsOptimizing(true);
-      setTimeout(() => {
-        handleAiSuggestion();
-        setIsOptimizing(false);
-      }, 500);
+      setTriggerAutoRefresh(true);
     }
-  }, [vibeId, colorLocks, fontLockMode, autoRefresh, handleAiSuggestion]);
+  }, [vibeId, colorLocks, fontLockMode, autoRefresh]);
 
   const spinColorsOnly = useCallback(() => {
     const newSeed = Math.random();
