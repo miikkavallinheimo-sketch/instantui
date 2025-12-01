@@ -124,7 +124,6 @@ export interface FontPair {
 export interface DesignState {
   vibe: VibePreset;
   colors: ColorSet;
-  originalColors: ColorSet;
   fontPair: FontPair;
   uiTokens: VibeUiTokens;
   typography: TypographyTokens;

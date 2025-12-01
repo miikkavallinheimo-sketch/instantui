@@ -74,14 +74,8 @@ const sizeMap = {
 
 const Preview = ({ designState }: PreviewProps) => {
   const { colors, fontPair, typography, uiTokens } = designState;
-  const navBg = adjustLightness(
-    colors.primary,
-    designState.vibe.isDarkUi ? 2 : -14
-  );
-  const navAccent = adjustLightness(
-    colors.primary,
-    designState.vibe.isDarkUi ? 12 : -8
-  );
+  const navBg = adjustLightness(colors.secondary, designState.vibe.isDarkUi ? 4 : -8);
+  const navAccent = adjustLightness(colors.secondary, designState.vibe.isDarkUi ? 14 : -20);
   const navText = "#ffffff";
   const navTextMuted = "rgba(255,255,255,0.75)";
   const surface = colors.surface;
@@ -123,8 +117,8 @@ const Preview = ({ designState }: PreviewProps) => {
       label: "Trial Conversion",
       value: "37%",
       note: "target 40%",
-      textColor: colors.onSecondary,
-      background: colors.secondary,
+      textColor: colors.onAccent,
+      background: colors.accent,
     },
     {
       label: "Churn",
@@ -406,12 +400,22 @@ const Preview = ({ designState }: PreviewProps) => {
                   backgroundColor: card.background,
                 }}
               >
-                <div className="text-xs uppercase tracking-wide opacity-70" style={{ fontFamily: fontPair.body }}>
+                <div
+                  className="text-xs uppercase tracking-wide"
+                  style={{
+                    fontFamily: fontPair.body,
+                    color: ensureReadableColor(card.background, textMuted),
+                    opacity: 0.8,
+                  }}
+                >
                   {card.label}
                 </div>
                 <div
                   className="text-2xl mt-2 font-semibold"
-                  style={{ fontFamily: fontPair.heading, color: card.textColor }}
+                  style={{
+                    fontFamily: fontPair.heading,
+                    color: ensureReadableColor(card.background, card.textColor),
+                  }}
                 >
                   {card.value}
                 </div>
