@@ -46,23 +46,23 @@ const ContrastRow = ({
   return (
     <div
       key={idx}
-      className={`p-4 border rounded-lg ${style.bg} ${style.border}`}
+      className={`p-2 border rounded text-xs ${style.bg} ${style.border}`}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <span className={`text-lg font-bold ${style.color}`}>
+          <div className="flex items-center gap-1 mb-1">
+            <span className={`font-bold ${style.color}`}>
               {style.icon}
             </span>
-            <span className="font-medium text-slate-900 dark:text-slate-100">
+            <span className="font-medium text-slate-900 dark:text-slate-100 truncate">
               {check.label}
             </span>
           </div>
 
           {/* Color swatches */}
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-1 mb-1">
             <div
-              className="w-8 h-8 rounded border border-slate-300"
+              className="w-5 h-5 rounded border border-slate-300"
               style={{ backgroundColor: check.foreground }}
               title={`FG: ${check.foreground}`}
             />
@@ -70,39 +70,27 @@ const ContrastRow = ({
               on
             </span>
             <div
-              className="w-8 h-8 rounded border border-slate-300"
+              className="w-5 h-5 rounded border border-slate-300"
               style={{ backgroundColor: check.background }}
               title={`BG: ${check.background}`}
             />
           </div>
 
-          {/* Standards */}
-          <div className="space-y-1 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-slate-600 dark:text-slate-400">
-                Ratio:
-              </span>
-              <span
-                className={`font-mono font-semibold ${check.aaaCompliant ? "text-emerald-600 dark:text-emerald-400" : check.aaCompliant ? "text-yellow-600 dark:text-yellow-400" : "text-red-600 dark:text-red-400"}`}
-              >
-                {check.ratio.toFixed(2)}:1
-              </span>
-            </div>
-
-            <div className="flex gap-4 text-xs mt-2">
-              <div
-                className={`flex items-center gap-1 ${check.aaCompliant ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}
-              >
-                <span>{check.aaCompliant ? "✓" : "✕"}</span>
-                <span>AA (4.5:1)</span>
-              </div>
-              <div
-                className={`flex items-center gap-1 ${check.aaaCompliant ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}
-              >
-                <span>{check.aaaCompliant ? "✓" : "✕"}</span>
-                <span>AAA (7:1)</span>
-              </div>
-            </div>
+          {/* Standards - compact */}
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-slate-600 dark:text-slate-400">
+              {check.ratio.toFixed(2)}:1
+            </span>
+            <span
+              className={`${check.aaCompliant ? "text-emerald-500" : "text-red-500"}`}
+            >
+              {check.aaCompliant ? "✓" : "✕"} AA
+            </span>
+            <span
+              className={`${check.aaaCompliant ? "text-emerald-500" : "text-red-500"}`}
+            >
+              {check.aaaCompliant ? "✓" : "✕"} AAA
+            </span>
           </div>
         </div>
       </div>
@@ -136,67 +124,54 @@ export const ContrastCheckerPanel = ({
   if (!isOpen) return null;
 
   return (
-    <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden shadow-lg">
-      {/* Header */}
-      <div className="bg-slate-50 dark:bg-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700 space-y-3">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100">
-          WCAG Contrast Checker
-        </h3>
-
-        {/* Summary stats */}
-        <div className="flex gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-slate-600 dark:text-slate-400">
-              Pass: <span className="font-semibold text-slate-900 dark:text-slate-100">{passCount}</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-yellow-500" />
-            <span className="text-slate-600 dark:text-slate-400">
-              AA Fail: <span className="font-semibold text-slate-900 dark:text-slate-100">{violations.aa}</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-red-500" />
-            <span className="text-slate-600 dark:text-slate-400">
-              AAA Fail: <span className="font-semibold text-slate-900 dark:text-slate-100">{violations.aaa}</span>
-            </span>
+    <div className="w-full bg-slate-950/40 border-t border-slate-800 overflow-hidden">
+      {/* Compact Header */}
+      <div className="px-4 py-2 space-y-2">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-slate-100">
+            WCAG Contrast
+          </h3>
+          {/* Summary stats - inline */}
+          <div className="flex gap-3 text-xs">
+            <div className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <span className="text-slate-400">Pass: <span className="font-semibold text-slate-100">{passCount}</span></span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
+              <span className="text-slate-400">AA: <span className="font-semibold text-slate-100">{violations.aa}</span></span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+              <span className="text-slate-400">AAA: <span className="font-semibold text-slate-100">{violations.aaa}</span></span>
+            </div>
           </div>
         </div>
 
-        {/* Fix buttons */}
+        {/* Fix buttons - compact */}
         {(violations.aa > 0 || violations.aaa > 0) && (
-          <div className="flex gap-2 pt-2">
+          <div className="flex gap-2">
             <button
               onClick={handleFixAA}
-              className="flex-1 px-3 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
+              className="flex-1 px-2 py-1 text-xs font-medium bg-emerald-600/80 hover:bg-emerald-600 text-white rounded transition-colors"
             >
-              Fix to AA
+              Fix AA
             </button>
             <button
               onClick={handleFixAAA}
-              className="flex-1 px-3 py-2 text-xs font-medium bg-emerald-700 hover:bg-emerald-800 text-white rounded transition-colors"
+              className="flex-1 px-2 py-1 text-xs font-medium bg-emerald-700/80 hover:bg-emerald-700 text-white rounded transition-colors"
             >
-              Fix to AAA
+              Fix AAA
             </button>
           </div>
         )}
       </div>
 
-      {/* Checks list */}
-      <div className="p-6 space-y-3 max-h-96 overflow-y-auto">
+      {/* Checks list - compact */}
+      <div className="px-4 py-2 space-y-2 max-h-40 overflow-y-auto">
         {checks.map((check, idx) => (
           <ContrastRow key={idx} check={check} idx={idx} />
         ))}
-      </div>
-
-      {/* Footer */}
-      <div className="bg-slate-50 dark:bg-slate-800 px-6 py-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400">
-        <p>
-          <strong>WCAG Compliance:</strong> AA requires 4.5:1 contrast ratio. AAA
-          requires 7:1 for normal text.
-        </p>
       </div>
     </div>
   );

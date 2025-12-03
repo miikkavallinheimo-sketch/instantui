@@ -72,7 +72,7 @@ const Preview = ({
 
       {/* Contrast Checker Panel - Below preview */}
       {showContrastChecker && (
-        <div className="max-h-64 overflow-y-auto border-t border-slate-800">
+        <div className="max-h-48">
           <ContrastCheckerPanel designState={designState} onColorsFixed={onColorsFixed} />
         </div>
       )}
