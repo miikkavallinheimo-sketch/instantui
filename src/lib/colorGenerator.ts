@@ -828,7 +828,11 @@ export function enforceLuxuryDiscipline(colors: ColorSet): ColorSet {
   const surfaceAlt = makeSurface(mode === "emerald" ? 12 : 14);
   const borderSubtle = makeSurface(mode === "emerald" ? 2 : 3);
   const borderStrong = makeSurface(mode === "emerald" ? 18 : 20);
-  const textMuted = mixHex(colors.textMuted, background, 0.45);
+  const baseMuted = mixHex(colors.textMuted, background, 0.45);
+  // Ensure textMuted meets minimum WCAG contrast (3:1 for normal text is acceptable)
+  // If it doesn't, use a lighter version
+  const mutedContrast = contrastRatio(baseMuted, background);
+  const textMuted = mutedContrast >= 3 ? baseMuted : mixHex(colors.textMuted, background, 0.25);
 
   const text = ensureReadableText(background, colors.text);
   const onPrimary = ensureReadableText(primary, text);
@@ -928,7 +932,11 @@ export function enforceDarkDiscipline(colors: ColorSet): ColorSet {
   const surfaceAlt = makeSurface(14);
   const borderSubtle = makeSurface(4, 5);
   const borderStrong = makeSurface(20, 8);
-  const textMuted = mixHex(colors.textMuted, background, 0.55);
+  const baseMuted = mixHex(colors.textMuted, background, 0.55);
+  // Ensure textMuted meets minimum WCAG contrast (3:1 for normal text is acceptable)
+  // If it doesn't, use a lighter version
+  const mutedContrast = contrastRatio(baseMuted, background);
+  const textMuted = mutedContrast >= 3 ? baseMuted : mixHex(colors.textMuted, background, 0.35);
 
   const text = ensureReadableText(background, colors.text);
   const onPrimary = ensureReadableText(primary, text);
