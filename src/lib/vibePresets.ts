@@ -314,7 +314,7 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       accent: "#FBBF24",
       background: "#FFFBEB",
       surface: "#FFFFFF",
-      surfaceAlt: "#FEF3C7",
+      surfaceAlt: "#FEF08A",
       text: "#1F2937",
       textMuted: "#6B7280",
       borderSubtle: "#FDE68A",
