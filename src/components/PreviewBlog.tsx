@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { useState } from "react";
 import type { DesignState } from "../lib/types";
 
 interface PreviewBlogProps {
@@ -16,56 +17,88 @@ const sizeMap = {
 
 const PreviewBlog = ({ designState }: PreviewBlogProps) => {
   const { colors, fontPair, typography } = designState;
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  const categories = ["All", "Design", "Typography", "Color", "Accessibility", "Workflow"];
 
   const articles = [
     {
       title: "Getting Started with Design Systems",
-      excerpt:
-        "Learn the fundamentals of building a scalable design system that grows with your product.",
-      date: "Dec 15, 2024",
-      author: "Sarah Chen",
+      excerpt: "Learn the fundamentals of building a scalable design system.",
+      readTime: "8 min",
       category: "Design",
-      color: "secondary",
+      color: "primary",
+      image: "🎨",
     },
     {
       title: "Typography Best Practices",
-      excerpt:
-        "Master the art of typography and create visual hierarchy that guides users through your interface.",
-      date: "Dec 10, 2024",
-      author: "Marcus Johnson",
+      excerpt: "Master the art of typography and create visual hierarchy.",
+      readTime: "12 min",
       category: "Typography",
-      color: "accent",
+      color: "secondary",
+      image: "✍️",
     },
     {
       title: "Color Theory for Interfaces",
-      excerpt:
-        "Understand how color psychology impacts user experience and how to build accessible color systems.",
-      date: "Dec 5, 2024",
-      author: "Lisa Park",
+      excerpt: "Understand how color psychology impacts user experience.",
+      readTime: "10 min",
       category: "Color",
+      color: "accent",
+      image: "🎯",
+    },
+    {
+      title: "Accessibility Fundamentals",
+      excerpt: "Build inclusive interfaces that work for everyone.",
+      readTime: "15 min",
+      category: "Accessibility",
+      color: "primary",
+      image: "♿",
+    },
+    {
+      title: "Design System Tokens",
+      excerpt: "Organize and scale your design with proper tokenization.",
+      readTime: "11 min",
+      category: "Design",
       color: "secondary",
+      image: "🔧",
+    },
+    {
+      title: "Workflow Optimization",
+      excerpt: "Streamline your design process with better tools and habits.",
+      readTime: "9 min",
+      category: "Workflow",
+      color: "accent",
+      image: "⚡",
     },
   ];
 
+  const filteredArticles = selectedCategory === "All"
+    ? articles
+    : articles.filter(a => a.category === selectedCategory);
+
   const getColorForArticle = (colorKey: string) => {
     switch (colorKey) {
+      case "primary":
+        return colors.primary;
       case "secondary":
         return colors.secondary;
       case "accent":
         return colors.accent;
       default:
-        return colors.secondary;
+        return colors.primary;
     }
   };
 
   const getOnColorForArticle = (colorKey: string) => {
     switch (colorKey) {
+      case "primary":
+        return colors.onPrimary;
       case "secondary":
         return colors.onSecondary;
       case "accent":
         return colors.onAccent;
       default:
-        return colors.onSecondary;
+        return colors.onPrimary;
     }
   };
 
@@ -76,123 +109,136 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
 
   return (
     <div className="w-full" style={rootStyle}>
-      {/* Hero Section */}
-      <section className="px-6 py-12 md:py-16 border-b" style={{ borderColor: colors.borderSubtle }}>
-        <div className="max-w-4xl mx-auto">
-          <div
-            style={{
-              fontFamily: fontPair.heading,
-              fontSize: sizeMap[typography.heading.size],
-              fontWeight: typography.heading.weight,
-              color: colors.text,
-            }}
-            className="mb-4"
-          >
-            Latest Articles
-          </div>
-          <p
-            style={{
-              fontFamily: fontPair.body,
-              fontSize: sizeMap[typography.body.size],
-              color: colors.textMuted,
-            }}
-          >
-            Insights, tips, and best practices for designing better products.
-          </p>
-        </div>
-      </section>
-
-      {/* Featured Article */}
-      <section className="px-6 py-12 md:py-16 border-b" style={{ borderColor: colors.borderSubtle }}>
-        <div className="max-w-4xl mx-auto">
-          <div
-            style={{ backgroundColor: colors.primary }}
-            className="p-8 md:p-12 rounded-lg text-left"
-          >
-            <div
-              style={{
-                fontFamily: fontPair.body,
-                fontSize: sizeMap["sm"],
-                fontWeight: 600,
-                color: colors.onPrimary,
-                textTransform: "uppercase",
-              }}
-              className="opacity-80 mb-2"
-            >
-              Featured
-            </div>
+      {/* Top Header */}
+      <section
+        className="px-6 py-8 border-b"
+        style={{ borderColor: colors.borderSubtle }}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
             <div
               style={{
                 fontFamily: fontPair.heading,
                 fontSize: sizeMap["2xl"],
                 fontWeight: 700,
-                color: colors.onPrimary,
+                color: colors.text,
               }}
-              className="mb-4"
             >
-              Building Design Systems at Scale
+              Design Journal
             </div>
             <p
               style={{
                 fontFamily: fontPair.body,
-                fontSize: sizeMap[typography.body.size],
-                color: `${colors.onPrimary}cc`,
-              }}
-              className="mb-6 max-w-2xl"
-            >
-              Discover how to architect a design system that empowers your entire
-              organization to ship quality interfaces faster.
-            </p>
-            <div
-              style={{
-                fontFamily: fontPair.body,
                 fontSize: sizeMap["sm"],
-                color: `${colors.onPrimary}99`,
+                color: colors.textMuted,
+                marginTop: "0.5rem",
               }}
-              className="flex gap-4 flex-wrap"
             >
-              <span>By Emma Garcia</span>
-              <span>Dec 20, 2024</span>
-              <span
-                className="px-3 py-1 rounded-full"
-                style={{ backgroundColor: `${colors.onPrimary}20` }}
-              >
-                Design Systems
-              </span>
-            </div>
+              Stories, insights, and lessons from the design world
+            </p>
+          </div>
+          <div
+            className="px-6 py-3 rounded-lg text-sm font-semibold"
+            style={{
+              backgroundColor: colors.accent,
+              color: colors.onAccent,
+              fontFamily: fontPair.heading,
+            }}
+          >
+            {filteredArticles.length} Articles
           </div>
         </div>
       </section>
 
-      {/* Articles Grid */}
-      <section className="px-6 py-12 md:py-16">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {articles.map((article, idx) => {
-            const articleColor = getColorForArticle(article.color);
-            const articleOnColor = getOnColorForArticle(article.color);
-            return (
-              <article
-                key={idx}
-                className="pb-6 border-b"
-                style={{ borderColor: colors.borderSubtle }}
-              >
-                <div className="flex gap-4 mb-4">
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Sidebar */}
+        <aside className="lg:col-span-1">
+          <div
+            className="sticky top-6 p-6 rounded-lg"
+            style={{
+              backgroundColor: colors.surface,
+              borderColor: colors.borderSubtle,
+              border: `1px solid ${colors.borderSubtle}`,
+            }}
+          >
+            <div
+              style={{
+                fontFamily: fontPair.heading,
+                fontSize: sizeMap["lg"],
+                fontWeight: 600,
+                color: colors.text,
+                marginBottom: "1rem",
+              }}
+            >
+              Categories
+            </div>
+            <div className="space-y-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className="w-full text-left px-4 py-2 rounded-lg transition-all"
+                  style={{
+                    backgroundColor:
+                      selectedCategory === cat
+                        ? colors.primary
+                        : "transparent",
+                    color:
+                      selectedCategory === cat
+                        ? colors.onPrimary
+                        : colors.text,
+                    fontFamily: fontPair.body,
+                    fontSize: sizeMap["sm"],
+                    fontWeight: selectedCategory === cat ? 600 : 400,
+                  }}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Articles Grid */}
+        <section className="lg:col-span-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredArticles.map((article, idx) => {
+              const articleColor = getColorForArticle(article.color);
+              const articleOnColor = getOnColorForArticle(article.color);
+              return (
+                <article
+                  key={idx}
+                  className="rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                  style={{
+                    backgroundColor: colors.surface,
+                    border: `1px solid ${colors.borderSubtle}`,
+                  }}
+                >
                   <div
-                    className="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center font-bold text-sm"
-                    style={{
-                      backgroundColor: articleColor,
-                      color: articleOnColor,
-                    }}
+                    className="h-32 flex items-center justify-center text-5xl"
+                    style={{ backgroundColor: articleColor }}
                   >
-                    {String.fromCharCode(65 + idx)}
+                    {article.image}
                   </div>
-                  <div className="space-y-2 flex-1">
+                  <div className="p-6">
+                    <div
+                      className="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3"
+                      style={{
+                        backgroundColor: `${articleColor}20`,
+                        color: articleColor,
+                        fontFamily: fontPair.body,
+                      }}
+                    >
+                      {article.category}
+                    </div>
                     <div
                       style={{
                         fontFamily: fontPair.heading,
                         fontSize: sizeMap["lg"],
                         fontWeight: 600,
                         color: colors.text,
+                        marginBottom: "0.75rem",
                       }}
                     >
                       {article.title}
@@ -200,84 +246,87 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                     <p
                       style={{
                         fontFamily: fontPair.body,
-                        fontSize: sizeMap[typography.body.size],
+                        fontSize: sizeMap["sm"],
                         color: colors.textMuted,
+                        marginBottom: "1rem",
                       }}
                     >
                       {article.excerpt}
                     </p>
+                    <div
+                      className="flex items-center justify-between"
+                      style={{
+                        fontFamily: fontPair.body,
+                        fontSize: sizeMap["xs"],
+                        color: colors.textMuted,
+                      }}
+                    >
+                      <span>{article.readTime}</span>
+                      <button
+                        className="px-3 py-1 rounded-full font-semibold text-xs"
+                        style={{
+                          backgroundColor: articleColor,
+                          color: articleOnColor,
+                          fontFamily: fontPair.heading,
+                        }}
+                      >
+                        Read
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div
-                  className="flex flex-wrap gap-4 items-center"
-                  style={{
-                    fontFamily: fontPair.body,
-                    fontSize: sizeMap["sm"],
-                    color: colors.textMuted,
-                  }}
-                >
-                  <span>{article.author}</span>
-                  <span>•</span>
-                  <span>{article.date}</span>
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-medium"
-                    style={{
-                      backgroundColor: articleColor,
-                      color: articleOnColor,
-                    }}
-                  >
-                    {article.category}
-                  </span>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </div>
 
-      {/* Newsletter CTA */}
-      <section className="px-6 py-12 md:py-16" style={{ backgroundColor: colors.accent }}>
+      {/* CTA Section */}
+      <section
+        className="mt-12 mx-6 rounded-lg p-8 md:p-12"
+        style={{ backgroundColor: colors.secondary }}
+      >
         <div className="max-w-2xl mx-auto text-center space-y-4">
           <div
             style={{
               fontFamily: fontPair.heading,
               fontSize: sizeMap["xl"],
               fontWeight: 600,
-              color: colors.onAccent,
+              color: colors.onSecondary,
             }}
           >
-            Subscribe to Our Newsletter
+            Stay Updated with Latest Insights
           </div>
           <p
             style={{
               fontFamily: fontPair.body,
               fontSize: sizeMap[typography.body.size],
-              color: `${colors.onAccent}cc`,
+              color: `${colors.onSecondary}cc`,
             }}
           >
-            Get the latest design tips and insights delivered to your inbox.
+            Get curated design articles and resources delivered weekly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-2">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="your@email.com"
               className="flex-1 px-4 py-2 rounded-lg border"
               style={{
-                borderColor: `${colors.onAccent}30`,
-                backgroundColor: `${colors.onAccent}10`,
-                color: colors.onAccent,
+                borderColor: `${colors.onSecondary}30`,
+                backgroundColor: `${colors.onSecondary}10`,
+                color: colors.onSecondary,
                 fontFamily: fontPair.body,
               }}
             />
             <button
               className="px-6 py-2 rounded-lg font-semibold"
               style={{
-                backgroundColor: colors.onAccent,
-                color: colors.accent,
+                backgroundColor: colors.onSecondary,
+                color: colors.secondary,
                 fontFamily: fontPair.heading,
               }}
             >
-              Subscribe
+              Join
             </button>
           </div>
         </div>
@@ -285,22 +334,104 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
 
       {/* Footer */}
       <footer
-        className="px-6 py-8 border-t"
+        className="px-6 py-12 border-t mt-12"
         style={{
           backgroundColor: colors.background,
           borderColor: colors.borderSubtle,
         }}
       >
-        <div className="max-w-4xl mx-auto text-center">
-          <p
-            style={{
-              fontFamily: fontPair.body,
-              fontSize: sizeMap["sm"],
-              color: colors.textMuted,
-            }}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                About Blog
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                  lineHeight: 1.6,
+                }}
+              >
+                Sharing knowledge about design systems, typography, and creating beautiful products.
+              </p>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                Categories
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                {categories.slice(1).map((cat) => (
+                  <li key={cat}>
+                    <a href="#" style={{ color: colors.text }}>
+                      {cat}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                More
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                <li><a href="#" style={{ color: colors.text }}>RSS Feed</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Archive</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div
+            className="border-t pt-6"
+            style={{ borderColor: colors.borderSubtle }}
           >
-            © 2024 Elementry Design Blog. All rights reserved. | <a href="#" style={{ color: colors.text }}>Privacy</a> | <a href="#" style={{ color: colors.text }}>Terms</a>
-          </p>
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
+                color: colors.textMuted,
+                textAlign: "center",
+              }}
+            >
+              © 2024 Elementry Design Journal. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
