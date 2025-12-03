@@ -79,8 +79,10 @@ const sizeMap = {
 
 const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboardProps) => {
   const { colors, fontPair, typography, uiTokens } = designState;
-  const navBg = adjustLightness(colors.primary, designState.vibe.isDarkUi ? 6 : -10);
-  const navAccent = adjustLightness(colors.primary, designState.vibe.isDarkUi ? 16 : -22);
+  const navBg = colors.primary;
+  const navAccent = designState.vibe.isDarkUi
+    ? `rgba(255, 255, 255, 0.15)`
+    : `rgba(255, 255, 255, 0.2)`;
   const navText = "#ffffff";
   const navTextMuted = "rgba(255,255,255,0.75)";
   const surface = colors.surface;

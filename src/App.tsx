@@ -24,7 +24,7 @@ import type {
   GeneratedVibesResponse,
   SavedFavorite,
 } from "./lib/types";
-import { hexToHsl, hslToHex, contrastRatio } from "./lib/colorUtils";
+import { hexToHsl, hslToHex, contrastRatio, hexToLuminance } from "./lib/colorUtils";
 import aiVibesData from "./data/generatedVibes.json";
 import SidebarControls from "./components/SidebarControls";
 import Preview from "./components/Preview";
@@ -98,35 +98,173 @@ const applySurfaceShade = (colors: DesignState["colors"], shade: number) => {
   };
 };
 
-const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"]) => {
+/**
+ * Calculate hue distance between two hues (0-180 degrees)
+ */
+const hueDistance = (a: number, b: number): number => {
+  const diff = Math.abs(a - b) % 360;
+  return diff > 180 ? 360 - diff : diff;
+};
+
+/**
+ * Validate color harmony and return issues if any
+ */
+interface HarmonyIssues {
+  primary_secondary_similar: boolean;
+  accent_too_close: boolean;
+  background_contrast_low: boolean;
+  saturation_uneven: boolean;
+}
+
+const validateColorHarmony = (colors: DesignState["colors"], vibe: DesignState["vibe"]): HarmonyIssues => {
   const primary = hexToHsl(colors.primary);
+  const secondary = hexToHsl(colors.secondary);
+  const accent = hexToHsl(colors.accent);
+
+  // Get vibe-specific settings
+  const isLuxury = vibe.id === "luxury";
+  const maxSecondaryDelta = isLuxury ? 18 : 38;
+  const minAccentDelta = isLuxury ? 65 : 70;
+  const minSatPrimary = 40;
+  const minSatSecondary = 35;
+  const minSatAccent = 50;
+
+  // Issue 1: Primary and secondary too similar in hue
+  const primarySecondaryDistance = hueDistance(primary.h, secondary.h);
+  const primary_secondary_similar = primarySecondaryDistance < maxSecondaryDelta;
+
+  // Issue 2: Accent too close to primary/secondary midpoint
+  const midpointHue = (primary.h + secondary.h) / 2;
+  const accentDistance = hueDistance(accent.h, midpointHue);
+  const accent_too_close = accentDistance < minAccentDelta;
+
+  // Issue 3: Background contrast with primary is too low
+  const background_contrast_low = contrastRatio(colors.primary, colors.background) < 4.5;
+
+  // Issue 4: Saturation is uneven
+  const saturation_uneven =
+    primary.s < minSatPrimary ||
+    secondary.s < minSatSecondary ||
+    accent.s < minSatAccent;
+
+  return {
+    primary_secondary_similar,
+    accent_too_close,
+    background_contrast_low,
+    saturation_uneven,
+  };
+};
+
+/**
+ * Fix color harmony issues
+ */
+const fixColorHarmony = (colors: DesignState["colors"], vibe: DesignState["vibe"]): DesignState["colors"] => {
+  const issues = validateColorHarmony(colors, vibe);
+  let fixed = { ...colors };
+  const isLuxury = vibe.id === "luxury";
+  const maxSecondaryDelta = isLuxury ? 18 : 38;
+  const minAccentDelta = isLuxury ? 65 : 70;
+
+  // Fix Issue 1: Separate primary and secondary if too similar
+  if (issues.primary_secondary_similar) {
+    const primaryHsl = hexToHsl(fixed.primary);
+    const secondaryHsl = hexToHsl(fixed.secondary);
+    const distance = hueDistance(primaryHsl.h, secondaryHsl.h);
+
+    if (distance < maxSecondaryDelta) {
+      // Move secondary away from primary
+      const direction = distance > 180 ? -1 : 1;
+      const newSecondaryHue = (secondaryHsl.h + direction * (maxSecondaryDelta - distance) + 360) % 360;
+      fixed.secondary = hslToHex(newSecondaryHue, secondaryHsl.s, secondaryHsl.l);
+    }
+  }
+
+  // Fix Issue 2: Separate accent if too close to primary/secondary
+  if (issues.accent_too_close) {
+    const primaryHsl = hexToHsl(fixed.primary);
+    const secondaryHsl = hexToHsl(fixed.secondary);
+    const accentHsl = hexToHsl(fixed.accent);
+    const midpoint = (primaryHsl.h + secondaryHsl.h) / 2;
+    const distance = hueDistance(accentHsl.h, midpoint);
+
+    if (distance < minAccentDelta) {
+      // Move accent away from midpoint
+      const direction = accentHsl.h > midpoint ? 1 : -1;
+      const newAccentHue = (accentHsl.h + direction * (minAccentDelta - distance) + 360) % 360;
+      fixed.accent = hslToHex(newAccentHue, accentHsl.s, accentHsl.l);
+    }
+  }
+
+  // Fix Issue 3: Improve background contrast if needed
+  if (issues.background_contrast_low) {
+    const bgHsl = hexToHsl(fixed.background);
+    const primaryLum = hexToLuminance(fixed.primary);
+    const shouldDarken = primaryLum > 0.5;
+
+    let newL = bgHsl.l;
+    for (let i = 0; i < 5; i++) {
+      newL += shouldDarken ? -6 : 6;
+      newL = clampValue(newL, 5, 95);
+      const testBg = hslToHex(bgHsl.h, bgHsl.s, newL);
+      if (contrastRatio(fixed.primary, testBg) >= 4.5) {
+        fixed.background = testBg;
+        break;
+      }
+    }
+  }
+
+  // Fix Issue 4: Ensure saturation minimums
+  if (issues.saturation_uneven) {
+    const primaryHsl = hexToHsl(fixed.primary);
+    const secondaryHsl = hexToHsl(fixed.secondary);
+    const accentHsl = hexToHsl(fixed.accent);
+
+    if (primaryHsl.s < 40) {
+      fixed.primary = hslToHex(primaryHsl.h, 40, primaryHsl.l);
+    }
+    if (secondaryHsl.s < 35) {
+      fixed.secondary = hslToHex(secondaryHsl.h, 35, secondaryHsl.l);
+    }
+    if (accentHsl.s < 50) {
+      fixed.accent = hslToHex(accentHsl.h, 50, accentHsl.l);
+    }
+  }
+
+  return fixed;
+};
+
+const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"]) => {
+  // First, validate and fix any harmony issues
+  const harmonyFixed = fixColorHarmony(colors, vibe);
+
+  const primary = hexToHsl(harmonyFixed.primary);
   const targetSat = vibe.isDarkUi ? 68 : 58;
   const saturationShift = clampValue(targetSat - primary.s, -15, 15);
   const hueShift = clampValue(Math.round((Math.random() - 0.5) * 12), -8, 8);
   const baseShade = vibe.isDarkUi ? -2 : 3;
   let surfaceShade = baseShade;
-  if (contrastRatio(colors.primary, colors.background) < 4.5) {
+  if (contrastRatio(harmonyFixed.primary, harmonyFixed.background) < 4.5) {
     surfaceShade -= 4;
   }
 
-  const tunedColors: DesignState["colors"] = { ...colors };
-  const accentHsl = hexToHsl(colors.accent);
+  const tunedColors: DesignState["colors"] = { ...harmonyFixed };
+  const accentHsl = hexToHsl(harmonyFixed.accent);
   tunedColors.accent = hslToHex(
     (accentHsl.h + hueShift + 360) % 360,
     clampValue(accentHsl.s + (vibe.isDarkUi ? 10 : -5), 30, 100),
     clampValue(accentHsl.l + (vibe.isDarkUi ? 8 : -6), 5, 90)
   );
 
-  const secondaryHsl = hexToHsl(colors.secondary);
+  const secondaryHsl = hexToHsl(harmonyFixed.secondary);
   tunedColors.secondary = hslToHex(
     secondaryHsl.h,
     clampValue(secondaryHsl.s + (vibe.isDarkUi ? -5 : -10), 15, 90),
     clampValue(secondaryHsl.l + (vibe.isDarkUi ? 4 : -3), 5, 90)
   );
 
-  tunedColors.background = shiftLightness(colors.background, surfaceShade);
-  tunedColors.surface = shiftLightness(colors.surface, surfaceShade);
-  tunedColors.surfaceAlt = shiftLightness(colors.surfaceAlt, surfaceShade * 0.9);
+  tunedColors.background = shiftLightness(harmonyFixed.background, surfaceShade);
+  tunedColors.surface = shiftLightness(harmonyFixed.surface, surfaceShade);
+  tunedColors.surfaceAlt = shiftLightness(harmonyFixed.surfaceAlt, surfaceShade * 0.9);
 
   return {
     baseColors: tunedColors,
