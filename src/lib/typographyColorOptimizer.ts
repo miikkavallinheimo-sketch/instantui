@@ -1,4 +1,4 @@
-import type { ColorSet } from "./types";
+import type { ColorSet, TypographyColors } from "./types";
 import { hexToHsl, hslToHex } from "./colorUtils";
 
 // Helper: Add slight randomization while maintaining bounds
@@ -184,4 +184,22 @@ export function getOptimizedTypographyColors(
   }
 
   return optimizeTypographyColors(colors);
+}
+
+/**
+ * Generate typography color hierarchy (H1, H2, body, bodyMuted, accent)
+ * Uses optimized typography colors to create proper visual hierarchy
+ */
+export function getTypographyColorHierarchy(
+  colors: ColorSet
+): TypographyColors {
+  const optimized = getOptimizedTypographyColors(colors);
+
+  return {
+    heading: optimized.heading,           // H1 - max contrast
+    subheading: optimized.subheading,     // H2
+    body: optimized.body,                 // Body text
+    bodyMuted: colors.textMuted,          // De-emphasized text
+    accent: optimized.accent,             // CTA emphasis
+  };
 }
