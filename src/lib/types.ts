@@ -52,6 +52,8 @@ export type ColorVariations = PaletteVariation[];
 export type RadiusToken = "none" | "sm" | "md" | "lg" | "xl" | "full";
 export type ShadowToken = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type BorderToken = "none" | "subtle" | "strong";
+export type SpacingToken = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
+export type SpacingDensity = "compact" | "default" | "relaxed";
 
 // Feature tier system
 export type FeatureTier = "FREE" | "PRO";
@@ -113,11 +115,19 @@ export interface TypographyTokens {
   subheading?: TextStyle;
 }
 
+export interface SpacingConfig {
+  density: SpacingDensity;
+  // Optional overrides for specific patterns
+  containerPadding?: string;
+  gridGap?: string;
+}
+
 export interface VibeUiTokens {
   buttonPrimary: ComponentShape;
   buttonSecondary: ComponentShape;
   card: ComponentShape;
   typography?: TypographyTokens;
+  spacing?: SpacingConfig;
 }
 
 export type VibeId =
@@ -161,6 +171,36 @@ export interface FontPair {
   notes?: string;
 }
 
+export interface SpacingScale {
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  "2xl": string;
+  "3xl": string;
+  "4xl": string;
+  "5xl": string;
+}
+
+export interface SpacingPatterns {
+  containerPadding: {
+    sm: string;
+    md: string;
+    lg: string;
+  };
+  gridGap: {
+    sm: string;
+    md: string;
+    lg: string;
+  };
+  verticalRhythm: {
+    tight: string;
+    normal: string;
+    loose: string;
+  };
+}
+
 export interface DesignState {
   vibe: VibePreset;
   colors: ColorSet;
@@ -168,6 +208,8 @@ export interface DesignState {
   fontPair: FontPair;
   uiTokens: VibeUiTokens;
   typography: TypographyTokens;
+  spacing: SpacingScale;
+  spacingPatterns: SpacingPatterns;
 }
 
 export interface DesignTokens {

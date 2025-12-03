@@ -26,6 +26,7 @@ import type {
   SavedFavorite,
 } from "./lib/types";
 import { hexToHsl, hslToHex, contrastRatio, hexToLuminance } from "./lib/colorUtils";
+import { getSpacingScale, getSpacingPatterns } from "./lib/spacingScale";
 import aiVibesData from "./data/generatedVibes.json";
 import SidebarControls from "./components/SidebarControls";
 import Preview from "./components/Preview";
@@ -394,6 +395,11 @@ function buildDesignState(
 
   const { uiTokens, typography } = generateStyleTokens(vibe, seed);
 
+  // Get spacing configuration from vibe UI tokens
+  const spacingDensity = vibe.ui?.spacing?.density || "default";
+  const spacingScale = getSpacingScale(spacingDensity);
+  const spacingPatterns = getSpacingPatterns(spacingScale);
+
   return {
     vibe,
     colors: adjustedColors,
@@ -401,6 +407,8 @@ function buildDesignState(
     fontPair: baseFontPair,
     uiTokens,
     typography,
+    spacing: spacingScale,
+    spacingPatterns,
   };
 }
 

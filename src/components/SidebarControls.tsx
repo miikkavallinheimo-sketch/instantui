@@ -411,6 +411,25 @@ const SidebarControls = ({
       </div>
 
       <div>
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-3">
+          Spacing Scale
+        </h3>
+        <div className="bg-slate-900/30 rounded-lg border border-slate-800 p-3 space-y-2">
+          <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
+            Density: <span className="text-slate-300 capitalize">{designState.uiTokens.spacing?.density || "default"}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-[10px]">
+            {(Object.entries(designState.spacing) as Array<[string, string]>).map(([token, value]) => (
+              <div key={token} className="flex justify-between items-center px-2 py-1 rounded bg-slate-800/50 border border-slate-700">
+                <span className="text-slate-400 font-mono">{token}</span>
+                <span className="text-slate-300 text-xs">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div>
         <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
           Theme
         </h3>
