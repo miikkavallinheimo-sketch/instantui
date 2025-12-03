@@ -605,6 +605,37 @@ function ensureReadableText(bg: string, preferred: string): string {
 }
 
 /**
+ * Ensures muted text color has at least 3:1 contrast ratio with background.
+ * Used specifically for secondary text that should be readable but not as prominent.
+ */
+function ensureMutedTextReadable(bg: string, preferred: string): string {
+  const black = "#000000";
+  const white = "#ffffff";
+
+  const prefC = contrastRatio(bg, preferred);
+  const blackC = contrastRatio(bg, black);
+  const whiteC = contrastRatio(bg, white);
+
+  const target = 3.0; // WCAG AA for large text / AAA for normal text
+
+  // Prefer the input color if it meets the minimum contrast
+  if (prefC >= target) return preferred;
+
+  // Otherwise pick best option that meets the target
+  if (blackC >= target && whiteC < target) return black;
+  if (whiteC >= target && blackC < target) return white;
+  if (blackC >= target && whiteC >= target) {
+    // Both meet standard - prefer black for light backgrounds, white for dark
+    const bgLuminance = hexToLuminance(bg);
+    return bgLuminance > 0.5 ? black : white;
+  }
+
+  // If nothing meets target, pick the better option
+  if (whiteC >= blackC) return white;
+  return black;
+}
+
+/**
  * Generoi värit käyttäen väriharmonia-algoritmia vibe:n base-väristä.
  * Jos lukittu, käytetään edellisen tilan arvoja.
  */
@@ -939,7 +970,7 @@ export function enforceLuxuryDiscipline(colors: ColorSet): ColorSet {
   // Prefer a neutral gray that's darker for light backgrounds, lighter for dark backgrounds
   const bgLum = hexToLuminance(background);
   const mutedGray = bgLum > 0.5 ? "#475569" : "#A1A5B0"; // darker gray for light bg, lighter for dark bg
-  const textMuted = ensureReadableText(background, mutedGray);
+  const textMuted = ensureMutedTextReadable(background, mutedGray);
 
   const text = ensureReadableText(background, colors.text);
   const onPrimary = ensureReadableText(primary, text);
@@ -1044,7 +1075,7 @@ export function enforceDarkDiscipline(colors: ColorSet): ColorSet {
   // Prefer a neutral gray that's darker for light backgrounds, lighter for dark backgrounds
   const bgLum = hexToLuminance(background);
   const mutedGray = bgLum > 0.5 ? "#475569" : "#A1A5B0"; // darker gray for light bg, lighter for dark bg
-  const textMuted = ensureReadableText(background, mutedGray);
+  const textMuted = ensureMutedTextReadable(background, mutedGray);
 
   const text = ensureReadableText(background, colors.text);
   const onPrimary = ensureReadableText(primary, text);
