@@ -58,7 +58,7 @@ export const SharedNav = ({
               <button
                 key={page.id}
                 onClick={() => onPageChange?.(page.id)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium hover-lift ${
                   activePage === page.id ? "opacity-100" : "opacity-60 hover:opacity-80"
                 }`}
                 style={{
@@ -79,7 +79,7 @@ export const SharedNav = ({
           {pageNav.items.map((item, idx) => (
             <button
               key={item.label}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium hover-subtle ${
                 idx === pageNav.activeIndex ? "opacity-100" : "opacity-60 hover:opacity-80"
               }`}
               style={{

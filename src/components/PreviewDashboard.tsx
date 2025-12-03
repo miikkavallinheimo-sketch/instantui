@@ -58,14 +58,15 @@ const radiusMap = {
   full: "9999px",
 } as const;
 
+// Multi-layered shadows for non-flat depth
 const shadowMap = {
   none: "none",
-  xs: "0 1px 2px rgba(15,23,42,0.05)",
-  sm: "0 2px 8px rgba(15,23,42,0.08)",
-  md: "0 4px 16px rgba(15,23,42,0.12)",
-  lg: "0 8px 24px rgba(15,23,42,0.16)",
-  xl: "0 12px 40px rgba(15,23,42,0.22)",
-  "2xl": "0 24px 60px rgba(15,23,42,0.35)",
+  xs: "0 1px 3px rgba(15,23,42,0.08)",
+  sm: "0 1px 3px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.06)",
+  md: "0 2px 4px rgba(15,23,42,0.08), 0 4px 12px rgba(15,23,42,0.10), 0 8px 20px rgba(15,23,42,0.06)",
+  lg: "0 4px 8px rgba(15,23,42,0.10), 0 8px 20px rgba(15,23,42,0.12), 0 16px 32px rgba(15,23,42,0.08)",
+  xl: "0 6px 12px rgba(15,23,42,0.12), 0 12px 32px rgba(15,23,42,0.14), 0 24px 48px rgba(15,23,42,0.10)",
+  "2xl": "0 8px 16px rgba(15,23,42,0.14), 0 16px 40px rgba(15,23,42,0.18), 0 32px 64px rgba(15,23,42,0.12)",
 } as const;
 
 const sizeMap = {
