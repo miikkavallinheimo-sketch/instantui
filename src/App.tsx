@@ -248,9 +248,14 @@ const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"
     "retro-pixel": 72,
     "warm-editorial": 38,
     "magazine-brutalism": 8,
+    "modern-saas": 62,
+    "dark-tech": 68,
+    "soft-neo-tech": 60,
+    luxury: 45,
+    "gradient-bloom": 65,
+    "cyber-mint": 78,
   };
   const targetSat = vibeTargetSat[vibe.id] ?? (vibe.isDarkUi ? 68 : 58);
-  const saturationShift = clampValue(targetSat - primary.s, -15, 15);
   const hueShift = clampValue(Math.round((Math.random() - 0.5) * 12), -8, 8);
   const baseShade = vibe.isDarkUi ? -2 : 3;
   let surfaceShade = baseShade;
@@ -259,6 +264,17 @@ const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"
   }
 
   const tunedColors: DesignState["colors"] = { ...harmonyFixed };
+
+  // Apply saturation targeting to primary based on vibe target
+  const primaryHsl = hexToHsl(harmonyFixed.primary);
+  // Target saturation directly, with small random variation
+  const primaryTargetSat = clampValue(targetSat + (Math.random() - 0.5) * 6, 8, 95);
+  tunedColors.primary = hslToHex(
+    primaryHsl.h,
+    primaryTargetSat,
+    primaryHsl.l
+  );
+
   const accentHsl = hexToHsl(harmonyFixed.accent);
   tunedColors.accent = hslToHex(
     (accentHsl.h + hueShift + 360) % 360,
@@ -267,9 +283,11 @@ const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"
   );
 
   const secondaryHsl = hexToHsl(harmonyFixed.secondary);
+  // Secondary should be slightly lower saturation than primary (subordinate role)
+  const secondaryTargetSat = clampValue(primaryTargetSat - 5 + (Math.random() - 0.5) * 4, 15, 90);
   tunedColors.secondary = hslToHex(
     secondaryHsl.h,
-    clampValue(secondaryHsl.s + (vibe.isDarkUi ? -5 : -10), 15, 90),
+    secondaryTargetSat,
     clampValue(secondaryHsl.l + (vibe.isDarkUi ? 4 : -3), 5, 90)
   );
 
@@ -280,7 +298,6 @@ const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"
   return {
     baseColors: tunedColors,
     hueShift,
-    saturationShift,
   };
 };
 
@@ -744,14 +761,14 @@ function App() {
     setDesignState((prev) => {
       if (!prev) return prev;
       const tuning = computeAiTuning(prev.colors, prev.vibe);
-      setHueShift(tuning.hueShift);
-      setSaturationShift(tuning.saturationShift);
+      setHueShift(0);  // Reset to 0 - hue tuning already applied in computeAiTuning
       setAiTuned(false);  // Allow re-triggering
       const disciplinedBase = applyVibeColorRules(prev.vibe, tuning.baseColors);
+      // No additional adjustments - all tuning done in computeAiTuning
       const adjusted = applyColorAdjustments(
         disciplinedBase,
-        tuning.hueShift,
-        tuning.saturationShift
+        0,  // No additional hue shift
+        0   // No additional saturation shift
       );
 
       // Optimoi typografia algoritmisesti
