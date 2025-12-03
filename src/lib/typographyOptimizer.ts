@@ -36,6 +36,92 @@ const jitterWeight = (weight: number): number => {
   return applyJitter(weight, maxJitter);
 };
 
+// Get base font size for type scale calculation
+function getBaseSize(vibeId: string): number {
+  // Different vibes may have different base sizes
+  const baseSizes: Record<string, number> = {
+    "magazine-brutalism": 1.125, // 18px
+    "warm-editorial": 1.125,
+    "default": 1,
+  };
+  return baseSizes[vibeId] || baseSizes.default;
+}
+
+// Generate H1-H4 hierarchy using 1.25 type scale
+function generateTypographyScale(
+  current: TypographyTokens,
+  vibe: VibePreset
+): TypographyTokens {
+  const baseSize = getBaseSize(vibe.id);
+  const scaleRatio = 1.25;
+
+  // Convert rem to size token
+  const remToToken = (rem: number): string => {
+    // Map rem values back to SIZE_ORDER tokens
+    const remValues: Record<number, string> = {
+      12: "xs",
+      14: "sm",
+      16: "md",
+      18: "lg",
+      20: "xl",
+      24: "2xl",
+    };
+    const px = Math.round(rem * 16); // Convert rem to px
+    return remValues[px] || "md"; // Fallback
+  };
+
+  const basePx = baseSize * 16; // Convert to px
+
+  return {
+    h1: {
+      size: remToToken(baseSize * scaleRatio ** 3), // ~2rem / 32px
+      weight: 700,
+      style: current.heading?.style || "normal",
+      transform: current.heading?.transform,
+    },
+    h2: {
+      size: remToToken(baseSize * scaleRatio ** 2), // ~1.5rem / 24px
+      weight: 600,
+      style: current.heading?.style || "normal",
+      transform: current.heading?.transform,
+    },
+    h3: {
+      size: remToToken(baseSize * scaleRatio), // ~1.25rem / 20px
+      weight: 600,
+      style: "normal",
+    },
+    h4: {
+      size: remToToken(baseSize), // 1rem / 16px
+      weight: 500,
+      style: "normal",
+    },
+    body: {
+      size: remToToken(baseSize * 0.875), // 0.875rem / 14px
+      weight: current.body.weight,
+      style: current.body.style || "normal",
+    },
+    accent: {
+      size: remToToken(baseSize * 0.75), // 0.75rem / 12px
+      weight: current.accent.weight,
+      style: current.accent.style || "normal",
+      transform: current.accent.transform,
+    },
+    // Backward compatibility aliases
+    heading: {
+      size: remToToken(baseSize * scaleRatio ** 3),
+      weight: 700,
+      style: current.heading?.style || "normal",
+      transform: current.heading?.transform,
+    },
+    subheading: {
+      size: remToToken(baseSize * scaleRatio ** 2),
+      weight: 600,
+      style: current.heading?.style || "normal",
+      transform: current.heading?.transform,
+    },
+  };
+}
+
 // Pääoptimointifunktio
 export function optimizeTypography(
   current: TypographyTokens,
@@ -43,11 +129,18 @@ export function optimizeTypography(
   colors: ColorSet,
   trends?: TypographyTrendData
 ): TypographyTokens {
-  let optimized = { ...current };
-  optimized.subheading = optimized.subheading ? { ...optimized.subheading } : undefined;
-  optimized.heading = { ...optimized.heading };
+  // Generate H1-H4 scale
+  let optimized = generateTypographyScale(current, vibe);
+
+  // Create mutable copies
+  optimized.h1 = { ...optimized.h1 };
+  optimized.h2 = { ...optimized.h2 };
+  optimized.h3 = { ...optimized.h3 };
+  optimized.h4 = { ...optimized.h4 };
   optimized.body = { ...optimized.body };
   optimized.accent = { ...optimized.accent };
+  if (optimized.heading) optimized.heading = { ...optimized.heading };
+  if (optimized.subheading) optimized.subheading = { ...optimized.subheading };
 
   // A) Hierarkian validointi - SIZE
   const headingIdx = SIZE_ORDER.indexOf(
