@@ -1,5 +1,5 @@
-import { contrastRatio } from "./colorUtils";
-import type { DesignState } from "./types";
+import { contrastRatio, hexToHsl, hslToHex } from "./colorUtils";
+import type { DesignState, ColorSet } from "./types";
 
 export interface ContrastCheck {
   foreground: string;
@@ -132,5 +132,51 @@ export function getContrastViolations(checks: ContrastCheck[]): {
   return {
     aa: checks.filter((c) => !c.aaCompliant).length,
     aaa: checks.filter((c) => !c.aaaCompliant).length,
+  };
+}
+
+/**
+ * Adjust text color lightness to meet minimum contrast ratio
+ */
+function adjustTextLightnessForContrast(
+  textColor: string,
+  backgroundColor: string,
+  targetRatio: number
+): string {
+  const bgLum = contrastRatio("#ffffff", backgroundColor);
+  let { h, s, l } = hexToHsl(textColor);
+
+  // Try adjusting lightness to meet contrast
+  const isLightBg = bgLum < 12; // white has ratio of ~21 on light bg
+  let step = isLightBg ? -5 : 5; // make darker for light bg, lighter for dark bg
+
+  for (let i = 0; i < 20; i++) {
+    const testColor = hslToHex(h, s, Math.max(0, Math.min(100, l)));
+    const ratio = contrastRatio(testColor, backgroundColor);
+    if (ratio >= targetRatio) {
+      return testColor;
+    }
+    l += step;
+  }
+
+  return isLightBg ? "#000000" : "#ffffff";
+}
+
+/**
+ * Fix all colors in design to meet WCAG standard
+ */
+export function fixContrastToWCAG(
+  colors: ColorSet,
+  target: "aa" | "aaa" = "aa"
+): ColorSet {
+  const targetRatio = target === "aaa" ? 7 : 4.5;
+
+  return {
+    ...colors,
+    text: adjustTextLightnessForContrast(colors.text, colors.background, targetRatio),
+    textMuted: adjustTextLightnessForContrast(colors.textMuted, colors.background, 3),
+    onPrimary: adjustTextLightnessForContrast(colors.onPrimary, colors.primary, targetRatio),
+    onSecondary: adjustTextLightnessForContrast(colors.onSecondary, colors.secondary, targetRatio),
+    onAccent: adjustTextLightnessForContrast(colors.onAccent, colors.accent, targetRatio),
   };
 }

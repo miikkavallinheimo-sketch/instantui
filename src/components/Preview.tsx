@@ -11,6 +11,7 @@ interface PreviewProps {
   activePage?: PreviewPageId;
   activeMenu?: MenuPresetId;
   onPageChange?: (page: PreviewPageId) => void;
+  onColorsFixed?: (newColors: DesignState["colors"]) => void;
   showContrastChecker?: boolean;
 }
 
@@ -20,6 +21,7 @@ const Preview = ({
   activePage = "dashboard",
   activeMenu = "top-nav",
   onPageChange,
+  onColorsFixed,
   showContrastChecker = true,
 }: PreviewProps) => {
   return (
@@ -71,7 +73,7 @@ const Preview = ({
       {/* Contrast Checker Sidebar */}
       {showContrastChecker && (
         <div className="w-80 flex-shrink-0 overflow-y-auto">
-          <ContrastCheckerPanel designState={designState} />
+          <ContrastCheckerPanel designState={designState} onColorsFixed={onColorsFixed} />
         </div>
       )}
     </div>

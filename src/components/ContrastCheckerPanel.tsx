@@ -3,12 +3,14 @@ import type { DesignState } from "../lib/types";
 import {
   checkDesignContrast,
   getContrastViolations,
+  fixContrastToWCAG,
   type ContrastCheck,
 } from "../lib/contrastChecker";
 
 interface ContrastCheckerPanelProps {
   designState: DesignState;
   isOpen?: boolean;
+  onColorsFixed?: (newColors: DesignState["colors"]) => void;
 }
 
 const severityStyles = {
@@ -111,6 +113,7 @@ const ContrastRow = ({
 export const ContrastCheckerPanel = ({
   designState,
   isOpen = true,
+  onColorsFixed,
 }: ContrastCheckerPanelProps) => {
   const checks = useMemo(
     () => checkDesignContrast(designState),
@@ -120,13 +123,23 @@ export const ContrastCheckerPanel = ({
   const violations = useMemo(() => getContrastViolations(checks), [checks]);
   const passCount = checks.filter((c) => c.severity === "pass").length;
 
+  const handleFixAA = () => {
+    const fixedColors = fixContrastToWCAG(designState.colors, "aa");
+    onColorsFixed?.(fixedColors);
+  };
+
+  const handleFixAAA = () => {
+    const fixedColors = fixContrastToWCAG(designState.colors, "aaa");
+    onColorsFixed?.(fixedColors);
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden shadow-lg">
       {/* Header */}
-      <div className="bg-slate-50 dark:bg-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
+      <div className="bg-slate-50 dark:bg-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700 space-y-3">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100">
           WCAG Contrast Checker
         </h3>
 
@@ -151,6 +164,24 @@ export const ContrastCheckerPanel = ({
             </span>
           </div>
         </div>
+
+        {/* Fix buttons */}
+        {(violations.aa > 0 || violations.aaa > 0) && (
+          <div className="flex gap-2 pt-2">
+            <button
+              onClick={handleFixAA}
+              className="flex-1 px-3 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
+            >
+              Fix to AA
+            </button>
+            <button
+              onClick={handleFixAAA}
+              className="flex-1 px-3 py-2 text-xs font-medium bg-emerald-700 hover:bg-emerald-800 text-white rounded transition-colors"
+            >
+              Fix to AAA
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Checks list */}

@@ -844,6 +844,12 @@ function App() {
               activePage={previewState.activePage}
               activeMenu={previewState.activeMenu}
               onPageChange={previewState.setActivePage}
+              onColorsFixed={(newColors) => {
+                setDesignState((prev) => ({
+                  ...prev,
+                  colors: newColors,
+                }));
+              }}
             />
           </div>
 
