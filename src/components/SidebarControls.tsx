@@ -32,6 +32,8 @@ interface SidebarControlsProps {
   onPageChange?: (page: PreviewPageId) => void;
   activeMenu?: MenuPresetId;
   onMenuChange?: (menu: MenuPresetId) => void;
+  darkMode?: "light" | "dark";
+  onDarkModeChange?: (mode: "light" | "dark") => void;
 }
 
 const SidebarControls = ({
@@ -56,6 +58,8 @@ const SidebarControls = ({
   onPageChange,
   activeMenu = "top-nav",
   onMenuChange,
+  darkMode = "light",
+  onDarkModeChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -403,6 +407,34 @@ const SidebarControls = ({
               Body copy preview demonstrates paragraph text for this palette.
             </div>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
+          Theme
+        </h3>
+        <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden w-full">
+          <button
+            onClick={() => onDarkModeChange?.("light")}
+            className={`flex-1 px-3 py-2 transition ${
+              darkMode === "light"
+                ? "bg-slate-700 text-slate-50"
+                : "text-slate-300 hover:text-slate-100"
+            }`}
+          >
+            Light
+          </button>
+          <button
+            onClick={() => onDarkModeChange?.("dark")}
+            className={`flex-1 px-3 py-2 transition ${
+              darkMode === "dark"
+                ? "bg-slate-700 text-slate-50"
+                : "text-slate-300 hover:text-slate-100"
+            }`}
+          >
+            Dark
+          </button>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import type { VibePreset, VibeId } from "./types";
+import { invertPaletteForDarkMode, createOptimizedDarkVariant } from "./darkModeUtils";
 
 export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
   minimal: {
@@ -35,6 +36,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#96BEBC", secondary: "#BDC8CC", accent: "#E7C198" },
       { primary: "#82AFA6", secondary: "#92A5AD", accent: "#D6AA82" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#6DA8A2",
+        secondary: "#8EA5B2",
+        accent: "#D9A066",
+        background: "#F9FAFB",
+        surface: "#FFFFFF",
+        surfaceAlt: "#EFF3F4",
+        text: "#1F2B2E",
+        textMuted: "#7D8A92",
+        borderSubtle: "#E6ECEE",
+        borderStrong: "#BFD1D7",
+      }),
+    },
   },
 
   "modern-saas": {
@@ -72,6 +87,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#3B82F6", secondary: "#A5B4FC", accent: "#FCD34D" },
       { primary: "#60A5FA", secondary: "#C4B5FD", accent: "#FBBF24" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#2563EB",
+        secondary: "#4F46E5",
+        accent: "#F97316",
+        background: "#F3F4F6",
+        surface: "#FFFFFF",
+        surfaceAlt: "#E5E7EB",
+        text: "#020617",
+        textMuted: "#6B7280",
+        borderSubtle: "#E5E7EB",
+        borderStrong: "#CBD5F5",
+      }),
+    },
   },
 
   brutalist: {
@@ -108,6 +137,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#0F172A", secondary: "#FCD34D", accent: "#BE123C" },
       { primary: "#18181B", secondary: "#EF4444", accent: "#7C2D12" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#111827",
+        secondary: "#F97316",
+        accent: "#EC4899",
+        background: "#F9FAFB",
+        surface: "#FFFFFF",
+        surfaceAlt: "#F3F4F6",
+        text: "#020617",
+        textMuted: "#4B5563",
+        borderSubtle: "#E5E7EB",
+        borderStrong: "#111827",
+      }),
+    },
   },
 
   pastel: {
@@ -144,6 +187,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#F87171", secondary: "#0EA5E9", accent: "#E9D5FF" },
       { primary: "#FCA5A5", secondary: "#06B6D4", accent: "#F3E8FF" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#FB7185",
+        secondary: "#38BDF8",
+        accent: "#A78BFA",
+        background: "#FEFCE8",
+        surface: "#FFFBEB",
+        surfaceAlt: "#F9FAFB",
+        text: "#1F2933",
+        textMuted: "#6B7280",
+        borderSubtle: "#FDE68A",
+        borderStrong: "#F97373",
+      }),
+    },
   },
 
   "dark-tech": {
@@ -180,6 +237,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#06B6D4", secondary: "#C4B5FD", accent: "#DCFCE7" },
       { primary: "#67E8F9", secondary: "#E9D5FF", accent: "#BBFF00" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#38BDF8",
+        secondary: "#6366F1",
+        accent: "#22C55E",
+        background: "#020617",
+        surface: "#0F172A",
+        surfaceAlt: "#1E293B",
+        text: "#F1F5F9",
+        textMuted: "#94A3B8",
+        borderSubtle: "#1E293B",
+        borderStrong: "#38BDF8",
+      }),
+    },
   },
 
   luxury: {
@@ -265,6 +336,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
         surfaceAlt: "#1B2338",
       },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#1C261F",
+        secondary: "#D2C09D",
+        accent: "#F0D9A2",
+        background: "#050807",
+        surface: "#111914",
+        surfaceAlt: "#1C261C",
+        text: "#F5EFDD",
+        textMuted: "#CEBFA0",
+        borderSubtle: "#1E271E",
+        borderStrong: "#F2D9AB",
+      }),
+    },
   },
 
   "soft-neo-tech": {
@@ -301,6 +386,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#DDD6FE", secondary: "#FBCFE8", accent: "#A5F3FC" },
       { primary: "#F3E8FF", secondary: "#FEE2E8", accent: "#CFFAFE" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#8B5CF6",
+        secondary: "#EC4899",
+        accent: "#06B6D4",
+        background: "#1F1F2E",
+        surface: "#2D2D44",
+        surfaceAlt: "#3D3D55",
+        text: "#E8E8F0",
+        textMuted: "#A8A8C0",
+        borderSubtle: "#3D3D55",
+        borderStrong: "#8B5CF6",
+      }),
+    },
   },
 
   "gradient-bloom": {
@@ -337,6 +436,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#BE123C", secondary: "#EA580C", accent: "#B45309" },
       { primary: "#E11D48", secondary: "#D97706", accent: "#92400E" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#EC4899",
+        secondary: "#F97316",
+        accent: "#FBBF24",
+        background: "#FFFBEB",
+        surface: "#FFFFFF",
+        surfaceAlt: "#FEF08A",
+        text: "#1F2937",
+        textMuted: "#6B7280",
+        borderSubtle: "#FDE68A",
+        borderStrong: "#FBBF24",
+      }),
+    },
   },
 
   "warm-editorial": {
@@ -373,6 +486,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#8C3F2A", secondary: "#AF684E", accent: "#D88D65" },
       { primary: "#B76F52", secondary: "#A45941", accent: "#E0A87D" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#9A4B34",
+        secondary: "#C07A5A",
+        accent: "#D68F62",
+        background: "#FFF6EE",
+        surface: "#FFEFE3",
+        surfaceAlt: "#F7E1D1",
+        text: "#4B2C23",
+        textMuted: "#9B6F5C",
+        borderSubtle: "#F3DACE",
+        borderStrong: "#C0633E",
+      }),
+    },
   },
 
   dark: {
@@ -410,6 +537,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#181C1E", secondary: "#575C62", accent: "#38BDF8" },
       { primary: "#121515", secondary: "#484E54", accent: "#C3FF3D" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#0F1315",
+        secondary: "#3A3F45",
+        accent: "#35FFD1",
+        background: "#000000",
+        surface: "#050505",
+        surfaceAlt: "#0B0B0B",
+        text: "#F3F5F6",
+        textMuted: "#8F959C",
+        borderSubtle: "#121314",
+        borderStrong: "#3B3F42",
+      }),
+    },
   },
 
   "retro-pixel": {
@@ -446,6 +587,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#B91C1C", secondary: "#1E3A8A", accent: "#FBBF24" },
       { primary: "#991B1B", secondary: "#1E293B", accent: "#FBBF24" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#DC2626",
+        secondary: "#1E40AF",
+        accent: "#FBBF24",
+        background: "#FEF3C7",
+        surface: "#FFFFFF",
+        surfaceAlt: "#FEF08A",
+        text: "#0F172A",
+        textMuted: "#4B5563",
+        borderSubtle: "#FDE68A",
+        borderStrong: "#111827",
+      }),
+    },
   },
 
   "magazine-brutalism": {
@@ -482,6 +637,20 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#0F172A", secondary: "#78716C", accent: "#FCD34D" },
       { primary: "#1A202C", secondary: "#64748B", accent: "#FBBF24" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#111827",
+        secondary: "#6B7280",
+        accent: "#F97316",
+        background: "#F9FAFB",
+        surface: "#FFFFFF",
+        surfaceAlt: "#F3F4F6",
+        text: "#000000",
+        textMuted: "#4B5563",
+        borderSubtle: "#E5E7EB",
+        borderStrong: "#000000",
+      }),
+    },
   },
 
   "cyber-mint": {
@@ -518,5 +687,19 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       { primary: "#0891B2", secondary: "#059669", accent: "#00B300" },
       { primary: "#0E7490", secondary: "#047857", accent: "#007700" },
     ],
+    darkVariant: {
+      palette: invertPaletteForDarkMode({
+        primary: "#06B6D4",
+        secondary: "#10B981",
+        accent: "#00FF00",
+        background: "#0A0E27",
+        surface: "#0F1729",
+        surfaceAlt: "#1A2332",
+        text: "#FFFFFF",
+        textMuted: "#94A3B8",
+        borderSubtle: "#1A2332",
+        borderStrong: "#06B6D4",
+      }),
+    },
   },
 };

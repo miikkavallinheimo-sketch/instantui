@@ -333,9 +333,21 @@ function buildDesignState(
   hueShift: number,
   saturationShift: number,
   prev?: DesignState,
-  freezeFonts = false
+  freezeFonts = false,
+  darkMode: "light" | "dark" = "light"
 ): DesignState {
-  const vibe = VIBE_PRESETS[vibeId];
+  let vibe = VIBE_PRESETS[vibeId];
+
+  // Apply dark mode variant if available and dark mode is enabled
+  if (darkMode === "dark" && vibe.darkVariant) {
+    vibe = {
+      ...vibe,
+      palette: vibe.darkVariant.palette,
+      ui: vibe.darkVariant.ui ? { ...vibe.ui, ...vibe.darkVariant.ui } : vibe.ui,
+      isDarkUi: true,
+    };
+  }
+
   const previousState =
     prev && prev.vibe.id === vibeId ? prev : undefined;
 
@@ -439,7 +451,10 @@ function App() {
       DEFAULT_LOCKS,
       initialAppState.fontLockMode,
       initialAppState.hueShift,
-      initialAppState.saturationShift
+      initialAppState.saturationShift,
+      undefined,
+      false,
+      previewState.darkMode
     )
   );
 
@@ -541,7 +556,9 @@ function App() {
           state.fontLockMode,
           state.hueShift,
           state.saturationShift,
-          prev
+          prev,
+          false,
+          previewState.darkMode
         )
       );
     }
@@ -560,11 +577,13 @@ function App() {
           fontLockMode,
           hueShift,
           saturationShift,
-          prev
+          prev,
+          false,
+          previewState.darkMode
         )
       );
     },
-    [seed, colorLocks, fontLockMode, hueShift, saturationShift]
+    [seed, colorLocks, fontLockMode, hueShift, saturationShift, previewState.darkMode]
   );
 
   const spinAll = useCallback(() => {
@@ -582,14 +601,16 @@ function App() {
         fontLockMode,
         0,
         0,
-        prev
+        prev,
+        false,
+        previewState.darkMode
       )
     );
     // Trigger auto-refresh if enabled
     if (autoRefresh) {
       setTriggerAutoRefresh(true);
     }
-  }, [vibeId, colorLocks, fontLockMode, autoRefresh]);
+  }, [vibeId, colorLocks, fontLockMode, autoRefresh, previewState.darkMode]);
 
   const spinColorsOnly = useCallback(() => {
     const newSeed = Math.random();
@@ -604,10 +625,11 @@ function App() {
         hueShift,
         saturationShift,
         prev,
-        true
+        true,
+        previewState.darkMode
       )
     );
-  }, [vibeId, colorLocks, fontLockMode, hueShift, saturationShift]);
+  }, [vibeId, colorLocks, fontLockMode, hueShift, saturationShift, previewState.darkMode]);
 
   const toggleColorLock = useCallback((key: keyof ColorLocks) => {
     setColorLocks((prev) => ({
@@ -633,7 +655,9 @@ function App() {
             fontLockMode,
             hueShift,
             saturationShift,
-            prev
+            prev,
+            false,
+            previewState.darkMode
           );
 
         let newBaseColors = applyVibeColorRules(base.vibe, {
@@ -725,7 +749,7 @@ function App() {
       });
       setActiveGeneratedName(gv.name);
     },
-    [vibeId, colorLocks, fontLockMode, hueShift, saturationShift]
+    [vibeId, colorLocks, fontLockMode, hueShift, saturationShift, previewState.darkMode]
   );
 
   const updateToneShift = useCallback(
@@ -879,11 +903,13 @@ function App() {
         fav.fontLockMode,
         fav.hueShift,
         fav.saturationShift,
-        prev
+        prev,
+        false,
+        previewState.darkMode
       )
     );
     showToast(`Applied favorite: ${fav.name}`);
-  }, [showToast]);
+  }, [showToast, previewState.darkMode]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -982,6 +1008,8 @@ function App() {
             onPageChange={previewState.setActivePage}
             activeMenu={previewState.activeMenu}
             onMenuChange={previewState.setActiveMenu}
+            darkMode={previewState.darkMode}
+            onDarkModeChange={previewState.setDarkMode}
           />
 
           <div className="border-t border-slate-800 pt-4">
