@@ -114,6 +114,8 @@ export interface TextStyle {
   style: "normal" | "italic";
   transform?: "none" | "uppercase";
   color?: string;
+  lineHeight?: number | string;
+  letterSpacing?: string;
 }
 
 // Typography color hierarchy
