@@ -564,7 +564,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                 textAlign: "center",
               }}
             >
-              © 2024 Elementry Design Journal. All rights reserved.
+              © 2024 InstantUI Design Journal. All rights reserved.
             </p>
           </div>
         </div>

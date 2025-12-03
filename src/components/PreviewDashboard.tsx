@@ -110,30 +110,30 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
 
   const summaryCards = [
     {
-      label: "Active Billing",
-      value: "€12.7k",
-      note: "+5.1% month",
+      label: "Design Exports",
+      value: "847",
+      note: "+12% this week",
       textColor: colors.primary,
       background: colors.surface,
     },
     {
-      label: "Product Seats",
-      value: "18,204",
-      note: "2.1% growth",
+      label: "Component Library",
+      value: "234",
+      note: "Updated today",
       textColor: colors.secondary,
       background: colors.surfaceAlt,
     },
     {
-      label: "Trial Conversion",
-      value: "37%",
-      note: "target 40%",
+      label: "System Health",
+      value: "98%",
+      note: "All systems optimal",
       textColor: colors.onSecondary,
       background: colors.secondary,
     },
     {
-      label: "Churn",
-      value: "2.3%",
-      note: "down from 3.1%",
+      label: "Active Collaborators",
+      value: "42",
+      note: "5 new members",
       textColor: colors.onAccent,
       background: colors.accent,
     },
@@ -238,7 +238,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
               className="text-lg font-semibold"
               style={{ fontFamily: fontPair.heading, color: navText }}
             >
-              Elementry
+              InstantUI
             </div>
             <div
               className="text-xs opacity-80"
@@ -250,7 +250,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
 
           <nav className="flex flex-col gap-2 text-sm" style={{ fontFamily: fontPair.body }}
           >
-            {["Pulse", "Revenue", "Segments", "Content", "Settings", "Labs"].map(
+            {["Overview", "Designs", "Components", "Exports", "Team", "Settings"].map(
               (item, index) => (
                 <div
                   key={item}
@@ -294,12 +294,12 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                 color: typography.heading.color ?? colors.text
               }}
             >
-              Command Center
+              Design Hub
             </div>
               <p
                 style={{ fontFamily: fontPair.body, fontSize: sizeMap[typography.body.size], fontWeight: typography.body.weight, fontStyle: typography.body.style, color: bodyTextColor }}
               >
-                Monitor health metrics and content performance.
+                View your design system activity and team collaboration metrics.
               </p>
               <div
                 className="text-base mt-2"

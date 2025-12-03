@@ -102,7 +102,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               letterSpacing: "-0.5px",
             }}
           >
-            Elementry
+            InstantUI
           </div>
 
           {/* Navigation Menu */}
@@ -284,7 +284,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
           }}
           className="max-w-xl mx-auto mb-8"
         >
-          Start with Elementry today and accelerate your design workflow.
+          Start with InstantUI today and create beautiful designs instantly.
         </p>
         <button
           className="px-6 py-3 rounded-lg font-semibold"
@@ -317,7 +317,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                   marginBottom: "1rem",
                 }}
               >
-                Elementry
+                InstantUI
               </div>
               <p
                 style={{
@@ -326,7 +326,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                   color: colors.textMuted,
                 }}
               >
-                Design system that grows with your product.
+                Beautiful design systems, instantly generated.
               </p>
             </div>
             <div>
@@ -413,7 +413,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                 textAlign: "center",
               }}
             >
-              © 2024 Elementry. All rights reserved.
+              © 2024 InstantUI. All rights reserved.
             </p>
           </div>
         </div>
