@@ -482,18 +482,20 @@ function ensureReadableText(bg: string, preferred: string): string {
   // pientä joustoa: priorisoidaan preferred, jos se on lähellä tavoitetta
   const target = 4.5;
 
+  // Always prefer the option that meets WCAG AA (4.5:1)
   if (prefC >= target) return preferred;
-  if (blackC >= whiteC && blackC >= target) return black;
-  if (whiteC >= blackC && whiteC >= target) return white;
+  if (blackC >= target && whiteC < target) return black;
+  if (whiteC >= target && blackC < target) return white;
+  if (blackC >= target && whiteC >= target) {
+    // Both meet standard - prefer black for light backgrounds, white for dark
+    const bgLuminance = hexToLuminance(bg);
+    return bgLuminance > 0.5 ? black : white;
+  }
 
   // jos mikään ei ylitä targettia, valitaan paras
-  const best =
-    prefC >= blackC && prefC >= whiteC
-      ? preferred
-      : blackC >= whiteC
-      ? black
-      : white;
-  return best;
+  // Always prefer white over black for safety on dark backgrounds
+  if (whiteC >= blackC) return white;
+  return black;
 }
 
 /**
