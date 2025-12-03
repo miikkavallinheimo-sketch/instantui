@@ -28,7 +28,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       readTime: "8 min",
       category: "Design",
       color: "primary",
-      image: "🎨",
+      componentType: "button", // Primary button showcase
     },
     {
       title: "Typography Best Practices",
@@ -36,7 +36,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       readTime: "12 min",
       category: "Typography",
       color: "secondary",
-      image: "✍️",
+      componentType: "pill", // Pill/badge showcase
     },
     {
       title: "Color Theory for Interfaces",
@@ -44,7 +44,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       readTime: "10 min",
       category: "Color",
       color: "accent",
-      image: "🎯",
+      componentType: "card", // Card component showcase
     },
     {
       title: "Accessibility Fundamentals",
@@ -52,7 +52,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       readTime: "15 min",
       category: "Accessibility",
       color: "primary",
-      image: "♿",
+      componentType: "button",
     },
     {
       title: "Design System Tokens",
@@ -60,7 +60,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       readTime: "11 min",
       category: "Design",
       color: "secondary",
-      image: "🔧",
+      componentType: "pill",
     },
     {
       title: "Workflow Optimization",
@@ -68,7 +68,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       readTime: "9 min",
       category: "Workflow",
       color: "accent",
-      image: "⚡",
+      componentType: "card",
     },
   ];
 
@@ -206,6 +206,141 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
             {filteredArticles.map((article, idx) => {
               const articleColor = getColorForArticle(article.color);
               const articleOnColor = getOnColorForArticle(article.color);
+
+              // Render different UI components based on componentType
+              const renderComponentPreview = () => {
+                if (article.componentType === "button") {
+                  return (
+                    <div className="flex flex-col gap-3">
+                      <button
+                        className="px-6 py-3 font-semibold text-sm"
+                        style={{
+                          backgroundColor: articleColor,
+                          color: articleOnColor,
+                          fontFamily: fontPair.heading,
+                          borderRadius: "0.375rem",
+                        }}
+                      >
+                        Primary Button
+                      </button>
+                      <button
+                        className="px-6 py-3 font-semibold text-sm border"
+                        style={{
+                          color: articleColor,
+                          borderColor: articleColor,
+                          fontFamily: fontPair.heading,
+                          borderRadius: "0.375rem",
+                          backgroundColor: "transparent",
+                        }}
+                      >
+                        Secondary Button
+                      </button>
+                    </div>
+                  );
+                } else if (article.componentType === "pill") {
+                  return (
+                    <div className="flex flex-wrap gap-2">
+                      <span
+                        className="px-4 py-2 text-sm font-medium"
+                        style={{
+                          backgroundColor: articleColor,
+                          color: articleOnColor,
+                          fontFamily: fontPair.body,
+                          borderRadius: "9999px",
+                        }}
+                      >
+                        Design
+                      </span>
+                      <span
+                        className="px-4 py-2 text-sm font-medium"
+                        style={{
+                          backgroundColor: `${articleColor}20`,
+                          color: articleColor,
+                          fontFamily: fontPair.body,
+                          borderRadius: "9999px",
+                        }}
+                      >
+                        System
+                      </span>
+                      <span
+                        className="px-4 py-2 text-sm font-medium border"
+                        style={{
+                          color: articleColor,
+                          borderColor: articleColor,
+                          fontFamily: fontPair.body,
+                          borderRadius: "9999px",
+                          backgroundColor: "transparent",
+                        }}
+                      >
+                        Tags
+                      </span>
+                    </div>
+                  );
+                } else {
+                  // card component
+                  return (
+                    <div className="grid grid-cols-2 gap-2">
+                      <div
+                        className="p-4"
+                        style={{
+                          backgroundColor: colors.surface,
+                          borderColor: colors.borderSubtle,
+                          border: `1px solid ${colors.borderSubtle}`,
+                          borderRadius: "0.5rem",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: sizeMap["xs"],
+                            color: colors.textMuted,
+                            marginBottom: "0.5rem",
+                          }}
+                        >
+                          Card 1
+                        </div>
+                        <div
+                          style={{
+                            fontSize: sizeMap["md"],
+                            fontWeight: 600,
+                            color: articleColor,
+                          }}
+                        >
+                          24
+                        </div>
+                      </div>
+                      <div
+                        className="p-4"
+                        style={{
+                          backgroundColor: `${articleColor}10`,
+                          borderColor: articleColor,
+                          border: `1px solid ${articleColor}30`,
+                          borderRadius: "0.5rem",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: sizeMap["xs"],
+                            color: colors.textMuted,
+                            marginBottom: "0.5rem",
+                          }}
+                        >
+                          Card 2
+                        </div>
+                        <div
+                          style={{
+                            fontSize: sizeMap["md"],
+                            fontWeight: 600,
+                            color: articleColor,
+                          }}
+                        >
+                          12%
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              };
+
               return (
                 <article
                   key={idx}
@@ -216,10 +351,10 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                   }}
                 >
                   <div
-                    className="h-32 flex items-center justify-center text-5xl"
-                    style={{ backgroundColor: articleColor }}
+                    className="p-6"
+                    style={{ backgroundColor: `${articleColor}08` }}
                   >
-                    {article.image}
+                    {renderComponentPreview()}
                   </div>
                   <div className="p-6">
                     <div
