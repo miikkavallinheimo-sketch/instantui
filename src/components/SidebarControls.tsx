@@ -301,6 +301,9 @@ const SidebarControls = ({
         </h3>
         <div className="mt-2 grid grid-cols-1 gap-1 text-xs">
           {[
+            ["On Primary", colors.onPrimary],
+            ["On Secondary", colors.onSecondary],
+            ["On Accent", colors.onAccent],
             ["Surface", colors.surface],
             ["Surface Alt", colors.surfaceAlt],
             ["Text Muted", colors.textMuted],
