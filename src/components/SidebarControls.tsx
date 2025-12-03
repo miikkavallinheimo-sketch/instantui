@@ -1,5 +1,5 @@
 import { VIBE_PRESETS } from "../lib/vibePresets";
-import { getAvailablePages } from "../lib/featureFlags";
+import { getAvailablePages, getAvailableMenus } from "../lib/featureFlags";
 import type {
   VibeId,
   DesignState,
@@ -7,6 +7,7 @@ import type {
   ColorKey,
   FontLockMode,
   PreviewPageId,
+  MenuPresetId,
 } from "../lib/types";
 
 interface SidebarControlsProps {
@@ -29,6 +30,8 @@ interface SidebarControlsProps {
   isOptimizing?: boolean;
   activePage?: PreviewPageId;
   onPageChange?: (page: PreviewPageId) => void;
+  activeMenu?: MenuPresetId;
+  onMenuChange?: (menu: MenuPresetId) => void;
 }
 
 const SidebarControls = ({
@@ -51,11 +54,14 @@ const SidebarControls = ({
   isOptimizing = false,
   activePage = "dashboard",
   onPageChange,
+  activeMenu = "top-nav",
+  onMenuChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
   const vibes = Object.entries(VIBE_PRESETS);
   const availablePages = getAvailablePages();
+  const availableMenus = getAvailableMenus();
 
   return (
     <div className="space-y-6">
@@ -118,6 +124,32 @@ const SidebarControls = ({
               <div className="font-medium">{page.label}</div>
               <div className="text-[11px] text-slate-400">
                 {page.description}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
+            Navigation Menu
+          </h2>
+        </div>
+        <div className="space-y-1">
+          {availableMenus.map((menu) => (
+            <button
+              key={menu.id}
+              className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-150 ${
+                menu.id === activeMenu
+                  ? "bg-purple-700/60 text-purple-50 border border-purple-600"
+                  : "hover:bg-slate-800/70 text-slate-200 border border-transparent"
+              }`}
+              onClick={() => onMenuChange?.(menu.id)}
+            >
+              <div className="font-medium">{menu.label}</div>
+              <div className="text-[11px] text-slate-400">
+                {menu.description}
               </div>
             </button>
           ))}

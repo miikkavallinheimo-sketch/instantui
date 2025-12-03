@@ -810,6 +810,8 @@ function App() {
             isOptimizing={isOptimizing}
             activePage={previewState.activePage}
             onPageChange={previewState.setActivePage}
+            activeMenu={previewState.activeMenu}
+            onMenuChange={previewState.setActiveMenu}
           />
 
           <div className="border-t border-slate-800 pt-4">
