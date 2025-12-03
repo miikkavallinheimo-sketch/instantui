@@ -143,23 +143,42 @@ function adjustTextLightnessForContrast(
   backgroundColor: string,
   targetRatio: number
 ): string {
-  const bgLum = contrastRatio("#ffffff", backgroundColor);
-  let { h, s, l } = hexToHsl(textColor);
+  const { h, s } = hexToHsl(textColor);
 
-  // Try adjusting lightness to meet contrast
-  const isLightBg = bgLum < 12; // white has ratio of ~21 on light bg
-  let step = isLightBg ? -5 : 5; // make darker for light bg, lighter for dark bg
+  // Binary search for the right lightness value
+  let minL = 0;
+  let maxL = 100;
+  let bestL = 50;
 
   for (let i = 0; i < 20; i++) {
-    const testColor = hslToHex(h, s, Math.max(0, Math.min(100, l)));
+    const midL = (minL + maxL) / 2;
+    const testColor = hslToHex(h, s, midL);
     const ratio = contrastRatio(testColor, backgroundColor);
+
     if (ratio >= targetRatio) {
-      return testColor;
+      // Ratio is good, we can try even more extreme lightness for better contrast
+      bestL = midL;
+      // Continue searching toward extremes (darker for light bg, lighter for dark)
+      const whiteLum = contrastRatio("#ffffff", backgroundColor);
+      const isLightBg = whiteLum > 12; // light bg if white has high contrast
+      if (isLightBg) {
+        maxL = midL; // search darker (lower lightness)
+      } else {
+        minL = midL; // search lighter (higher lightness)
+      }
+    } else {
+      // Ratio is not sufficient, need to go further
+      const whiteLum = contrastRatio("#ffffff", backgroundColor);
+      const isLightBg = whiteLum > 12;
+      if (isLightBg) {
+        minL = midL; // go darker (lower lightness)
+      } else {
+        maxL = midL; // go lighter (higher lightness)
+      }
     }
-    l += step;
   }
 
-  return isLightBg ? "#000000" : "#ffffff";
+  return hslToHex(h, s, bestL);
 }
 
 /**
