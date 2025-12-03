@@ -179,7 +179,7 @@ export const FONT_PAIRS: FontPair[] = [
   {
     heading: "JetBrains Mono",
     body: "JetBrains Mono",
-    vibes: ["dark-tech", "minimal", "retro-pixel", "dark"],
+    vibes: ["dark-tech", "minimal", "retro-pixel", "dark", "cyber-mint", "soft-neo-tech"],
     source: "google",
   },
   {
@@ -198,6 +198,69 @@ export const FONT_PAIRS: FontPair[] = [
     heading: "Pacifico",
     body: "Nunito",
     vibes: ["pastel", "gradient-bloom"],
+    source: "google",
+  },
+  // New fonts - Geometric Sans category
+  {
+    heading: "Plus Jakarta Sans",
+    body: "Plus Jakarta Sans",
+    vibes: ["modern-saas", "dark-tech", "soft-neo-tech"],
+    source: "google",
+  },
+  {
+    heading: "Outfit",
+    body: "Outfit",
+    vibes: ["minimal", "modern-saas", "gradient-bloom"],
+    source: "google",
+  },
+  {
+    heading: "Urbanist",
+    body: "Urbanist",
+    vibes: ["modern-saas", "cyber-mint", "dark-tech"],
+    source: "google",
+  },
+  // New fonts - Display Serifs category
+  {
+    heading: "EB Garamond",
+    body: "Lato",
+    vibes: ["luxury", "warm-editorial"],
+    source: "google",
+  },
+  {
+    heading: "Crimson Text",
+    body: "Lato",
+    vibes: ["warm-editorial", "magazine-brutalism"],
+    source: "google",
+  },
+  {
+    heading: "Fraunces",
+    body: "Nunito",
+    vibes: ["pastel", "gradient-bloom", "luxury"],
+    source: "google",
+  },
+  // New fonts - Specialist category
+  {
+    heading: "Bebas Neue",
+    body: "Courier Prime",
+    vibes: ["brutalist", "retro-pixel", "dark-tech"],
+    source: "google",
+  },
+  {
+    heading: "Fredoka One",
+    body: "Nunito",
+    vibes: ["pastel", "gradient-bloom"],
+    source: "google",
+  },
+  {
+    heading: "Courier Prime",
+    body: "Courier Prime",
+    vibes: ["dark-tech", "retro-pixel", "minimal"],
+    source: "google",
+  },
+  {
+    heading: "Inconsolata",
+    body: "Inconsolata",
+    vibes: ["dark-tech", "minimal", "retro-pixel"],
     source: "google",
   },
 ];
