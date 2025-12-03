@@ -25,10 +25,10 @@ const Preview = ({
   showContrastChecker = true,
 }: PreviewProps) => {
   return (
-    <div className="flex gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full h-full">
       {/* Main Preview Area */}
-      <div className="flex-1 min-w-0">
-        <div className="w-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative" style={{ backgroundColor: designState.colors.background }}>
+      <div className="flex-1 min-w-0 overflow-hidden">
+        <div className="w-full h-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative" style={{ backgroundColor: designState.colors.background }}>
           {isAnalyzing && (
             <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
               <div
@@ -70,9 +70,9 @@ const Preview = ({
         </div>
       </div>
 
-      {/* Contrast Checker Sidebar */}
+      {/* Contrast Checker Panel - Below preview */}
       {showContrastChecker && (
-        <div className="w-80 flex-shrink-0 overflow-y-auto">
+        <div className="max-h-64 overflow-y-auto border-t border-slate-800">
           <ContrastCheckerPanel designState={designState} onColorsFixed={onColorsFixed} />
         </div>
       )}
