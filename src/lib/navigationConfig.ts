@@ -3,11 +3,12 @@ import type { PreviewPageId } from "./types";
 /**
  * Navigation configuration per preview page
  * Defines the sidebar navigation links shown for each page
+ *
+ * IMPORTANT: Do NOT use emojis in navigation items. Keep labels text-only for consistency.
  */
 
 export interface NavLink {
   label: string;
-  icon?: string; // Unicode emoji or icon
 }
 
 export interface PageNavigation {
@@ -19,12 +20,12 @@ export const NAVIGATION_CONFIG: Record<PreviewPageId, PageNavigation> = {
   // Dashboard: Data/metrics focused
   dashboard: {
     items: [
-      { label: "Pulse", icon: "📊" },
-      { label: "Revenue", icon: "💰" },
-      { label: "Segments", icon: "👥" },
-      { label: "Content", icon: "📝" },
-      { label: "Settings", icon: "⚙️" },
-      { label: "Labs", icon: "🔬" },
+      { label: "Pulse" },
+      { label: "Revenue" },
+      { label: "Segments" },
+      { label: "Content" },
+      { label: "Settings" },
+      { label: "Labs" },
     ],
     activeIndex: 0, // Pulse is active
   },
@@ -32,11 +33,11 @@ export const NAVIGATION_CONFIG: Record<PreviewPageId, PageNavigation> = {
   // Landing: Marketing focused
   landing: {
     items: [
-      { label: "Features", icon: "✨" },
-      { label: "Pricing", icon: "💳" },
-      { label: "Docs", icon: "📚" },
-      { label: "About", icon: "ℹ️" },
-      { label: "Contact", icon: "📧" },
+      { label: "Features" },
+      { label: "Pricing" },
+      { label: "Docs" },
+      { label: "About" },
+      { label: "Contact" },
     ],
     activeIndex: -1, // No active item (all are sections)
   },
@@ -44,11 +45,11 @@ export const NAVIGATION_CONFIG: Record<PreviewPageId, PageNavigation> = {
   // Blog: Content focused
   blog: {
     items: [
-      { label: "Latest", icon: "🔥" },
-      { label: "Design", icon: "🎨" },
-      { label: "Development", icon: "💻" },
-      { label: "Tips", icon: "💡" },
-      { label: "Resources", icon: "📖" },
+      { label: "Latest" },
+      { label: "Design" },
+      { label: "Development" },
+      { label: "Tips" },
+      { label: "Resources" },
     ],
     activeIndex: 0, // Latest is active
   },

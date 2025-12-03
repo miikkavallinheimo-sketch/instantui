@@ -89,7 +89,6 @@ export const SharedNav = ({
                 color: navText,
               }}
             >
-              {item.icon && <span className="mr-1">{item.icon}</span>}
               {item.label}
             </button>
           ))}
