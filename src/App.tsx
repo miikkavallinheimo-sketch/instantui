@@ -6,6 +6,7 @@ import {
   generateColors,
   enforceLuxuryDiscipline,
   enforceDarkDiscipline,
+  recalculateDerivedColors,
 } from "./lib/colorGenerator";
 import { buildDesignTokens } from "./lib/designTokens";
 import { generateStyleTokens } from "./lib/styleVariations";
@@ -771,16 +772,19 @@ function App() {
         0   // No additional saturation shift
       );
 
+      // Recalculate derived colors to ensure contrast is maintained
+      const withDerivedColors = recalculateDerivedColors(adjusted);
+
       // Optimoi typografia algoritmisesti
       const optimizedTypography = optimizeTypography(
         prev.typography,
         prev.vibe,
-        adjusted,
+        withDerivedColors,
         trendsData
       );
 
       // Optimoi typografian värit luomaan hierarkiaa
-      const typographyColors = getOptimizedTypographyColors(adjusted);
+      const typographyColors = getOptimizedTypographyColors(withDerivedColors);
 
       // Lisää värit optimoituun typografiaan
       const typographyWithColors = {
@@ -805,7 +809,7 @@ function App() {
 
       return {
         ...prev,
-        colors: applyVibeColorRules(prev.vibe, adjusted),
+        colors: applyVibeColorRules(prev.vibe, withDerivedColors),
         originalColors: disciplinedBase,
         typography: typographyWithColors,
       };

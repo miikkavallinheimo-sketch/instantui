@@ -1099,6 +1099,39 @@ export function enforceDarkDiscipline(colors: ColorSet): ColorSet {
     text,
   };
 }
+
+/**
+ * Recalculates derived colors (text, textMuted, onPrimary, onSecondary, onAccent)
+ * based on adjusted base colors. This ensures proper contrast is maintained
+ * after hue/saturation shifts are applied to base colors.
+ */
+export function recalculateDerivedColors(colors: ColorSet): ColorSet {
+  const { primary, secondary, accent, background } = colors;
+
+  // Recalculate text with proper contrast
+  const preferredText = colors.text;
+  const text = ensureReadableText(background, preferredText);
+
+  // Recalculate on-color text (white/black on colored backgrounds)
+  const onPrimary = ensureReadableText(primary, text);
+  const onSecondary = ensureReadableText(secondary, text);
+  const onAccent = ensureReadableText(accent, text);
+
+  // Recalculate muted text with 3:1 contrast minimum
+  const bgLum = hexToLuminance(background);
+  const mutedGray = bgLum > 0.5 ? "#475569" : "#A1A5B0";
+  const textMuted = ensureMutedTextReadable(background, mutedGray);
+
+  return {
+    ...colors,
+    text,
+    textMuted,
+    onPrimary,
+    onSecondary,
+    onAccent,
+  };
+}
+
 const clampHueToBand = (
   hue: number,
   allowed: [number, number][],
