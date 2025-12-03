@@ -50,8 +50,8 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
 
   const headingSize = getFontSizeValue(typography.heading.size);
   const subheadingSize = getFontSizeValue(subheadingTokens.size as keyof typeof fontSizeMap);
-  const h3Size = getFontSizeValue(typography.h3.size as keyof typeof fontSizeMap);
-  const h4Size = getFontSizeValue(typography.h4.size as keyof typeof fontSizeMap);
+  const h3Size = typography.h3 ? getFontSizeValue(typography.h3.size as keyof typeof fontSizeMap) : headingSize;
+  const h4Size = typography.h4 ? getFontSizeValue(typography.h4.size as keyof typeof fontSizeMap) : subheadingSize;
   const bodySize = getFontSizeValue(typography.body.size);
   const accentSize = getFontSizeValue(typography.accent.size);
 
@@ -92,11 +92,11 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
   --subheading-font-weight: ${subheadingTokens.weight};
   --subheading-font-style: ${subheadingTokens.style ?? "normal"};
   --h3-font-size: ${h3Size};
-  --h3-font-weight: ${typography.h3.weight};
-  --h3-font-style: ${typography.h3.style};
+  --h3-font-weight: ${typography.h3?.weight ?? typography.heading.weight};
+  --h3-font-style: ${typography.h3?.style ?? typography.heading.style};
   --h4-font-size: ${h4Size};
-  --h4-font-weight: ${typography.h4.weight};
-  --h4-font-style: ${typography.h4.style};
+  --h4-font-weight: ${typography.h4?.weight ?? subheadingTokens.weight};
+  --h4-font-style: ${typography.h4?.style ?? subheadingTokens.style ?? "normal"};
   --body-font-size: ${bodySize};
   --body-font-weight: ${typography.body.weight};
   --body-font-style: ${typography.body.style};
@@ -163,8 +163,8 @@ theme: {
     fontWeight: {
       heading: "${typography.heading.weight}",
       subheading: "${subheadingTokens.weight}",
-      h3: "${typography.h3.weight}",
-      h4: "${typography.h4.weight}",
+      h3: "${typography.h3?.weight ?? typography.heading.weight}",
+      h4: "${typography.h4?.weight ?? subheadingTokens.weight}",
       body: "${typography.body.weight}",
       accent: "${typography.accent.weight}",
       thin: "${fontWeightVariants.thin}",
@@ -237,8 +237,8 @@ theme: {
     typography: {
       heading: typography.heading,
       subheading: typography.subheading,
-      h3: typography.h3,
-      h4: typography.h4,
+      h3: typography.h3 || typography.heading,
+      h4: typography.h4 || typography.subheading || typography.heading,
       body: typography.body,
       accent: typography.accent,
     },
@@ -270,18 +270,18 @@ theme: {
         transform: subheadingTokens.transform ?? "none",
       },
       h3: {
-        sizeToken: typography.h3.size,
+        sizeToken: typography.h3?.size ?? typography.heading.size,
         sizeRem: h3Size,
-        weight: typography.h3.weight,
-        style: typography.h3.style,
-        transform: typography.h3.transform ?? "none",
+        weight: typography.h3?.weight ?? typography.heading.weight,
+        style: typography.h3?.style ?? typography.heading.style,
+        transform: typography.h3?.transform ?? "none",
       },
       h4: {
-        sizeToken: typography.h4.size,
+        sizeToken: typography.h4?.size ?? subheadingTokens.size,
         sizeRem: h4Size,
-        weight: typography.h4.weight,
-        style: typography.h4.style,
-        transform: typography.h4.transform ?? "none",
+        weight: typography.h4?.weight ?? subheadingTokens.weight,
+        style: typography.h4?.style ?? subheadingTokens.style ?? "normal",
+        transform: typography.h4?.transform ?? "none",
       },
       body: {
         sizeToken: typography.body.size,
