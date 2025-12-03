@@ -238,7 +238,18 @@ const computeAiTuning = (colors: DesignState["colors"], vibe: DesignState["vibe"
   const harmonyFixed = fixColorHarmony(colors, vibe);
 
   const primary = hexToHsl(harmonyFixed.primary);
-  const targetSat = vibe.isDarkUi ? 68 : 58;
+
+  // Vibe-specific target saturation to respect COLOR_BEHAVIORS constraints
+  const vibeTargetSat: Record<string, number> = {
+    minimal: 28,
+    pastel: 28,
+    dark: 8,
+    brutalist: 8,
+    "retro-pixel": 72,
+    "warm-editorial": 38,
+    "magazine-brutalism": 8,
+  };
+  const targetSat = vibeTargetSat[vibe.id] ?? (vibe.isDarkUi ? 68 : 58);
   const saturationShift = clampValue(targetSat - primary.s, -15, 15);
   const hueShift = clampValue(Math.round((Math.random() - 0.5) * 12), -8, 8);
   const baseShade = vibe.isDarkUi ? -2 : 3;
