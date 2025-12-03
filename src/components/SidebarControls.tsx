@@ -1,10 +1,12 @@
 import { VIBE_PRESETS } from "../lib/vibePresets";
+import { getAvailablePages } from "../lib/featureFlags";
 import type {
   VibeId,
   DesignState,
   ColorLocks,
   ColorKey,
   FontLockMode,
+  PreviewPageId,
 } from "../lib/types";
 
 interface SidebarControlsProps {
@@ -25,6 +27,8 @@ interface SidebarControlsProps {
   autoRefresh?: boolean;
   onToggleAutoRefresh?: (enabled: boolean) => void;
   isOptimizing?: boolean;
+  activePage?: PreviewPageId;
+  onPageChange?: (page: PreviewPageId) => void;
 }
 
 const SidebarControls = ({
@@ -45,10 +49,13 @@ const SidebarControls = ({
   autoRefresh = false,
   onToggleAutoRefresh,
   isOptimizing = false,
+  activePage = "dashboard",
+  onPageChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
   const vibes = Object.entries(VIBE_PRESETS);
+  const availablePages = getAvailablePages();
 
   return (
     <div className="space-y-6">
@@ -88,6 +95,32 @@ const SidebarControls = ({
             Auto Refresh
           </label>
           <span className="text-[10px] text-slate-500">on vibe change</span>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
+            Preview Page
+          </h2>
+        </div>
+        <div className="space-y-1">
+          {availablePages.map((page) => (
+            <button
+              key={page.id}
+              className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-150 ${
+                page.id === activePage
+                  ? "bg-blue-700/60 text-blue-50 border border-blue-600"
+                  : "hover:bg-slate-800/70 text-slate-200 border border-transparent"
+              }`}
+              onClick={() => onPageChange?.(page.id)}
+            >
+              <div className="font-medium">{page.label}</div>
+              <div className="text-[11px] text-slate-400">
+                {page.description}
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 

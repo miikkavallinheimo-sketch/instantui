@@ -33,6 +33,7 @@ import GeneratedVibesPanel from "./components/GeneratedVibesPanel";
 import FavoritesPanel from "./components/FavoritesPanel";
 import { useToast } from "./components/Toast";
 import { useHistory } from "./hooks/useHistory";
+import { usePreviewState } from "./hooks/usePreviewState";
 import { saveFavorite } from "./lib/favoritesManager";
 
 const DEFAULT_VIBE: VibeId = "modern-saas";
@@ -282,6 +283,9 @@ function App() {
   const [activeGeneratedName, setActiveGeneratedName] = useState<string | null>(
     null
   );
+
+  // Preview state (page, menu, dark mode)
+  const previewState = usePreviewState();
 
   // History for undo/redo
   const history = useHistory<AppState>({
@@ -804,6 +808,8 @@ function App() {
             autoRefresh={autoRefresh}
             onToggleAutoRefresh={setAutoRefresh}
             isOptimizing={isOptimizing}
+            activePage={previewState.activePage}
+            onPageChange={previewState.setActivePage}
           />
 
           <div className="border-t border-slate-800 pt-4">
@@ -830,7 +836,13 @@ function App() {
 
         <section className="flex-1 flex flex-col">
           <div className="flex-1 p-4 lg:p-6 relative">
-            <Preview designState={designState} isAnalyzing={isOptimizing} />
+            <Preview
+              designState={designState}
+              isAnalyzing={isOptimizing}
+              activePage={previewState.activePage}
+              activeMenu={previewState.activeMenu}
+              onPageChange={previewState.setActivePage}
+            />
           </div>
 
           <div className="border-t border-slate-800 p-4 lg:p-6 bg-slate-950/60">
