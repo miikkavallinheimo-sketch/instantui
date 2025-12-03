@@ -55,6 +55,35 @@ export type BorderToken = "none" | "subtle" | "strong";
 export type SpacingToken = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
 export type SpacingDensity = "compact" | "default" | "relaxed";
 
+// Animation types
+export type HoverAnimationType = "subtle" | "lift" | "glow" | "shimmer" | "bounce" | "none";
+export type HapticIntensity = "light" | "medium" | "pattern";
+
+export interface AnimationConfig {
+  type: HoverAnimationType;
+  duration: number;
+  timingFunction: string;
+  scale?: number;
+  glowColor?: string;
+  translateY?: number;
+  shimmerDuration?: number;
+}
+
+export interface HapticConfig {
+  enabled: boolean;
+  onHoverStart: HapticIntensity | null;
+  onClick: HapticIntensity | null;
+  respectUserPreference: boolean;
+}
+
+export interface ComponentAnimations {
+  button: AnimationConfig;
+  card: AnimationConfig;
+  link: AnimationConfig;
+  navItem: AnimationConfig;
+  interactive: AnimationConfig;
+}
+
 // Feature tier system
 export type FeatureTier = "FREE" | "PRO";
 
@@ -128,6 +157,8 @@ export interface VibeUiTokens {
   card: ComponentShape;
   typography?: TypographyTokens;
   spacing?: SpacingConfig;
+  animations?: ComponentAnimations;
+  haptic?: HapticConfig;
 }
 
 export type VibeId =
