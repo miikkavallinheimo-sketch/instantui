@@ -83,6 +83,67 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
 
   return (
     <div className="w-full" style={rootStyle}>
+      {/* Header / Navigation */}
+      <header
+        className="sticky top-0 z-50 px-6 py-4 border-b"
+        style={{
+          borderColor: colors.borderSubtle,
+          backgroundColor: colors.background,
+        }}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo */}
+          <div
+            style={{
+              fontFamily: fontPair.heading,
+              fontSize: sizeMap["lg"],
+              fontWeight: 700,
+              color: colors.text,
+              letterSpacing: "-0.5px",
+            }}
+          >
+            Elementry
+          </div>
+
+          {/* Navigation Menu */}
+          <nav className="hidden md:flex items-center gap-8">
+            {["Features", "Pricing", "Docs", "Blog"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.text,
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = colors.primary;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = colors.text;
+                }}
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          {/* CTA Button */}
+          <button
+            className="px-5 py-2 rounded-lg font-semibold text-sm"
+            style={{
+              backgroundColor: colors.accent,
+              color: colors.onAccent,
+              fontFamily: fontPair.heading,
+            }}
+          >
+            Sign Up
+          </button>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="px-6 py-16 md:py-24 text-center space-y-6">
         <div
