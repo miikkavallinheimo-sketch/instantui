@@ -19,9 +19,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#BFD1D7",
     },
     ui: {
-      buttonPrimary: { radius: "lg", shadow: "soft", border: "none" },
+      buttonPrimary: { radius: "lg", shadow: "md", border: "none" },
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
-      card: { radius: "xl", shadow: "soft", border: "subtle" },
+      card: { radius: "xl", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "xl", weight: 600, style: "normal" },
@@ -56,9 +56,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#CBD5F5",
     },
     ui: {
-      buttonPrimary: { radius: "lg", shadow: "soft", border: "none" },
+      buttonPrimary: { radius: "lg", shadow: "md", border: "none" },
       buttonSecondary: { radius: "lg", shadow: "none", border: "subtle" },
-      card: { radius: "xl", shadow: "soft", border: "subtle" },
+      card: { radius: "xl", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "2xl", weight: 700, style: "normal" },
@@ -128,9 +128,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#F97373",
     },
     ui: {
-      buttonPrimary: { radius: "full", shadow: "soft", border: "none" },
+      buttonPrimary: { radius: "full", shadow: "md", border: "none" },
       buttonSecondary: { radius: "full", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "soft", border: "subtle" },
+      card: { radius: "lg", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "xl", weight: 700, style: "italic" },
@@ -164,9 +164,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#38BDF8",
     },
     ui: {
-      buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
+      buttonPrimary: { radius: "md", shadow: "lg", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "strong", border: "subtle" },
+      card: { radius: "lg", shadow: "lg", border: "subtle" },
     },
     typography: {
       heading: { size: "2xl", weight: 700, style: "normal" },
@@ -200,9 +200,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#F2D9AB",
     },
     ui: {
-      buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
+      buttonPrimary: { radius: "md", shadow: "lg", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "strong", border: "subtle" },
+      card: { radius: "lg", shadow: "lg", border: "subtle" },
     },
     typography: {
       heading: { size: "2xl", weight: 600, style: "italic" },
@@ -285,9 +285,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#8B5CF6",
     },
     ui: {
-      buttonPrimary: { radius: "full", shadow: "soft", border: "none" },
+      buttonPrimary: { radius: "full", shadow: "md", border: "none" },
       buttonSecondary: { radius: "full", shadow: "none", border: "subtle" },
-      card: { radius: "xl", shadow: "soft", border: "subtle" },
+      card: { radius: "xl", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "xl", weight: 600, style: "normal" },
@@ -321,9 +321,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#FBBF24",
     },
     ui: {
-      buttonPrimary: { radius: "full", shadow: "soft", border: "none" },
+      buttonPrimary: { radius: "full", shadow: "md", border: "none" },
       buttonSecondary: { radius: "full", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "soft", border: "subtle" },
+      card: { radius: "lg", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "2xl", weight: 700, style: "italic" },
@@ -357,9 +357,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#C0633E",
     },
     ui: {
-      buttonPrimary: { radius: "md", shadow: "soft", border: "none" },
+      buttonPrimary: { radius: "md", shadow: "md", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "soft", border: "subtle" },
+      card: { radius: "lg", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "2xl", weight: 700, style: "italic" },
@@ -393,9 +393,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#3B3F42",
     },
     ui: {
-      buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
+      buttonPrimary: { radius: "md", shadow: "lg", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "soft", border: "subtle" },
+      card: { radius: "lg", shadow: "md", border: "subtle" },
     },
     typography: {
       heading: { size: "xl", weight: 600, style: "normal" },
@@ -430,9 +430,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#111827",
     },
     ui: {
-      buttonPrimary: { radius: "none", shadow: "strong", border: "strong" },
-      buttonSecondary: { radius: "none", shadow: "strong", border: "strong" },
-      card: { radius: "none", shadow: "strong", border: "strong" },
+      buttonPrimary: { radius: "none", shadow: "lg", border: "strong" },
+      buttonSecondary: { radius: "none", shadow: "lg", border: "strong" },
+      card: { radius: "none", shadow: "lg", border: "strong" },
     },
     typography: {
       heading: { size: "2xl", weight: 800, style: "normal" },
@@ -502,9 +502,9 @@ export const VIBE_PRESETS: Record<VibeId, VibePreset> = {
       borderStrong: "#06B6D4",
     },
     ui: {
-      buttonPrimary: { radius: "md", shadow: "strong", border: "none" },
+      buttonPrimary: { radius: "md", shadow: "lg", border: "none" },
       buttonSecondary: { radius: "md", shadow: "none", border: "subtle" },
-      card: { radius: "lg", shadow: "strong", border: "subtle" },
+      card: { radius: "lg", shadow: "lg", border: "subtle" },
     },
     typography: {
       heading: { size: "2xl", weight: 700, style: "normal" },

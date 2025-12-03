@@ -12,6 +12,13 @@ export interface ColorSet {
   onPrimary: string;
   onSecondary: string;
   onAccent: string;
+
+  // Typography hierarchy colors (optional, fallback to text colors)
+  textHeading?: string;
+  textSubheading?: string;
+  textBody?: string;
+  textBodyMuted?: string;
+  textAccent?: string;
 }
 
 export interface VibePalette {
@@ -43,8 +50,49 @@ export interface PaletteVariation {
 export type ColorVariations = PaletteVariation[];
 
 export type RadiusToken = "none" | "sm" | "md" | "lg" | "xl" | "full";
-export type ShadowToken = "none" | "soft" | "strong";
+export type ShadowToken = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type BorderToken = "none" | "subtle" | "strong";
+
+// Feature tier system
+export type FeatureTier = "FREE" | "PRO";
+
+// Preview page types
+export type PreviewPageId = "landing" | "blog" | "dashboard";
+
+export interface PreviewPage {
+  id: PreviewPageId;
+  label: string;
+  description: string;
+  tier: FeatureTier;
+}
+
+// Menu preset types
+export type MenuPresetId = "top-nav" | "centered-pill" | "sidebar";
+
+export interface MenuPreset {
+  id: MenuPresetId;
+  label: string;
+  description: string;
+  tier: FeatureTier;
+}
+
+// Text style interface (reusable for h1-h4)
+export interface TextStyle {
+  size: string;
+  weight: number;
+  style: "normal" | "italic";
+  transform?: "none" | "uppercase";
+  color?: string;
+}
+
+// Typography color hierarchy
+export interface TypographyColors {
+  heading: string; // H1 - max contrast
+  subheading: string; // H2
+  body: string; // Normal text
+  bodyMuted: string; // De-emphasized
+  accent: string; // CTA emphasis
+}
 
 export interface ComponentShape {
   radius: RadiusToken;
@@ -53,34 +101,16 @@ export interface ComponentShape {
 }
 
 export interface TypographyTokens {
-  heading: {
-    size: "sm" | "md" | "lg" | "xl" | "2xl";
-    weight: number; // 400, 600, 700, 800
-    style: "normal" | "italic";
-    transform?: "none" | "uppercase";
-    color?: string;
-  };
-  subheading?: {
-    size: "sm" | "md" | "lg" | "xl";
-    weight: number;
-    style: "normal" | "italic";
-    transform?: "none" | "uppercase";
-    color?: string;
-  };
-  body: {
-    size: "xs" | "sm" | "md" | "lg";
-    weight: number;
-    style: "normal" | "italic";
-    transform?: "none" | "uppercase";
-    color?: string;
-  };
-  accent: {
-    size: "xs" | "sm" | "md";
-    weight: number;
-    style: "normal" | "italic";
-    transform?: "none" | "uppercase";
-    color?: string;
-  };
+  h1: TextStyle;
+  h2: TextStyle;
+  h3: TextStyle;
+  h4: TextStyle;
+  body: TextStyle;
+  accent: TextStyle;
+
+  // Backward compatibility aliases
+  heading?: TextStyle;
+  subheading?: TextStyle;
 }
 
 export interface VibeUiTokens {
@@ -113,6 +143,12 @@ export interface VibePreset {
   palette: VibePalette;
   ui: VibeUiTokens;
   colorVariations?: ColorVariations;
+
+  // Optional dark mode variant for this vibe
+  darkVariant?: {
+    palette: VibePalette;
+    ui?: Partial<VibeUiTokens>;
+  };
 }
 
 export type FontSource = "google" | "system" | "premium";
