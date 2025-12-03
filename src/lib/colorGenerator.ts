@@ -828,11 +828,12 @@ export function enforceLuxuryDiscipline(colors: ColorSet): ColorSet {
   const surfaceAlt = makeSurface(mode === "emerald" ? 12 : 14);
   const borderSubtle = makeSurface(mode === "emerald" ? 2 : 3);
   const borderStrong = makeSurface(mode === "emerald" ? 18 : 20);
-  const baseMuted = mixHex(colors.textMuted, background, 0.45);
-  // Ensure textMuted meets minimum WCAG contrast (3:1 for normal text is acceptable)
-  // If it doesn't, use a lighter version
-  const mutedContrast = contrastRatio(baseMuted, background);
-  const textMuted = mutedContrast >= 3 ? baseMuted : mixHex(colors.textMuted, background, 0.25);
+
+  // Create textMuted with proper contrast
+  // Prefer a neutral gray that's darker for light backgrounds, lighter for dark backgrounds
+  const bgLum = hexToLuminance(background);
+  const mutedGray = bgLum > 0.5 ? "#475569" : "#A1A5B0"; // darker gray for light bg, lighter for dark bg
+  const textMuted = ensureReadableText(background, mutedGray);
 
   const text = ensureReadableText(background, colors.text);
   const onPrimary = ensureReadableText(primary, text);
@@ -932,11 +933,12 @@ export function enforceDarkDiscipline(colors: ColorSet): ColorSet {
   const surfaceAlt = makeSurface(14);
   const borderSubtle = makeSurface(4, 5);
   const borderStrong = makeSurface(20, 8);
-  const baseMuted = mixHex(colors.textMuted, background, 0.55);
-  // Ensure textMuted meets minimum WCAG contrast (3:1 for normal text is acceptable)
-  // If it doesn't, use a lighter version
-  const mutedContrast = contrastRatio(baseMuted, background);
-  const textMuted = mutedContrast >= 3 ? baseMuted : mixHex(colors.textMuted, background, 0.35);
+
+  // Create textMuted with proper contrast
+  // Prefer a neutral gray that's darker for light backgrounds, lighter for dark backgrounds
+  const bgLum = hexToLuminance(background);
+  const mutedGray = bgLum > 0.5 ? "#475569" : "#A1A5B0"; // darker gray for light bg, lighter for dark bg
+  const textMuted = ensureReadableText(background, mutedGray);
 
   const text = ensureReadableText(background, colors.text);
   const onPrimary = ensureReadableText(primary, text);
