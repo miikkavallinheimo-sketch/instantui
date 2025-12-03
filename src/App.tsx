@@ -492,6 +492,23 @@ function App() {
     setTokens(buildDesignTokens(designState));
   }, [designState]);
 
+  // Rebuild designState when dark mode changes
+  useEffect(() => {
+    setDesignState((prev) =>
+      buildDesignState(
+        vibeId,
+        seed,
+        colorLocks,
+        fontLockMode,
+        hueShift,
+        saturationShift,
+        prev,
+        false,
+        previewState.darkMode
+      )
+    );
+  }, [previewState.darkMode, vibeId, seed, colorLocks, fontLockMode, hueShift, saturationShift]);
+
   useEffect(() => {
     ensureFontLoaded(designState.fontPair.heading, designState.fontPair.source);
     ensureFontLoaded(designState.fontPair.body, designState.fontPair.source);
