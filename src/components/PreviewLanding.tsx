@@ -21,28 +21,60 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
     {
       title: "Fast & Responsive",
       description: "Built for speed with optimized performance across all devices.",
+      color: "primary",
     },
     {
       title: "Beautiful Design",
       description: "Carefully crafted visual hierarchy and color system.",
+      color: "secondary",
     },
     {
       title: "Accessible",
       description: "WCAG compliant with proper contrast and semantic HTML.",
+      color: "accent",
     },
     {
       title: "Developer Friendly",
       description: "Clean code, well-documented, and easy to customize.",
+      color: "primary",
     },
     {
       title: "Production Ready",
       description: "Battle-tested components ready for real-world use.",
+      color: "secondary",
     },
     {
       title: "Future Proof",
       description: "Built with modern standards and best practices.",
+      color: "accent",
     },
   ];
+
+  const getColorForFeature = (colorKey: string) => {
+    switch (colorKey) {
+      case "primary":
+        return colors.primary;
+      case "secondary":
+        return colors.secondary;
+      case "accent":
+        return colors.accent;
+      default:
+        return colors.primary;
+    }
+  };
+
+  const getOnColorForFeature = (colorKey: string) => {
+    switch (colorKey) {
+      case "primary":
+        return colors.onPrimary;
+      case "secondary":
+        return colors.onSecondary;
+      case "accent":
+        return colors.onAccent;
+      default:
+        return colors.onPrimary;
+    }
+  };
 
   const rootStyle: CSSProperties = {
     backgroundColor: colors.background,
@@ -119,37 +151,51 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
         </div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="p-6 rounded-lg border"
-              style={{
-                backgroundColor: colors.surface,
-                borderColor: colors.borderSubtle,
-              }}
-            >
+          {features.map((feature, idx) => {
+            const featureColor = getColorForFeature(feature.color);
+            const featureOnColor = getOnColorForFeature(feature.color);
+            return (
               <div
+                key={idx}
+                className="p-6 rounded-lg border-l-4 overflow-hidden"
                 style={{
-                  fontFamily: fontPair.heading,
-                  fontSize: sizeMap["lg"],
-                  fontWeight: 600,
-                  color: colors.text,
+                  backgroundColor: colors.surface,
+                  borderColor: featureColor,
+                  borderLeftColor: featureColor,
                 }}
-                className="mb-3"
               >
-                {feature.title}
+                <div
+                  className="w-10 h-10 rounded-lg mb-4 flex items-center justify-center font-bold"
+                  style={{
+                    backgroundColor: featureColor,
+                    color: featureOnColor,
+                  }}
+                >
+                  {String.fromCharCode(65 + (idx % 6))}
+                </div>
+                <div
+                  style={{
+                    fontFamily: fontPair.heading,
+                    fontSize: sizeMap["lg"],
+                    fontWeight: 600,
+                    color: colors.text,
+                  }}
+                  className="mb-3"
+                >
+                  {feature.title}
+                </div>
+                <p
+                  style={{
+                    fontFamily: fontPair.body,
+                    fontSize: sizeMap[typography.body.size],
+                    color: colors.textMuted,
+                  }}
+                >
+                  {feature.description}
+                </p>
               </div>
-              <p
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap[typography.body.size],
-                  color: colors.textMuted,
-                }}
-              >
-                {feature.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -190,6 +236,127 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
           Start Free
         </button>
       </section>
+
+      {/* Footer */}
+      <footer
+        className="px-6 py-8 border-t"
+        style={{
+          backgroundColor: colors.background,
+          borderColor: colors.borderSubtle,
+        }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                Elementry
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+              >
+                Design system that grows with your product.
+              </p>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                Product
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                <li><a href="#" style={{ color: colors.text }}>Features</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Pricing</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Docs</a></li>
+              </ul>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                Company
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                <li><a href="#" style={{ color: colors.text }}>About</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Blog</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "1rem",
+                }}
+              >
+                Legal
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                <li><a href="#" style={{ color: colors.text }}>Privacy</a></li>
+                <li><a href="#" style={{ color: colors.text }}>Terms</a></li>
+              </ul>
+            </div>
+          </div>
+          <div
+            className="border-t pt-6"
+            style={{ borderColor: colors.borderSubtle }}
+          >
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
+                color: colors.textMuted,
+                textAlign: "center",
+              }}
+            >
+              © 2024 Elementry. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
