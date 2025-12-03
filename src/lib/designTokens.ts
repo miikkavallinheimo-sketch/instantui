@@ -1,4 +1,5 @@
 import type { BorderToken, DesignState, DesignTokens } from "./types";
+import { fontWeightVariants, fontWeightCombinations } from "./fontWeightVariants";
 
 const radiusMap = {
   none: "0px",
@@ -49,6 +50,8 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
 
   const headingSize = getFontSizeValue(typography.heading.size);
   const subheadingSize = getFontSizeValue(subheadingTokens.size as keyof typeof fontSizeMap);
+  const h3Size = getFontSizeValue(typography.h3.size as keyof typeof fontSizeMap);
+  const h4Size = getFontSizeValue(typography.h4.size as keyof typeof fontSizeMap);
   const bodySize = getFontSizeValue(typography.body.size);
   const accentSize = getFontSizeValue(typography.accent.size);
 
@@ -88,12 +91,27 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
   --subheading-font-size: ${subheadingSize};
   --subheading-font-weight: ${subheadingTokens.weight};
   --subheading-font-style: ${subheadingTokens.style ?? "normal"};
+  --h3-font-size: ${h3Size};
+  --h3-font-weight: ${typography.h3.weight};
+  --h3-font-style: ${typography.h3.style};
+  --h4-font-size: ${h4Size};
+  --h4-font-weight: ${typography.h4.weight};
+  --h4-font-style: ${typography.h4.style};
   --body-font-size: ${bodySize};
   --body-font-weight: ${typography.body.weight};
   --body-font-style: ${typography.body.style};
   --accent-font-size: ${accentSize};
   --accent-font-weight: ${typography.accent.weight};
   --accent-font-style: ${typography.accent.style};
+  --font-weight-thin: ${fontWeightVariants.thin};
+  --font-weight-extralight: ${fontWeightVariants.extralight};
+  --font-weight-light: ${fontWeightVariants.light};
+  --font-weight-normal: ${fontWeightVariants.normal};
+  --font-weight-medium: ${fontWeightVariants.medium};
+  --font-weight-semibold: ${fontWeightVariants.semibold};
+  --font-weight-bold: ${fontWeightVariants.bold};
+  --font-weight-extrabold: ${fontWeightVariants.extrabold};
+  --font-weight-black: ${fontWeightVariants.black};
 }
 
 /* Example usage:
@@ -137,14 +155,27 @@ theme: {
     fontSize: {
       heading: "${headingSize}",
       subheading: "${subheadingSize}",
+      h3: "${h3Size}",
+      h4: "${h4Size}",
       body: "${bodySize}",
       accent: "${accentSize}",
     },
     fontWeight: {
       heading: "${typography.heading.weight}",
       subheading: "${subheadingTokens.weight}",
+      h3: "${typography.h3.weight}",
+      h4: "${typography.h4.weight}",
       body: "${typography.body.weight}",
       accent: "${typography.accent.weight}",
+      thin: "${fontWeightVariants.thin}",
+      extralight: "${fontWeightVariants.extralight}",
+      light: "${fontWeightVariants.light}",
+      normal: "${fontWeightVariants.normal}",
+      medium: "${fontWeightVariants.medium}",
+      semibold: "${fontWeightVariants.semibold}",
+      bold: "${fontWeightVariants.bold}",
+      extrabold: "${fontWeightVariants.extrabold}",
+      black: "${fontWeightVariants.black}",
     },
     borderRadius: {
       card: "var(--radius-card)",
@@ -206,9 +237,23 @@ theme: {
     typography: {
       heading: typography.heading,
       subheading: typography.subheading,
+      h3: typography.h3,
+      h4: typography.h4,
       body: typography.body,
       accent: typography.accent,
     },
+    fontWeights: {
+      thin: fontWeightVariants.thin,
+      extralight: fontWeightVariants.extralight,
+      light: fontWeightVariants.light,
+      normal: fontWeightVariants.normal,
+      medium: fontWeightVariants.medium,
+      semibold: fontWeightVariants.semibold,
+      bold: fontWeightVariants.bold,
+      extrabold: fontWeightVariants.extrabold,
+      black: fontWeightVariants.black,
+    },
+    fontWeightCombinations: fontWeightCombinations,
     typographyValues: {
       heading: {
         sizeToken: typography.heading.size,
@@ -223,6 +268,20 @@ theme: {
         weight: subheadingTokens.weight,
         style: subheadingTokens.style ?? "normal",
         transform: subheadingTokens.transform ?? "none",
+      },
+      h3: {
+        sizeToken: typography.h3.size,
+        sizeRem: h3Size,
+        weight: typography.h3.weight,
+        style: typography.h3.style,
+        transform: typography.h3.transform ?? "none",
+      },
+      h4: {
+        sizeToken: typography.h4.size,
+        sizeRem: h4Size,
+        weight: typography.h4.weight,
+        style: typography.h4.style,
+        transform: typography.h4.transform ?? "none",
       },
       body: {
         sizeToken: typography.body.size,

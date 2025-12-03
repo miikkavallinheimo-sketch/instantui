@@ -3,6 +3,7 @@ import { SharedNav } from "./SharedNav";
 import PreviewDashboard from "./PreviewDashboard";
 import PreviewLanding from "./PreviewLanding";
 import PreviewBlog from "./PreviewBlog";
+import { ContrastCheckerPanel } from "./ContrastCheckerPanel";
 
 interface PreviewProps {
   designState: DesignState;
@@ -10,6 +11,7 @@ interface PreviewProps {
   activePage?: PreviewPageId;
   activeMenu?: MenuPresetId;
   onPageChange?: (page: PreviewPageId) => void;
+  showContrastChecker?: boolean;
 }
 
 const Preview = ({
@@ -18,9 +20,12 @@ const Preview = ({
   activePage = "dashboard",
   activeMenu = "top-nav",
   onPageChange,
+  showContrastChecker = true,
 }: PreviewProps) => {
   return (
-    <div className="w-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative" style={{ backgroundColor: designState.colors.background }}>
+    <div className="space-y-4 w-full">
+      {showContrastChecker && <ContrastCheckerPanel designState={designState} />}
+      <div className="w-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative" style={{ backgroundColor: designState.colors.background }}>
       {isAnalyzing && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
           <div
@@ -58,6 +63,7 @@ const Preview = ({
         )}
         {activePage === "landing" && <PreviewLanding designState={designState} />}
         {activePage === "blog" && <PreviewBlog designState={designState} />}
+      </div>
       </div>
     </div>
   );
