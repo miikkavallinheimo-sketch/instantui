@@ -444,6 +444,9 @@ function App() {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [triggerAutoRefresh, setTriggerAutoRefresh] = useState(false);
 
+  // Preview state (page, menu, dark mode) - must be before designState
+  const previewState = usePreviewState();
+
   const [designState, setDesignState] = useState<DesignState>(() =>
     buildDesignState(
       initialAppState.vibeId,
@@ -465,9 +468,6 @@ function App() {
   const [activeGeneratedName, setActiveGeneratedName] = useState<string | null>(
     null
   );
-
-  // Preview state (page, menu, dark mode)
-  const previewState = usePreviewState();
 
   // History for undo/redo
   const history = useHistory<AppState>({
