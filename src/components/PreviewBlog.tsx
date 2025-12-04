@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import type { DesignState } from "../lib/types";
+import { getShadowForMode } from "../lib/shadowTokens";
 
 interface PreviewBlogProps {
   designState: DesignState;
@@ -160,6 +161,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
               backgroundColor: colors.surface,
               borderColor: colors.borderSubtle,
               border: `1px solid ${colors.borderSubtle}`,
+              boxShadow: getShadowForMode(designState.uiTokens.card.shadow, designState.vibe.isDarkUi),
             }}
           >
             <div
@@ -344,10 +346,21 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
               return (
                 <article
                   key={idx}
-                  className="rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                  className="rounded-lg overflow-hidden transition-shadow cursor-pointer"
                   style={{
                     backgroundColor: colors.surface,
                     border: `1px solid ${colors.borderSubtle}`,
+                    boxShadow: getShadowForMode(designState.uiTokens.card.shadow, designState.vibe.isDarkUi),
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.boxShadow = getShadowForMode("lg", designState.vibe.isDarkUi);
+                    el.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.boxShadow = getShadowForMode(designState.uiTokens.card.shadow, designState.vibe.isDarkUi);
+                    el.style.transform = "translateY(0)";
                   }}
                 >
                   <div
