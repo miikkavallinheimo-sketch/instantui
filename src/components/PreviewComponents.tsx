@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { CSSProperties } from "react";
 import type { DesignState, BorderToken, HoverAnimationType } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
@@ -774,6 +775,175 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               This is muted text for secondary information and captions.
             </p>
           ),
+        },
+      ],
+    },
+    {
+      title: "Banners & Alerts",
+      components: [
+        {
+          name: "Primary Banner",
+          render: () => {
+            const [closed, setClosed] = useState(false);
+            if (closed) return null;
+            return (
+              <div
+                style={{
+                  backgroundColor: `${colors.primary}15`,
+                  border: `1px solid ${colors.primary}`,
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "1rem",
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.primary,
+                  minWidth: "280px",
+                }}
+              >
+                <div>📢 Important announcement here</div>
+                <button
+                  onClick={() => setClosed(true)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: colors.primary,
+                    cursor: "pointer",
+                    fontSize: "1.25rem",
+                    lineHeight: 1,
+                    padding: "0.25rem",
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            );
+          },
+        },
+        {
+          name: "Accent Banner",
+          render: () => {
+            const [closed, setClosed] = useState(false);
+            if (closed) return null;
+            return (
+              <div
+                style={{
+                  backgroundColor: `${colors.accent}15`,
+                  border: `1px solid ${colors.accent}`,
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "1rem",
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.accent,
+                  minWidth: "280px",
+                }}
+              >
+                <div>⚡ Special offer – Limited time!</div>
+                <button
+                  onClick={() => setClosed(true)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: colors.accent,
+                    cursor: "pointer",
+                    fontSize: "1.25rem",
+                    lineHeight: 1,
+                    padding: "0.25rem",
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            );
+          },
+        },
+        {
+          name: "Secondary Banner",
+          render: () => {
+            const [closed, setClosed] = useState(false);
+            if (closed) return null;
+            return (
+              <div
+                style={{
+                  backgroundColor: `${colors.secondary}15`,
+                  border: `1px solid ${colors.secondary}`,
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "1rem",
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.secondary,
+                  minWidth: "280px",
+                }}
+              >
+                <div>ℹ️ Update: New version available</div>
+                <button
+                  onClick={() => setClosed(true)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: colors.secondary,
+                    cursor: "pointer",
+                    fontSize: "1.25rem",
+                    lineHeight: 1,
+                    padding: "0.25rem",
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            );
+          },
+        },
+        {
+          name: "Subtle Banner",
+          render: () => {
+            const [closed, setClosed] = useState(false);
+            if (closed) return null;
+            return (
+              <div
+                style={{
+                  backgroundColor: colors.surface,
+                  border: `1px solid ${colors.borderSubtle}`,
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "1rem",
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.text,
+                  minWidth: "280px",
+                }}
+              >
+                <div>💡 Tip: You can customize this message</div>
+                <button
+                  onClick={() => setClosed(true)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: colors.text,
+                    cursor: "pointer",
+                    fontSize: "1.25rem",
+                    lineHeight: 1,
+                    padding: "0.25rem",
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            );
+          },
         },
       ],
     },
