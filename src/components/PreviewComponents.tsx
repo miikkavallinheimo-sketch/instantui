@@ -112,23 +112,11 @@ const applyHoverAnimation = (
         childDivs.forEach((child) => {
           (child as HTMLElement).style.textDecoration = "underline";
           (child as HTMLElement).style.textDecorationColor = "currentColor";
-          // Optional: brighten text for buttons using lighter shadow
-          if (brightnessLevel && brightnessLevel > 1) {
-            // Use text-shadow to brighten without filter delay
-            const shadowAlpha = Math.min((brightnessLevel - 1) * 200, 255);
-            (child as HTMLElement).style.textShadow = `0 0 ${shadowAlpha * 0.15}px rgba(255, 255, 255, ${Math.min(brightnessLevel * 0.3, 0.8)})`;
-          }
         });
       } else {
         // No children, apply to element itself
         element.style.textDecoration = "underline";
         element.style.textDecorationColor = "currentColor";
-        // Optional: brighten text for buttons using lighter shadow
-        if (brightnessLevel && brightnessLevel > 1) {
-          // Use text-shadow to brighten without filter delay
-          const shadowAlpha = Math.min((brightnessLevel - 1) * 200, 255);
-          element.style.textShadow = `0 0 ${shadowAlpha * 0.15}px rgba(255, 255, 255, ${Math.min(brightnessLevel * 0.3, 0.8)})`;
-        }
       }
       break;
 
@@ -201,12 +189,10 @@ const removeHoverAnimation = (
       // Remove underline from element and all child divs
       element.style.textDecoration = "none";
       element.style.textDecorationColor = "auto";
-      element.style.textShadow = "none";
       const childDivs = element.querySelectorAll("div");
       childDivs.forEach((child) => {
         (child as HTMLElement).style.textDecoration = "none";
         (child as HTMLElement).style.textDecorationColor = "auto";
-        (child as HTMLElement).style.textShadow = "none";
       });
       break;
 
@@ -251,6 +237,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 }}
                 onMouseEnter={(e) => {
                   const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
+                  const originalColor = window.getComputedStyle(e.currentTarget).color;
+                  // For text-underline, brighten the text color
+                  if (btnAnimConfig?.type === "text-underline") {
+                    e.currentTarget.style.color = colors.accent;
+                  }
                   applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
                     duration: btnAnimConfig?.duration || 200,
                     timingFunction: btnAnimConfig?.timingFunction || "ease-out",
@@ -263,6 +254,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     isDarkUi: vibe.isDarkUi,
                   });
                   (e.currentTarget as any).originalBgColor = originalBgColor;
+                  (e.currentTarget as any).originalColor = originalColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
@@ -271,6 +263,10 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     originalShadow,
                     originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
+                  // Reset color for text-underline
+                  if (btnAnimConfig?.type === "text-underline") {
+                    e.currentTarget.style.color = (e.currentTarget as any).originalColor;
+                  }
                 }}
               >
                 Click me
@@ -350,6 +346,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 }}
                 onMouseEnter={(e) => {
                   const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
+                  const originalColor = window.getComputedStyle(e.currentTarget).color;
+                  // For text-underline, brighten the text color
+                  if (btnAnimConfig?.type === "text-underline") {
+                    e.currentTarget.style.color = colors.accent;
+                  }
                   applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
                     duration: btnAnimConfig?.duration || 200,
                     timingFunction: btnAnimConfig?.timingFunction || "ease-out",
@@ -362,6 +363,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     isDarkUi: vibe.isDarkUi,
                   });
                   (e.currentTarget as any).originalBgColor = originalBgColor;
+                  (e.currentTarget as any).originalColor = originalColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
@@ -370,6 +372,10 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     originalShadow,
                     originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
+                  // Reset color for text-underline
+                  if (btnAnimConfig?.type === "text-underline") {
+                    e.currentTarget.style.color = (e.currentTarget as any).originalColor;
+                  }
                 }}
               >
                 Accent
