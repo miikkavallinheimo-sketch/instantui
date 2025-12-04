@@ -60,13 +60,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
-                const scale = uiTokens.animations?.button.scale || 1.05;
                 const ty = uiTokens.animations?.button.translateY || -2;
-                e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.transform = `translateY(${ty}px)`;
                 e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
               }}
             >
@@ -124,13 +123,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
-                const scale = uiTokens.animations?.card.scale || 1.02;
                 const ty = uiTokens.animations?.card.translateY || -4;
-                e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.transform = `translateY(${ty}px)`;
                 e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
               }}
             >
@@ -172,13 +170,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
-                const scale = uiTokens.animations?.card.scale || 1.02;
                 const ty = uiTokens.animations?.card.translateY || -4;
-                e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.transform = `translateY(${ty}px)`;
                 e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
               }}
             >
@@ -221,13 +218,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
-                const scale = uiTokens.animations?.card.scale || 1.02;
                 const ty = uiTokens.animations?.card.translateY || -4;
-                e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.transform = `translateY(${ty}px)`;
                 e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
               }}
             >
