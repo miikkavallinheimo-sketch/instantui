@@ -112,7 +112,7 @@ const SidebarControls = ({
         <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
           Theme
         </h3>
-        {designState.vibe.isDarkUi ? (
+        {VIBE_PRESETS[vibeId].isDarkUi ? (
           <div className="px-3 py-2 rounded-full border border-slate-700 text-[11px] text-slate-400 text-center bg-slate-900/30">
             Locked to Dark
           </div>
