@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import type { DesignState, BorderToken, HoverAnimationType } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
+import { getGlassConfigForVibe, buildGlassBackground, buildGlassBorder, buildBackdropFilter } from "../lib/glassTokens";
 
 interface PreviewComponentsProps {
   designState: DesignState;
@@ -941,6 +942,266 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 >
                   ×
                 </button>
+              </div>
+            );
+          },
+        },
+      ],
+    },
+    {
+      title: "Glass & Glassmorphism",
+      components: [
+        {
+          name: "Subtle Glass",
+          render: () => {
+            const glassConfig = getGlassConfigForVibe(vibe.id);
+            const customConfig = { ...glassConfig, blur: 8, opacity: 0.6 };
+
+            return (
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  minWidth: "280px",
+                  minHeight: "120px",
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  overflow: "hidden",
+                }}
+              >
+                {/* Background for visual reference */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: `linear-gradient(135deg, ${colors.accent}20, ${colors.primary}20)`,
+                    zIndex: -1,
+                  }}
+                />
+
+                {/* Glass container */}
+                <div
+                  style={{
+                    backgroundColor: buildGlassBackground(colors.surface, customConfig),
+                    backdropFilter: buildBackdropFilter(customConfig.blur),
+                    WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
+                    border: buildGlassBorder(colors.borderStrong, customConfig),
+                    borderRadius: radiusMap[uiTokens.card.radius],
+                    padding: "1.5rem",
+                    boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["lg"],
+                      fontWeight: 600,
+                      marginBottom: "0.5rem",
+                      color: colors.text,
+                    }}
+                  >
+                    Subtle Glass
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["sm"],
+                      color: colors.textMuted,
+                    }}
+                  >
+                    Blur: {customConfig.blur}px, Opacity: {Math.round(customConfig.opacity * 100)}%
+                  </div>
+                </div>
+              </div>
+            );
+          },
+        },
+        {
+          name: "Moderate Glass",
+          render: () => {
+            const glassConfig = getGlassConfigForVibe(vibe.id);
+            const customConfig = { ...glassConfig, blur: 16, opacity: 0.55 };
+
+            return (
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  minWidth: "280px",
+                  minHeight: "120px",
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  overflow: "hidden",
+                }}
+              >
+                {/* Background for visual reference */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: `linear-gradient(135deg, ${colors.accent}30, ${colors.primary}30)`,
+                    zIndex: -1,
+                  }}
+                />
+
+                {/* Glass container */}
+                <div
+                  style={{
+                    backgroundColor: buildGlassBackground(colors.surface, customConfig),
+                    backdropFilter: buildBackdropFilter(customConfig.blur),
+                    WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
+                    border: buildGlassBorder(colors.borderStrong, customConfig),
+                    borderRadius: radiusMap[uiTokens.card.radius],
+                    padding: "1.5rem",
+                    boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["lg"],
+                      fontWeight: 600,
+                      marginBottom: "0.5rem",
+                      color: colors.text,
+                    }}
+                  >
+                    Moderate Glass
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["sm"],
+                      color: colors.textMuted,
+                    }}
+                  >
+                    Blur: {customConfig.blur}px, Opacity: {Math.round(customConfig.opacity * 100)}%
+                  </div>
+                </div>
+              </div>
+            );
+          },
+        },
+        {
+          name: "Strong Glass",
+          render: () => {
+            const glassConfig = getGlassConfigForVibe(vibe.id);
+            const customConfig = { ...glassConfig, blur: 24, opacity: 0.5 };
+
+            return (
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  minWidth: "280px",
+                  minHeight: "120px",
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  overflow: "hidden",
+                }}
+              >
+                {/* Background for visual reference */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: `linear-gradient(135deg, ${colors.accent}40, ${colors.primary}40)`,
+                    zIndex: -1,
+                  }}
+                />
+
+                {/* Glass container */}
+                <div
+                  style={{
+                    backgroundColor: buildGlassBackground(colors.surface, customConfig),
+                    backdropFilter: buildBackdropFilter(customConfig.blur),
+                    WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
+                    border: buildGlassBorder(colors.borderStrong, customConfig),
+                    borderRadius: radiusMap[uiTokens.card.radius],
+                    padding: "1.5rem",
+                    boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["lg"],
+                      fontWeight: 600,
+                      marginBottom: "0.5rem",
+                      color: colors.text,
+                    }}
+                  >
+                    Strong Glass
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["sm"],
+                      color: colors.textMuted,
+                    }}
+                  >
+                    Blur: {customConfig.blur}px, Opacity: {Math.round(customConfig.opacity * 100)}%
+                  </div>
+                </div>
+              </div>
+            );
+          },
+        },
+        {
+          name: "Vibe-Specific Glass",
+          render: () => {
+            const customConfig = getGlassConfigForVibe(vibe.id);
+
+            return (
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  minWidth: "280px",
+                  minHeight: "120px",
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  overflow: "hidden",
+                }}
+              >
+                {/* Background for visual reference */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: `linear-gradient(135deg, ${colors.accent}35, ${colors.primary}35)`,
+                    zIndex: -1,
+                  }}
+                />
+
+                {/* Glass container */}
+                <div
+                  style={{
+                    backgroundColor: buildGlassBackground(colors.surface, customConfig),
+                    backdropFilter: buildBackdropFilter(customConfig.blur),
+                    WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
+                    border: buildGlassBorder(colors.borderStrong, customConfig),
+                    borderRadius: radiusMap[uiTokens.card.radius],
+                    padding: "1.5rem",
+                    boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["lg"],
+                      fontWeight: 600,
+                      marginBottom: "0.5rem",
+                      color: colors.text,
+                    }}
+                  >
+                    {vibe.label} Glass
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["sm"],
+                      color: colors.textMuted,
+                    }}
+                  >
+                    Blur: {customConfig.blur}px, Opacity: {Math.round(customConfig.opacity * 100)}%
+                  </div>
+                </div>
               </div>
             );
           },
