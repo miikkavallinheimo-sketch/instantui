@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { DesignState, BorderToken } from "../lib/types";
+import type { DesignState, BorderToken, HoverAnimationType } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
 
 interface PreviewComponentsProps {
@@ -30,6 +30,112 @@ const getBorderStyle = (token: BorderToken, colors: DesignState["colors"]) => {
   return `1px solid ${color}`;
 };
 
+/**
+ * Apply vibe-specific hover animation based on animation type
+ */
+const applyHoverAnimation = (
+  element: HTMLElement,
+  animationType: HoverAnimationType,
+  config: {
+    duration: number;
+    timingFunction: string;
+    scale?: number;
+    glowColor?: string;
+    translateY?: number;
+    currentShadow: string;
+    isDarkUi: boolean;
+  }
+) => {
+  const { duration, timingFunction, scale, glowColor, translateY, currentShadow, isDarkUi } = config;
+
+  element.style.transition = `all ${duration}ms ${timingFunction}`;
+
+  switch (animationType) {
+    case "subtle":
+      // Subtle: slight opacity and shadow increase
+      element.style.opacity = "0.9";
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+
+    case "lift":
+      // Lift: translate up with enhanced shadow
+      element.style.transform = `translateY(${translateY || -4}px)`;
+      element.style.boxShadow = getShadowForMode("lg", isDarkUi);
+      break;
+
+    case "glow":
+      // Glow: add glowing effect with shadow
+      element.style.boxShadow = glowColor
+        ? `0 0 12px ${glowColor}, ${getShadowForMode("lg", isDarkUi)}`
+        : getShadowForMode("lg", isDarkUi);
+      break;
+
+    case "shimmer":
+      // Shimmer: scale up slightly with brightness
+      element.style.transform = `scale(${scale || 1.05})`;
+      element.style.boxShadow = getShadowForMode("lg", isDarkUi);
+      break;
+
+    case "bounce":
+      // Bounce: small scale-down then applies via animation
+      element.style.transform = `scale(${scale || 0.98})`;
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+
+    case "none":
+    default:
+      // No animation
+      break;
+  }
+};
+
+/**
+ * Remove hover animation effects
+ */
+const removeHoverAnimation = (
+  element: HTMLElement,
+  animationType: HoverAnimationType,
+  config: {
+    duration: number;
+    timingFunction: string;
+    originalShadow: string;
+  }
+) => {
+  const { duration, timingFunction, originalShadow } = config;
+
+  element.style.transition = `all ${duration}ms ${timingFunction}`;
+
+  switch (animationType) {
+    case "subtle":
+      element.style.opacity = "1";
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "lift":
+      element.style.transform = "translateY(0)";
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "glow":
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "shimmer":
+      element.style.transform = "scale(1)";
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "bounce":
+      element.style.transform = "scale(1)";
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "none":
+    default:
+      break;
+  }
+};
+
 const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
   const { colors, fontPair, typography, uiTokens, vibe } = designState;
 
@@ -44,64 +150,95 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
       components: [
         {
           name: "Primary Button",
-          render: () => (
-            <button
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.onPrimary,
-                padding: "0.75rem 1.5rem",
-                borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
-                border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
-                fontSize: sizeMap["sm"],
-                fontFamily: fontPair.heading,
-                fontWeight: 600,
-                boxShadow: getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi),
-                cursor: "pointer",
-                transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
-              }}
-              onMouseEnter={(e) => {
-                const ty = uiTokens.animations?.button.translateY || -2;
-                e.currentTarget.style.transform = `translateY(${ty}px)`;
-                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
-              }}
-            >
-              Click me
-            </button>
-          ),
+          render: () => {
+            const btnAnimConfig = uiTokens.animations?.button;
+            const originalShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
+
+            return (
+              <button
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.onPrimary,
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
+                  border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
+                  fontSize: sizeMap["sm"],
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  boxShadow: originalShadow,
+                  cursor: "pointer",
+                  transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    scale: btnAnimConfig?.scale,
+                    glowColor: btnAnimConfig?.glowColor,
+                    translateY: btnAnimConfig?.translateY || -2,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
+                }}
+              >
+                Click me
+              </button>
+            );
+          },
         },
         {
           name: "Secondary Button",
-          render: () => (
-            <button
-              style={{
-                backgroundColor: "transparent",
-                color: colors.secondary,
-                padding: "0.75rem 1.5rem",
-                borderRadius: radiusMap[uiTokens.buttonSecondary.radius],
-                border: `2px solid ${colors.secondary}`,
-                fontSize: sizeMap["sm"],
-                fontFamily: fontPair.heading,
-                fontWeight: 600,
-                boxShadow: getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi),
-                cursor: "pointer",
-                transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `${colors.secondary}15`;
-                e.currentTarget.style.boxShadow = getShadowForMode("md", vibe.isDarkUi);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi);
-              }}
-            >
-              Secondary
-            </button>
-          ),
+          render: () => {
+            const btnAnimConfig = uiTokens.animations?.button;
+            const originalShadow = getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi);
+
+            return (
+              <button
+                style={{
+                  backgroundColor: "transparent",
+                  color: colors.secondary,
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: radiusMap[uiTokens.buttonSecondary.radius],
+                  border: `2px solid ${colors.secondary}`,
+                  fontSize: sizeMap["sm"],
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  boxShadow: originalShadow,
+                  cursor: "pointer",
+                  transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${colors.secondary}15`;
+                  applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "subtle", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    scale: btnAnimConfig?.scale,
+                    glowColor: btnAnimConfig?.glowColor,
+                    translateY: btnAnimConfig?.translateY || -2,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "subtle", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
+                }}
+              >
+                Secondary
+              </button>
+            );
+          },
         },
       ],
     },
@@ -110,146 +247,188 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
       components: [
         {
           name: "Surface Card",
-          render: () => (
-            <div
-              style={{
-                backgroundColor: colors.surface,
-                border: `2px solid ${colors.borderStrong}`,
-                borderRadius: radiusMap[uiTokens.card.radius],
-                padding: "1.5rem",
-                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
-                minWidth: "200px",
-                cursor: "pointer",
-                transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
-              }}
-              onMouseEnter={(e) => {
-                const ty = uiTokens.animations?.card.translateY || -4;
-                e.currentTarget.style.transform = `translateY(${ty}px)`;
-                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
-              }}
-            >
+          render: () => {
+            const cardAnimConfig = uiTokens.animations?.card;
+            const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+
+            return (
               <div
                 style={{
-                  fontFamily: fontPair.heading,
-                  fontSize: sizeMap["lg"],
-                  fontWeight: 600,
-                  marginBottom: "0.5rem",
-                  color: colors.text,
+                  backgroundColor: colors.surface,
+                  border: `2px solid ${colors.borderStrong}`,
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1.5rem",
+                  boxShadow: originalShadow,
+                  minWidth: "200px",
+                  cursor: "pointer",
+                  transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    scale: cardAnimConfig?.scale,
+                    glowColor: cardAnimConfig?.glowColor,
+                    translateY: cardAnimConfig?.translateY || -4,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
                 }}
               >
-                Surface Card
+                <div
+                  style={{
+                    fontFamily: fontPair.heading,
+                    fontSize: sizeMap["lg"],
+                    fontWeight: 600,
+                    marginBottom: "0.5rem",
+                    color: colors.text,
+                  }}
+                >
+                  Surface Card
+                </div>
+                <div
+                  style={{
+                    fontFamily: fontPair.body,
+                    fontSize: sizeMap["sm"],
+                    color: colors.textMuted,
+                  }}
+                >
+                  With strong border
+                </div>
               </div>
-              <div
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["sm"],
-                  color: colors.textMuted,
-                }}
-              >
-                With strong border
-              </div>
-            </div>
-          ),
+            );
+          },
         },
         {
           name: "Primary Card",
-          render: () => (
-            <div
-              style={{
-                backgroundColor: colors.primary,
-                border: getBorderStyle(uiTokens.card.border, colors),
-                borderRadius: radiusMap[uiTokens.card.radius],
-                padding: "1.5rem",
-                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
-                minWidth: "200px",
-                cursor: "pointer",
-                transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
-              }}
-              onMouseEnter={(e) => {
-                const ty = uiTokens.animations?.card.translateY || -4;
-                e.currentTarget.style.transform = `translateY(${ty}px)`;
-                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
-              }}
-            >
+          render: () => {
+            const cardAnimConfig = uiTokens.animations?.card;
+            const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+
+            return (
               <div
                 style={{
-                  fontFamily: fontPair.heading,
-                  fontSize: sizeMap["lg"],
-                  fontWeight: 600,
-                  marginBottom: "0.5rem",
-                  color: colors.onPrimary,
+                  backgroundColor: colors.primary,
+                  border: getBorderStyle(uiTokens.card.border, colors),
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1.5rem",
+                  boxShadow: originalShadow,
+                  minWidth: "200px",
+                  cursor: "pointer",
+                  transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    scale: cardAnimConfig?.scale,
+                    glowColor: cardAnimConfig?.glowColor,
+                    translateY: cardAnimConfig?.translateY || -4,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
                 }}
               >
-                Primary Card
+                <div
+                  style={{
+                    fontFamily: fontPair.heading,
+                    fontSize: sizeMap["lg"],
+                    fontWeight: 600,
+                    marginBottom: "0.5rem",
+                    color: colors.onPrimary,
+                  }}
+                >
+                  Primary Card
+                </div>
+                <div
+                  style={{
+                    fontFamily: fontPair.body,
+                    fontSize: sizeMap["sm"],
+                    color: colors.onPrimary,
+                    opacity: 0.8,
+                  }}
+                >
+                  Accent background color
+                </div>
               </div>
-              <div
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["sm"],
-                  color: colors.onPrimary,
-                  opacity: 0.8,
-                }}
-              >
-                Accent background color
-              </div>
-            </div>
-          ),
+            );
+          },
         },
         {
           name: "Secondary Card",
-          render: () => (
-            <div
-              style={{
-                backgroundColor: colors.secondary,
-                border: getBorderStyle(uiTokens.card.border, colors),
-                borderRadius: radiusMap[uiTokens.card.radius],
-                padding: "1.5rem",
-                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
-                minWidth: "200px",
-                cursor: "pointer",
-                transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
-              }}
-              onMouseEnter={(e) => {
-                const ty = uiTokens.animations?.card.translateY || -4;
-                e.currentTarget.style.transform = `translateY(${ty}px)`;
-                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
-              }}
-            >
+          render: () => {
+            const cardAnimConfig = uiTokens.animations?.card;
+            const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+
+            return (
               <div
                 style={{
-                  fontFamily: fontPair.heading,
-                  fontSize: sizeMap["lg"],
-                  fontWeight: 600,
-                  marginBottom: "0.5rem",
-                  color: colors.onSecondary,
+                  backgroundColor: colors.secondary,
+                  border: getBorderStyle(uiTokens.card.border, colors),
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1.5rem",
+                  boxShadow: originalShadow,
+                  minWidth: "200px",
+                  cursor: "pointer",
+                  transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    scale: cardAnimConfig?.scale,
+                    glowColor: cardAnimConfig?.glowColor,
+                    translateY: cardAnimConfig?.translateY || -4,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
                 }}
               >
-                Secondary Card
+                <div
+                  style={{
+                    fontFamily: fontPair.heading,
+                    fontSize: sizeMap["lg"],
+                    fontWeight: 600,
+                    marginBottom: "0.5rem",
+                    color: colors.onSecondary,
+                  }}
+                >
+                  Secondary Card
+                </div>
+                <div
+                  style={{
+                    fontFamily: fontPair.body,
+                    fontSize: sizeMap["sm"],
+                    color: colors.onSecondary,
+                    opacity: 0.8,
+                  }}
+                >
+                  Secondary background color
+                </div>
               </div>
-              <div
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["sm"],
-                  color: colors.onSecondary,
-                  opacity: 0.8,
-                }}
-              >
-                Secondary background color
-              </div>
-            </div>
-          ),
+            );
+          },
         },
       ],
     },
