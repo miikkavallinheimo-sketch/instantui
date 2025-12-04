@@ -50,22 +50,20 @@ export const SHADOW_DEFINITIONS: Record<ShadowToken, ShadowDefinition> = {
   // md: Medium shadow with multiple layers
   md: {
     name: "Medium",
-    css: "0 2px 4px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.10), 0 8px 20px rgba(15, 23, 42, 0.06)",
+    css: "0 4px 8px rgba(15, 23, 42, 0.15), 0 8px 16px rgba(15, 23, 42, 0.15)",
     layers: [
-      { blur: 4, spread: 0, y: 2, opacity: 0.08 },
-      { blur: 12, spread: 0, y: 4, opacity: 0.10 },
-      { blur: 20, spread: 0, y: 8, opacity: 0.06 },
+      { blur: 8, spread: 0, y: 4, opacity: 0.15 },
+      { blur: 16, spread: 0, y: 8, opacity: 0.15 },
     ],
   },
 
   // lg: Large, elevated shadow
   lg: {
     name: "Large",
-    css: "0 4px 8px rgba(15, 23, 42, 0.10), 0 8px 20px rgba(15, 23, 42, 0.12), 0 16px 32px rgba(15, 23, 42, 0.08)",
+    css: "0 10px 30px rgba(15, 23, 42, 0.20), 0 15px 50px rgba(15, 23, 42, 0.15)",
     layers: [
-      { blur: 8, spread: 0, y: 4, opacity: 0.10 },
-      { blur: 20, spread: 0, y: 8, opacity: 0.12 },
-      { blur: 32, spread: 0, y: 16, opacity: 0.08 },
+      { blur: 30, spread: 0, y: 10, opacity: 0.20 },
+      { blur: 50, spread: 0, y: 15, opacity: 0.15 },
     ],
   },
 
