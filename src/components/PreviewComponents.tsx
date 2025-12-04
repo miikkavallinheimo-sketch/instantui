@@ -104,8 +104,9 @@ const applyHoverAnimation = (
       break;
 
     case "text-underline":
-      // Text underline: add underline decoration to text
+      // Text underline: add underline decoration to text (matches text color)
       element.style.textDecoration = "underline";
+      element.style.textDecorationColor = "currentColor";
       break;
 
     case "none":
@@ -175,6 +176,7 @@ const removeHoverAnimation = (
 
     case "text-underline":
       element.style.textDecoration = "none";
+      element.style.textDecorationColor = "auto";
       break;
 
     case "none":
