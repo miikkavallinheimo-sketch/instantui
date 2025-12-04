@@ -110,17 +110,19 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
     },
   },
 
-  // Dark Tech: Glow effects
+  // Dark Tech: Glow effects with cyan accent
   "dark-tech": {
     button: {
       type: "glow",
       duration: 250,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#00D9FF",
     },
     card: {
       type: "glow",
       duration: 300,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#00D9FF",
     },
     link: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
     navItem: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
@@ -128,6 +130,7 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
       type: "glow",
       duration: 250,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#00D9FF",
     },
   },
 
@@ -252,6 +255,7 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
       type: "glow",
       duration: 240,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#10F981",
     },
     card: {
       type: "lift",
@@ -266,20 +270,23 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
       type: "glow",
       duration: 240,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#10F981",
     },
   },
 
-  // Dark: Glow emphasis
+  // Dark: Glow emphasis with blue accent
   dark: {
     button: {
       type: "glow",
       duration: 250,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#3B82F6",
     },
     card: {
       type: "glow",
       duration: 300,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#3B82F6",
     },
     link: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
     navItem: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
@@ -287,6 +294,7 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
       type: "glow",
       duration: 250,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      glowColor: "#3B82F6",
     },
   },
 };
