@@ -966,31 +966,32 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minHeight: "120px",
                   borderRadius: radiusMap[uiTokens.card.radius],
                   overflow: "hidden",
+                  background: `
+                    linear-gradient(45deg, ${colors.primary}40 0%, ${colors.accent}40 50%, ${colors.secondary}40 100%),
+                    repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.05) 35px, rgba(255,255,255,0.05) 70px)
+                  `,
                 }}
               >
-                {/* Vibrant background with patterns */}
+                {/* Glass frosted overlay */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `
-                      linear-gradient(45deg, ${colors.primary}40 0%, ${colors.accent}40 50%, ${colors.secondary}40 100%),
-                      repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.05) 35px, rgba(255,255,255,0.05) 70px)
-                    `,
-                    zIndex: -1,
-                  }}
-                />
-
-                {/* Glass container */}
-                <div
-                  style={{
                     backgroundColor: buildGlassBackground(colors.surface, customConfig),
                     backdropFilter: buildBackdropFilter(customConfig.blur),
                     WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
                     border: buildGlassBorder(colors.borderStrong, customConfig),
                     borderRadius: radiusMap[uiTokens.card.radius],
-                    padding: "1.5rem",
                     boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                />
+
+                {/* Content */}
+                <div
+                  style={{
+                    position: "relative",
+                    padding: "1.5rem",
+                    zIndex: 1,
                   }}
                 >
                   <div
@@ -1033,34 +1034,35 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minHeight: "120px",
                   borderRadius: radiusMap[uiTokens.card.radius],
                   overflow: "hidden",
+                  background: `
+                    radial-gradient(circle, ${colors.primary}50 1px, transparent 1px),
+                    radial-gradient(circle, ${colors.accent}50 1px, transparent 1px),
+                    linear-gradient(120deg, ${colors.secondary}35 0%, ${colors.primary}35 50%, ${colors.accent}35 100%)
+                  `,
+                  backgroundSize: "50px 50px, 80px 80px, 100% 100%",
+                  backgroundPosition: "0 0, 25px 25px, 0 0",
                 }}
               >
-                {/* Vibrant background with dot pattern */}
+                {/* Glass frosted overlay */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `
-                      radial-gradient(circle, ${colors.primary}50 1px, transparent 1px),
-                      radial-gradient(circle, ${colors.accent}50 1px, transparent 1px),
-                      linear-gradient(120deg, ${colors.secondary}35 0%, ${colors.primary}35 50%, ${colors.accent}35 100%)
-                    `,
-                    backgroundSize: "50px 50px, 80px 80px, 100% 100%",
-                    backgroundPosition: "0 0, 25px 25px, 0 0",
-                    zIndex: -1,
-                  }}
-                />
-
-                {/* Glass container */}
-                <div
-                  style={{
                     backgroundColor: buildGlassBackground(colors.surface, customConfig),
                     backdropFilter: buildBackdropFilter(customConfig.blur),
                     WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
                     border: buildGlassBorder(colors.borderStrong, customConfig),
                     borderRadius: radiusMap[uiTokens.card.radius],
-                    padding: "1.5rem",
                     boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                />
+
+                {/* Content */}
+                <div
+                  style={{
+                    position: "relative",
+                    padding: "1.5rem",
+                    zIndex: 1,
                   }}
                 >
                   <div
@@ -1103,36 +1105,37 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minHeight: "120px",
                   borderRadius: radiusMap[uiTokens.card.radius],
                   overflow: "hidden",
+                  background: `
+                    linear-gradient(45deg, ${colors.accent}50 25%, transparent 25%),
+                    linear-gradient(-45deg, ${colors.accent}50 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, ${colors.primary}50 75%),
+                    linear-gradient(-45deg, transparent 75%, ${colors.primary}50 75%),
+                    linear-gradient(to right, ${colors.secondary}40, ${colors.accent}40)
+                  `,
+                  backgroundSize: "30px 30px, 30px 30px, 30px 30px, 30px 30px, 100% 100%",
+                  backgroundPosition: "0 0, 0 15px, 15px -15px, -15px 0px, 0 0",
                 }}
               >
-                {/* Vibrant background with wave pattern */}
+                {/* Glass frosted overlay */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `
-                      linear-gradient(45deg, ${colors.accent}50 25%, transparent 25%),
-                      linear-gradient(-45deg, ${colors.accent}50 25%, transparent 25%),
-                      linear-gradient(45deg, transparent 75%, ${colors.primary}50 75%),
-                      linear-gradient(-45deg, transparent 75%, ${colors.primary}50 75%),
-                      linear-gradient(to right, ${colors.secondary}40, ${colors.accent}40)
-                    `,
-                    backgroundSize: "30px 30px, 30px 30px, 30px 30px, 30px 30px, 100% 100%",
-                    backgroundPosition: "0 0, 0 15px, 15px -15px, -15px 0px, 0 0",
-                    zIndex: -1,
-                  }}
-                />
-
-                {/* Glass container */}
-                <div
-                  style={{
                     backgroundColor: buildGlassBackground(colors.surface, customConfig),
                     backdropFilter: buildBackdropFilter(customConfig.blur),
                     WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
                     border: buildGlassBorder(colors.borderStrong, customConfig),
                     borderRadius: radiusMap[uiTokens.card.radius],
-                    padding: "1.5rem",
                     boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                />
+
+                {/* Content */}
+                <div
+                  style={{
+                    position: "relative",
+                    padding: "1.5rem",
+                    zIndex: 1,
                   }}
                 >
                   <div
@@ -1174,33 +1177,34 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minHeight: "120px",
                   borderRadius: radiusMap[uiTokens.card.radius],
                   overflow: "hidden",
+                  background: `
+                    conic-gradient(from 0deg, ${colors.primary}45, ${colors.secondary}45, ${colors.accent}45, ${colors.primary}45),
+                    linear-gradient(135deg, ${colors.accent}50 0%, ${colors.primary}50 100%)
+                  `,
+                  backgroundSize: "200px 200px, 100% 100%",
+                  backgroundPosition: "0 0, 0 0",
                 }}
               >
-                {/* Vibrant background with complex gradient */}
+                {/* Glass frosted overlay */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `
-                      conic-gradient(from 0deg, ${colors.primary}45, ${colors.secondary}45, ${colors.accent}45, ${colors.primary}45),
-                      linear-gradient(135deg, ${colors.accent}50 0%, ${colors.primary}50 100%)
-                    `,
-                    backgroundSize: "200px 200px, 100% 100%",
-                    backgroundPosition: "0 0, 0 0",
-                    zIndex: -1,
-                  }}
-                />
-
-                {/* Glass container */}
-                <div
-                  style={{
                     backgroundColor: buildGlassBackground(colors.surface, customConfig),
                     backdropFilter: buildBackdropFilter(customConfig.blur),
                     WebkitBackdropFilter: buildBackdropFilter(customConfig.blur),
                     border: buildGlassBorder(colors.borderStrong, customConfig),
                     borderRadius: radiusMap[uiTokens.card.radius],
-                    padding: "1.5rem",
                     boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  }}
+                />
+
+                {/* Content */}
+                <div
+                  style={{
+                    position: "relative",
+                    padding: "1.5rem",
+                    zIndex: 1,
                   }}
                 >
                   <div
