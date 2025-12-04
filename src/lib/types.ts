@@ -245,6 +245,8 @@ export interface DesignState {
   typography: TypographyTokens;
   spacing: SpacingScale;
   spacingPatterns: SpacingPatterns;
+  textureId?: string; // Current texture (e.g., "fine-noise", "none")
+  textureOpacity?: number; // Texture opacity 0-100
 }
 
 export interface DesignTokens {

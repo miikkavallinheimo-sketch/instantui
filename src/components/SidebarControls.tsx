@@ -1,5 +1,6 @@
 import { VIBE_PRESETS } from "../lib/vibePresets";
 import { getAvailablePages, getAvailableMenus } from "../lib/featureFlags";
+import { TexturePanel } from "./TexturePanel";
 import type {
   VibeId,
   DesignState,
@@ -34,6 +35,8 @@ interface SidebarControlsProps {
   onMenuChange?: (menu: MenuPresetId) => void;
   darkMode?: "light" | "dark";
   onDarkModeChange?: (mode: "light" | "dark") => void;
+  onTextureChange?: (textureId: string) => void;
+  onTextureOpacityChange?: (opacity: number) => void;
 }
 
 const SidebarControls = ({
@@ -60,6 +63,8 @@ const SidebarControls = ({
   onMenuChange,
   darkMode = "light",
   onDarkModeChange,
+  onTextureChange,
+  onTextureOpacityChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -436,6 +441,14 @@ const SidebarControls = ({
           </div>
         </div>
       </div>
+
+      {onTextureChange && onTextureOpacityChange && (
+        <TexturePanel
+          designState={designState}
+          onTextureChange={onTextureChange}
+          onOpacityChange={onTextureOpacityChange}
+        />
+      )}
     </div>
   );
 };

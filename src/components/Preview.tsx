@@ -5,6 +5,7 @@ import PreviewLanding from "./PreviewLanding";
 import PreviewBlog from "./PreviewBlog";
 import PreviewComponents from "./PreviewComponents";
 import { ContrastCheckerPanel } from "./ContrastCheckerPanel";
+import { TextureOverlay } from "./TextureOverlay";
 
 interface PreviewProps {
   designState: DesignState;
@@ -30,6 +31,12 @@ const Preview = ({
       {/* Main Preview Area */}
       <div className="flex-1 min-w-0 overflow-hidden">
         <div className="w-full h-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative" style={{ backgroundColor: designState.colors.background }}>
+          {/* Texture Overlay */}
+          <TextureOverlay
+            textureId={designState.textureId}
+            opacity={designState.textureOpacity}
+          />
+
           {isAnalyzing && (
             <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
               <div

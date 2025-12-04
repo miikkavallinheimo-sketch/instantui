@@ -29,6 +29,7 @@ import { hexToHsl, hslToHex, contrastRatio, hexToLuminance } from "./lib/colorUt
 import { getSpacingScale, getSpacingPatterns } from "./lib/spacingScale";
 import aiVibesData from "./data/generatedVibes.json";
 import SidebarControls from "./components/SidebarControls";
+import { TexturePanel } from "./components/TexturePanel";
 import Preview from "./components/Preview";
 import ExportPanel from "./components/ExportPanel";
 import FavoritesPanel from "./components/FavoritesPanel";
@@ -454,8 +455,8 @@ function App() {
   // Preview state (page, menu, dark mode) - must be before designState
   const previewState = usePreviewState();
 
-  const [designState, setDesignState] = useState<DesignState>(() =>
-    buildDesignState(
+  const [designState, setDesignState] = useState<DesignState>(() => {
+    const baseState = buildDesignState(
       initialAppState.vibeId,
       initialAppState.seed,
       DEFAULT_LOCKS,
@@ -465,8 +466,13 @@ function App() {
       undefined,
       false,
       previewState.darkMode
-    )
-  );
+    );
+    return {
+      ...baseState,
+      textureId: "none",
+      textureOpacity: 10,
+    };
+  });
 
   const [tokens, setTokens] = useState<DesignTokens>(() =>
     buildDesignTokens(designState)
@@ -475,6 +481,10 @@ function App() {
   const [activeGeneratedName, setActiveGeneratedName] = useState<string | null>(
     null
   );
+
+  // Texture state
+  const [textureId, setTextureId] = useState<string>("none");
+  const [textureOpacity, setTextureOpacity] = useState<number>(10);
 
   // History for undo/redo
   const history = useHistory<AppState>({
@@ -532,6 +542,22 @@ function App() {
     designState.fontPair.source,
   ]);
 
+  // Handle texture changes
+  const handleTextureChange = (newTextureId: string) => {
+    setTextureId(newTextureId);
+    setDesignState((prev) => ({
+      ...prev,
+      textureId: newTextureId,
+    }));
+  };
+
+  const handleTextureOpacityChange = (opacity: number) => {
+    setTextureOpacity(opacity);
+    setDesignState((prev) => ({
+      ...prev,
+      textureOpacity: opacity,
+    }));
+  };
 
   // Update URL when state changes
   useEffect(() => {
@@ -1049,6 +1075,8 @@ function App() {
             onMenuChange={previewState.setActiveMenu}
             darkMode={previewState.darkMode}
             onDarkModeChange={previewState.setDarkMode}
+            onTextureChange={handleTextureChange}
+            onTextureOpacityChange={handleTextureOpacityChange}
           />
 
           <div className="border-t border-slate-800 pt-4">
