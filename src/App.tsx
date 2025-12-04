@@ -447,7 +447,7 @@ function App() {
   const [hueShift, setHueShift] = useState(initialAppState.hueShift);
   const [saturationShift, setSaturationShift] = useState(initialAppState.saturationShift);
   const [aiTuned, setAiTuned] = useState(false);
-  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(true);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [triggerAutoRefresh, setTriggerAutoRefresh] = useState(false);
 

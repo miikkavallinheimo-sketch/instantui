@@ -90,7 +90,7 @@ const SidebarControls = ({
               AI tuned
             </span>
           ) : (
-            "AI refresh (BETA)"
+            "AI refresh"
           )}
         </button>
         <div className="flex items-center gap-2 px-2 py-2 rounded-lg bg-slate-900/50 border border-slate-700">
