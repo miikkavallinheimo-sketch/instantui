@@ -1,4 +1,4 @@
-import { contrastRatio, hexToHsl, hslToHex } from "./colorUtils";
+import { contrastRatio, hexToHsl, hslToHex, hexToLuminance } from "./colorUtils";
 import type { DesignState, ColorSet } from "./types";
 
 export interface ContrastCheck {
@@ -144,8 +144,8 @@ function adjustTextLightnessForContrast(
   targetRatio: number
 ): string {
   const { h, s, l: originalL } = hexToHsl(textColor);
-  const bgLum = contrastRatio("#ffffff", backgroundColor);
-  const isLightBg = bgLum > 12; // light bg if white has high contrast
+  const bgLum = hexToLuminance(backgroundColor);
+  const isLightBg = bgLum > 0.5; // light bg if luminance is above 50%
 
   // For muted text (low saturation), constrain lightness to stay somewhat neutral
   // For other text (higher saturation), allow wider range

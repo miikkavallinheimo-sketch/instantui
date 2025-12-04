@@ -31,7 +31,6 @@ import aiVibesData from "./data/generatedVibes.json";
 import SidebarControls from "./components/SidebarControls";
 import Preview from "./components/Preview";
 import ExportPanel from "./components/ExportPanel";
-import GeneratedVibesPanel from "./components/GeneratedVibesPanel";
 import FavoritesPanel from "./components/FavoritesPanel";
 import { useToast } from "./components/Toast";
 import { useHistory } from "./hooks/useHistory";
@@ -493,6 +492,16 @@ function App() {
   }, [designState]);
 
   // Rebuild designState when dark mode changes
+  // Set darkMode based on vibe's isDarkUi property
+  useEffect(() => {
+    const vibe = VIBE_PRESETS[vibeId];
+    if (vibe && vibe.isDarkUi) {
+      previewState.setDarkMode("dark");
+    } else {
+      previewState.setDarkMode("light");
+    }
+  }, [vibeId, previewState]);
+
   useEffect(() => {
     setDesignState((prev) =>
       buildDesignState(
@@ -1044,19 +1053,6 @@ function App() {
             <FavoritesPanel onApply={handleApplyFavorite} />
           </div>
 
-          <div className="border-t border-slate-800 pt-4">
-            <GeneratedVibesPanel
-              onApply={applyGeneratedVibe}
-              generatedAt={AI_DATA.generatedAt}
-              vibes={AI_VIBES}
-              currentVibeId={vibeId}
-            />
-            {activeGeneratedName && (
-              <p className="mt-2 text-[11px] text-slate-500">
-                Active AI vibe: {activeGeneratedName}
-              </p>
-            )}
-          </div>
         </aside>
 
         <section className="flex-1 flex flex-col">

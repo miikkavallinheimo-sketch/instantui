@@ -109,28 +109,30 @@ const SidebarControls = ({
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
-            Preview Page
-          </h2>
-        </div>
-        <div className="space-y-1">
-          {availablePages.map((page) => (
-            <button
-              key={page.id}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-150 ${
-                page.id === activePage
-                  ? "bg-blue-700/60 text-blue-50 border border-blue-600"
-                  : "hover:bg-slate-800/70 text-slate-200 border border-transparent"
-              }`}
-              onClick={() => onPageChange?.(page.id)}
-            >
-              <div className="font-medium">{page.label}</div>
-              <div className="text-[11px] text-slate-400">
-                {page.description}
-              </div>
-            </button>
-          ))}
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
+          Theme
+        </h3>
+        <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden w-full">
+          <button
+            onClick={() => onDarkModeChange?.("light")}
+            className={`flex-1 px-3 py-2 transition ${
+              darkMode === "light"
+                ? "bg-slate-700 text-slate-50"
+                : "text-slate-300 hover:text-slate-100"
+            }`}
+          >
+            Light
+          </button>
+          <button
+            onClick={() => onDarkModeChange?.("dark")}
+            className={`flex-1 px-3 py-2 transition ${
+              darkMode === "dark"
+                ? "bg-slate-700 text-slate-50"
+                : "text-slate-300 hover:text-slate-100"
+            }`}
+          >
+            Dark
+          </button>
         </div>
       </div>
 
@@ -426,34 +428,6 @@ const SidebarControls = ({
               </div>
             ))}
           </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
-          Theme
-        </h3>
-        <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden w-full">
-          <button
-            onClick={() => onDarkModeChange?.("light")}
-            className={`flex-1 px-3 py-2 transition ${
-              darkMode === "light"
-                ? "bg-slate-700 text-slate-50"
-                : "text-slate-300 hover:text-slate-100"
-            }`}
-          >
-            Light
-          </button>
-          <button
-            onClick={() => onDarkModeChange?.("dark")}
-            className={`flex-1 px-3 py-2 transition ${
-              darkMode === "dark"
-                ? "bg-slate-700 text-slate-50"
-                : "text-slate-300 hover:text-slate-100"
-            }`}
-          >
-            Dark
-          </button>
         </div>
       </div>
     </div>
