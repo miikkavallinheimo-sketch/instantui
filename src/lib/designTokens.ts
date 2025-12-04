@@ -186,9 +186,6 @@ theme: {
       card: "var(--shadow-card)",
       button: "var(--shadow-button-primary)",
     },
-    borderWidth: {
-      card: "var(--border-card)",
-    },
   },
 }
 `;

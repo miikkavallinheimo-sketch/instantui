@@ -53,10 +53,12 @@ const FavoritesPanel = ({ onApply }: FavoritesPanelProps) => {
         alert("Favorites imported successfully!");
       } catch (error) {
         alert(`Import failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      } finally {
+        // Reset file input so same file can be imported again
+        event.target.value = "";
       }
     };
     reader.readAsText(file);
-    setIsImporting(false);
   };
 
   if (favorites.length === 0) {
