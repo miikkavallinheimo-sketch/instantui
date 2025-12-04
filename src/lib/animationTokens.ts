@@ -125,7 +125,7 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
       scale: 1.02,
       translateY: -3,
     },
-    link: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
+    link: { type: "text-underline", duration: 180, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
     interactive: {
       type: "lift",

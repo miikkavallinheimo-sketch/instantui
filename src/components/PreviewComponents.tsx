@@ -103,6 +103,11 @@ const applyHoverAnimation = (
       element.style.transform = `scale(${scale || 1.05})`;
       break;
 
+    case "text-underline":
+      // Text underline: add underline decoration to text
+      element.style.textDecoration = "underline";
+      break;
+
     case "none":
     default:
       // No animation
@@ -166,6 +171,10 @@ const removeHoverAnimation = (
 
     case "scale-only":
       element.style.transform = "scale(1)";
+      break;
+
+    case "text-underline":
+      element.style.textDecoration = "none";
       break;
 
     case "none":
