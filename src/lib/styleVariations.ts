@@ -1,6 +1,7 @@
 import type {
   BorderToken,
   ComponentShape,
+  ComponentAnimations,
   RadiusToken,
   ShadowToken,
   TypographyTokens,
@@ -8,6 +9,7 @@ import type {
   VibePreset,
   VibeUiTokens,
 } from "./types";
+import { getAnimationsForVibe } from "./animationTokens";
 
 type ComponentKey = "buttonPrimary" | "buttonSecondary" | "card";
 
@@ -657,7 +659,11 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
 export const generateStyleTokens = (
   vibe: VibePreset,
   seed: number
-): { uiTokens: VibeUiTokens; typography: TypographyTokens } => {
+): {
+  uiTokens: VibeUiTokens;
+  typography: TypographyTokens;
+  animations: ComponentAnimations;
+} => {
   const rule = VARIATION_SETTINGS[vibe.id] ?? VARIATION_SETTINGS["minimal"];
   const uiBase = vibe.ui;
   const baseTypography = vibe.typography ?? ({
@@ -680,8 +686,11 @@ export const generateStyleTokens = (
       0.23
     ),
     card: buildComponentShape(uiBase.card, rule.components.card, seed, 0.37),
+    animations: getAnimationsForVibe(vibe.id),
   };
 
   const typography = buildTypography(baseTypography, rule.typography, seed);
-  return { uiTokens, typography };
+  const animations = getAnimationsForVibe(vibe.id);
+
+  return { uiTokens, typography, animations };
 };
