@@ -27,6 +27,7 @@ import type {
 } from "./lib/types";
 import { hexToHsl, hslToHex, contrastRatio, hexToLuminance } from "./lib/colorUtils";
 import { getSpacingScale, getSpacingPatterns } from "./lib/spacingScale";
+import { getVibeTextures } from "./lib/textureTokens";
 import aiVibesData from "./data/generatedVibes.json";
 import SidebarControls from "./components/SidebarControls";
 import { TexturePanel } from "./components/TexturePanel";
@@ -634,6 +635,11 @@ function App() {
       setVibeId(newVibeId);
       setActiveGeneratedName(null);
       setAiTuned(false);
+
+      // Reset texture to default when changing vibe
+      const newVibeTextures = getVibeTextures(newVibeId);
+      setTextureId(newVibeTextures.defaultTexture);
+
       setDesignState((prev) =>
         buildDesignState(
           newVibeId,
@@ -647,6 +653,12 @@ function App() {
           previewState.darkMode
         )
       );
+
+      // Update designState with default texture for new vibe
+      setDesignState((prev) => ({
+        ...prev,
+        textureId: newVibeTextures.defaultTexture,
+      }));
     },
     [seed, colorLocks, fontLockMode, hueShift, saturationShift, previewState.darkMode]
   );
@@ -658,6 +670,13 @@ function App() {
     setHueShift(0);
     setSaturationShift(0);
     setAiTuned(false);
+
+    // Randomize texture
+    const vibeTextures = getVibeTextures(vibeId);
+    const randomIndex = Math.floor(Math.random() * vibeTextures.options.length);
+    const randomTexture = vibeTextures.options[randomIndex];
+    setTextureId(randomTexture);
+
     setDesignState((prev) =>
       buildDesignState(
         vibeId,
@@ -671,6 +690,13 @@ function App() {
         previewState.darkMode
       )
     );
+
+    // Update designState with new texture
+    setDesignState((prev) => ({
+      ...prev,
+      textureId: randomTexture,
+    }));
+
     // Trigger auto-refresh if enabled
     if (autoRefresh) {
       setTriggerAutoRefresh(true);
