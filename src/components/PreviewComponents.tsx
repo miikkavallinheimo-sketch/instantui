@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { DesignState } from "../lib/types";
+import type { DesignState, BorderToken } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
 
 interface PreviewComponentsProps {
@@ -15,6 +15,21 @@ const sizeMap = {
   "2xl": "1.5rem",
 } as const;
 
+const radiusMap = {
+  none: "0px",
+  sm: "6px",
+  md: "10px",
+  lg: "16px",
+  xl: "24px",
+  full: "9999px",
+} as const;
+
+const getBorderStyle = (token: BorderToken, colors: DesignState["colors"]) => {
+  if (token === "none") return "0px solid transparent";
+  const color = token === "subtle" ? colors.borderSubtle : colors.borderStrong;
+  return `1px solid ${color}`;
+};
+
 const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
   const { colors, fontPair, typography, uiTokens, vibe } = designState;
 
@@ -22,9 +37,6 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
     backgroundColor: colors.background,
     color: colors.text,
   };
-
-  const cardShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
-  const buttonPrimaryShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
 
   const componentCategories = [
     {
@@ -38,12 +50,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 backgroundColor: colors.primary,
                 color: colors.onPrimary,
                 padding: "0.75rem 1.5rem",
-                borderRadius: uiTokens.buttonPrimary.radius === "lg" ? "1rem" : "0.5rem",
-                border: "none",
+                borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
+                border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
                 fontSize: sizeMap["sm"],
                 fontFamily: fontPair.heading,
                 fontWeight: 600,
-                boxShadow: buttonPrimaryShadow,
+                boxShadow: getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi),
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
               }}
@@ -51,9 +63,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 const scale = uiTokens.animations?.button.scale || 1.05;
                 const ty = uiTokens.animations?.button.translateY || -2;
                 e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
               }}
             >
               Click me
@@ -68,19 +82,22 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 backgroundColor: "transparent",
                 color: colors.primary,
                 padding: "0.75rem 1.5rem",
-                borderRadius: uiTokens.buttonSecondary.radius === "lg" ? "1rem" : "0.5rem",
-                border: `2px solid ${colors.primary}`,
+                borderRadius: radiusMap[uiTokens.buttonSecondary.radius],
+                border: getBorderStyle(uiTokens.buttonSecondary.border, colors),
                 fontSize: sizeMap["sm"],
                 fontFamily: fontPair.heading,
                 fontWeight: 600,
+                boxShadow: getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi),
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = `${colors.primary}10`;
+                e.currentTarget.style.boxShadow = getShadowForMode("md", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi);
               }}
             >
               Secondary
@@ -98,10 +115,10 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
             <div
               style={{
                 backgroundColor: colors.surface,
-                border: `1px solid ${colors.borderSubtle}`,
-                borderRadius: "0.75rem",
+                border: getBorderStyle(uiTokens.card.border, colors),
+                borderRadius: radiusMap[uiTokens.card.radius],
                 padding: "1.5rem",
-                boxShadow: cardShadow,
+                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
                 minWidth: "200px",
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
@@ -114,7 +131,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "scale(1) translateY(0)";
-                e.currentTarget.style.boxShadow = cardShadow;
+                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
               }}
             >
               <div
@@ -275,8 +292,8 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     key={idx}
                     style={{
                       backgroundColor: colors.surface,
-                      border: `1px solid ${colors.borderSubtle}`,
-                      borderRadius: "0.5rem",
+                      border: getBorderStyle(uiTokens.card.border, colors),
+                      borderRadius: radiusMap[uiTokens.card.radius],
                       padding: "2rem",
                       boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
                       display: "flex",
@@ -311,8 +328,9 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
             marginTop: "4rem",
             padding: "2rem",
             backgroundColor: colors.surface,
-            borderRadius: "0.75rem",
-            border: `1px solid ${colors.borderSubtle}`,
+            borderRadius: radiusMap[uiTokens.card.radius],
+            border: getBorderStyle(uiTokens.card.border, colors),
+            boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
           }}
         >
           <div
@@ -413,6 +431,52 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 }}
               >
                 Token: {uiTokens.buttonPrimary.shadow}
+              </div>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Button Radius
+              </div>
+              <div
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+              >
+                Primary: {uiTokens.buttonPrimary.radius}
+                <br />
+                Secondary: {uiTokens.buttonSecondary.radius}
+              </div>
+            </div>
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Card Radius & Border
+              </div>
+              <div
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+              >
+                Radius: {uiTokens.card.radius}
+                <br />
+                Border: {uiTokens.card.border}
               </div>
             </div>
           </div>
