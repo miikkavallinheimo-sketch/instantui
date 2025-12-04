@@ -85,70 +85,71 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
     interactive: { type: "subtle", duration: 100, timingFunction: "linear" },
   },
 
-  // Pastel: Playful bounce animations
+  // Pastel: Playful scale and brightness animations
   pastel: {
     button: {
-      type: "bounce",
+      type: "brightness",
       duration: 250,
       timingFunction: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-      scale: 1.08,
+      brightnessLevel: 1.15,
     },
     card: {
-      type: "bounce",
+      type: "scale-only",
       duration: 300,
       timingFunction: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
       scale: 1.04,
-      translateY: -3,
     },
     link: { type: "subtle", duration: 150, timingFunction: "ease-out" },
     navItem: { type: "subtle", duration: 150, timingFunction: "ease-out" },
     interactive: {
-      type: "bounce",
+      type: "brightness",
       duration: 200,
       timingFunction: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-      scale: 1.06,
+      brightnessLevel: 1.12,
     },
   },
 
-  // Dark Tech: Glow effects with cyan accent
+  // Dark Tech: Subtle lift with refined timing
   "dark-tech": {
     button: {
-      type: "glow",
-      duration: 250,
+      type: "lift",
+      duration: 220,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#00D9FF",
+      scale: 1.03,
+      translateY: -2,
     },
     card: {
-      type: "glow",
-      duration: 300,
+      type: "lift",
+      duration: 280,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#00D9FF",
+      scale: 1.02,
+      translateY: -3,
     },
-    link: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
-    navItem: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
+    link: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
+    navItem: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
     interactive: {
-      type: "glow",
-      duration: 250,
+      type: "lift",
+      duration: 220,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#00D9FF",
+      scale: 1.02,
+      translateY: -1,
     },
   },
 
-  // Luxury: Subtle lift, smooth
+  // Luxury: Smooth brightness shift for sophisticated feel
   luxury: {
     button: {
-      type: "lift",
+      type: "brightness",
       duration: 300,
       timingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-      scale: 1.02,
-      translateY: -1,
+      brightnessLevel: 1.08,
     },
     card: {
       type: "lift",
       duration: 350,
       timingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
       scale: 1.01,
-      translateY: -2,
+      translateY: -1,
     },
     link: { type: "subtle", duration: 200, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 200, timingFunction: "ease-in-out" },
@@ -159,68 +160,70 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
     },
   },
 
-  // Soft Neo Tech: Shimmer and glow
+  // Soft Neo Tech: Shimmer and subtle lift
   "soft-neo-tech": {
     button: {
-      type: "glow",
-      duration: 300,
+      type: "lift",
+      duration: 280,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      scale: 1.04,
+      translateY: -2,
     },
     card: {
       type: "shimmer",
       duration: 300,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      shimmerDuration: 1500,
+      scale: 1.02,
     },
-    link: { type: "glow", duration: 250, timingFunction: "ease-in-out" },
+    link: { type: "subtle", duration: 220, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 150, timingFunction: "ease-in-out" },
     interactive: {
-      type: "glow",
-      duration: 300,
+      type: "lift",
+      duration: 280,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+      scale: 1.03,
+      translateY: -1,
     },
   },
 
-  // Gradient Bloom: Colorful animations
+  // Gradient Bloom: Vibrant scale and brightness mix
   "gradient-bloom": {
     button: {
-      type: "bounce",
+      type: "scale-only",
       duration: 280,
       timingFunction: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-      scale: 1.07,
+      scale: 1.08,
     },
     card: {
-      type: "bounce",
+      type: "brightness",
       duration: 320,
       timingFunction: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-      scale: 1.03,
-      translateY: -3,
+      brightnessLevel: 1.12,
     },
     link: { type: "subtle", duration: 160, timingFunction: "ease-out" },
     navItem: { type: "subtle", duration: 160, timingFunction: "ease-out" },
     interactive: {
-      type: "bounce",
+      type: "scale-only",
       duration: 240,
       timingFunction: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
       scale: 1.06,
     },
   },
 
-  // Warm Editorial: Sophisticated lift
+  // Warm Editorial: Mix of lift and brightness for warmth
   "warm-editorial": {
     button: {
-      type: "lift",
+      type: "brightness",
       duration: 280,
       timingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-      scale: 1.03,
-      translateY: -1.5,
+      brightnessLevel: 1.1,
     },
     card: {
       type: "lift",
       duration: 320,
       timingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
       scale: 1.02,
-      translateY: -3,
+      translateY: -2,
     },
     link: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
@@ -240,61 +243,66 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
     interactive: { type: "subtle", duration: 100, timingFunction: "steps(2)" },
   },
 
-  // Magazine Brutalism: Strong, deliberate
+  // Magazine Brutalism: Scale-based, stark
   "magazine-brutalism": {
-    button: { type: "lift", duration: 180, timingFunction: "linear" },
-    card: { type: "lift", duration: 200, timingFunction: "linear" },
+    button: { type: "scale-only", duration: 180, timingFunction: "linear", scale: 1.05 },
+    card: { type: "scale-only", duration: 200, timingFunction: "linear", scale: 1.02 },
     link: { type: "subtle", duration: 120, timingFunction: "linear" },
     navItem: { type: "subtle", duration: 120, timingFunction: "linear" },
-    interactive: { type: "lift", duration: 180, timingFunction: "linear" },
+    interactive: { type: "scale-only", duration: 180, timingFunction: "linear", scale: 1.04 },
   },
 
-  // Cyber Mint: Tech glow with subtle lift
+  // Cyber Mint: Tech-forward with confident lift
   "cyber-mint": {
     button: {
-      type: "glow",
+      type: "lift",
       duration: 240,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#10F981",
+      scale: 1.05,
+      translateY: -2,
     },
     card: {
       type: "lift",
       duration: 280,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      scale: 1.02,
-      translateY: -2,
+      scale: 1.03,
+      translateY: -3,
     },
-    link: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
+    link: { type: "subtle", duration: 200, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 140, timingFunction: "ease-in-out" },
     interactive: {
-      type: "glow",
+      type: "lift",
       duration: 240,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#10F981",
+      scale: 1.04,
+      translateY: -1,
     },
   },
 
-  // Dark: Glow emphasis with blue accent
+  // Dark: Refined lift with shadow emphasis
   dark: {
     button: {
-      type: "glow",
+      type: "lift",
       duration: 250,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#3B82F6",
+      scale: 1.04,
+      translateY: -2,
     },
     card: {
-      type: "glow",
+      type: "lift",
       duration: 300,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#3B82F6",
+      scale: 1.02,
+      translateY: -3,
     },
-    link: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
-    navItem: { type: "glow", duration: 200, timingFunction: "ease-in-out" },
+    link: { type: "subtle", duration: 200, timingFunction: "ease-in-out" },
+    navItem: { type: "subtle", duration: 200, timingFunction: "ease-in-out" },
     interactive: {
-      type: "glow",
+      type: "lift",
       duration: 250,
       timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      glowColor: "#3B82F6",
+      scale: 1.03,
+      translateY: -1,
     },
   },
 };

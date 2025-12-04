@@ -56,7 +56,7 @@ export type SpacingToken = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4
 export type SpacingDensity = "compact" | "default" | "relaxed";
 
 // Animation types
-export type HoverAnimationType = "subtle" | "lift" | "glow" | "shimmer" | "bounce" | "none";
+export type HoverAnimationType = "subtle" | "lift" | "glow" | "shimmer" | "bounce" | "color-shift" | "brightness" | "scale-only" | "none";
 export type HapticIntensity = "light" | "medium" | "pattern";
 
 export interface AnimationConfig {
@@ -67,6 +67,8 @@ export interface AnimationConfig {
   glowColor?: string;
   translateY?: number;
   shimmerDuration?: number;
+  colorShiftTarget?: string; // Target color for color-shift animation
+  brightnessLevel?: number; // Brightness multiplier (e.g., 1.1 = 10% brighter)
 }
 
 export interface HapticConfig {

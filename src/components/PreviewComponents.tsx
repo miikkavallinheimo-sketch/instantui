@@ -42,11 +42,13 @@ const applyHoverAnimation = (
     scale?: number;
     glowColor?: string;
     translateY?: number;
+    colorShiftTarget?: string;
+    brightnessLevel?: number;
     currentShadow: string;
     isDarkUi: boolean;
   }
 ) => {
-  const { duration, timingFunction, scale, glowColor, translateY, currentShadow, isDarkUi } = config;
+  const { duration, timingFunction, scale, glowColor, translateY, colorShiftTarget, brightnessLevel, currentShadow, isDarkUi } = config;
 
   element.style.transition = `all ${duration}ms ${timingFunction}`;
 
@@ -82,6 +84,25 @@ const applyHoverAnimation = (
       element.style.boxShadow = getShadowForMode("md", isDarkUi);
       break;
 
+    case "color-shift":
+      // Color shift: background or text color shift with subtle shadow
+      if (colorShiftTarget) {
+        element.style.backgroundColor = colorShiftTarget;
+      }
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+
+    case "brightness":
+      // Brightness: increase brightness/filter effect
+      element.style.filter = `brightness(${brightnessLevel || 1.1})`;
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+
+    case "scale-only":
+      // Scale only: pure scale transform without shadow
+      element.style.transform = `scale(${scale || 1.05})`;
+      break;
+
     case "none":
     default:
       // No animation
@@ -99,9 +120,10 @@ const removeHoverAnimation = (
     duration: number;
     timingFunction: string;
     originalShadow: string;
+    originalBgColor?: string;
   }
 ) => {
-  const { duration, timingFunction, originalShadow } = config;
+  const { duration, timingFunction, originalShadow, originalBgColor } = config;
 
   element.style.transition = `all ${duration}ms ${timingFunction}`;
 
@@ -128,6 +150,22 @@ const removeHoverAnimation = (
     case "bounce":
       element.style.transform = "scale(1)";
       element.style.boxShadow = originalShadow;
+      break;
+
+    case "color-shift":
+      if (originalBgColor) {
+        element.style.backgroundColor = originalBgColor;
+      }
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "brightness":
+      element.style.filter = "brightness(1)";
+      element.style.boxShadow = originalShadow;
+      break;
+
+    case "scale-only":
+      element.style.transform = "scale(1)";
       break;
 
     case "none":
@@ -170,21 +208,26 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
                 }}
                 onMouseEnter={(e) => {
+                  const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
                   applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
                     duration: btnAnimConfig?.duration || 200,
                     timingFunction: btnAnimConfig?.timingFunction || "ease-out",
                     scale: btnAnimConfig?.scale,
                     glowColor: btnAnimConfig?.glowColor,
                     translateY: btnAnimConfig?.translateY || -2,
+                    colorShiftTarget: btnAnimConfig?.colorShiftTarget,
+                    brightnessLevel: btnAnimConfig?.brightnessLevel,
                     currentShadow: originalShadow,
                     isDarkUi: vibe.isDarkUi,
                   });
+                  (e.currentTarget as any).originalBgColor = originalBgColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
                     duration: btnAnimConfig?.duration || 200,
                     timingFunction: btnAnimConfig?.timingFunction || "ease-out",
                     originalShadow,
+                    originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
                 }}
               >
@@ -222,6 +265,8 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     scale: btnAnimConfig?.scale,
                     glowColor: btnAnimConfig?.glowColor,
                     translateY: btnAnimConfig?.translateY || -2,
+                    colorShiftTarget: btnAnimConfig?.colorShiftTarget,
+                    brightnessLevel: btnAnimConfig?.brightnessLevel,
                     currentShadow: originalShadow,
                     isDarkUi: vibe.isDarkUi,
                   });
@@ -236,6 +281,56 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 }}
               >
                 Secondary
+              </button>
+            );
+          },
+        },
+        {
+          name: "Accent Button",
+          render: () => {
+            const btnAnimConfig = uiTokens.animations?.button;
+            const originalShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
+
+            return (
+              <button
+                style={{
+                  backgroundColor: colors.accent,
+                  color: colors.onAccent,
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
+                  border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
+                  fontSize: sizeMap["sm"],
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  boxShadow: originalShadow,
+                  cursor: "pointer",
+                  transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
+                  applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    scale: btnAnimConfig?.scale,
+                    glowColor: btnAnimConfig?.glowColor,
+                    translateY: btnAnimConfig?.translateY || -2,
+                    colorShiftTarget: btnAnimConfig?.colorShiftTarget,
+                    brightnessLevel: btnAnimConfig?.brightnessLevel,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                  (e.currentTarget as any).originalBgColor = originalBgColor;
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                    originalBgColor: (e.currentTarget as any).originalBgColor,
+                  });
+                }}
+              >
+                Accent
               </button>
             );
           },
@@ -264,21 +359,26 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
                 }}
                 onMouseEnter={(e) => {
+                  const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
                   applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     scale: cardAnimConfig?.scale,
                     glowColor: cardAnimConfig?.glowColor,
                     translateY: cardAnimConfig?.translateY || -4,
+                    colorShiftTarget: cardAnimConfig?.colorShiftTarget,
+                    brightnessLevel: cardAnimConfig?.brightnessLevel,
                     currentShadow: originalShadow,
                     isDarkUi: vibe.isDarkUi,
                   });
+                  (e.currentTarget as any).originalBgColor = originalBgColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     originalShadow,
+                    originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
                 }}
               >
@@ -325,21 +425,26 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
                 }}
                 onMouseEnter={(e) => {
+                  const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
                   applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     scale: cardAnimConfig?.scale,
                     glowColor: cardAnimConfig?.glowColor,
                     translateY: cardAnimConfig?.translateY || -4,
+                    colorShiftTarget: cardAnimConfig?.colorShiftTarget,
+                    brightnessLevel: cardAnimConfig?.brightnessLevel,
                     currentShadow: originalShadow,
                     isDarkUi: vibe.isDarkUi,
                   });
+                  (e.currentTarget as any).originalBgColor = originalBgColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     originalShadow,
+                    originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
                 }}
               >
@@ -387,21 +492,26 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
                 }}
                 onMouseEnter={(e) => {
+                  const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
                   applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     scale: cardAnimConfig?.scale,
                     glowColor: cardAnimConfig?.glowColor,
                     translateY: cardAnimConfig?.translateY || -4,
+                    colorShiftTarget: cardAnimConfig?.colorShiftTarget,
+                    brightnessLevel: cardAnimConfig?.brightnessLevel,
                     currentShadow: originalShadow,
                     isDarkUi: vibe.isDarkUi,
                   });
+                  (e.currentTarget as any).originalBgColor = originalBgColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     originalShadow,
+                    originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
                 }}
               >
@@ -449,21 +559,26 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
                 }}
                 onMouseEnter={(e) => {
+                  const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
                   applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     scale: cardAnimConfig?.scale,
                     glowColor: cardAnimConfig?.glowColor,
                     translateY: cardAnimConfig?.translateY || -4,
+                    colorShiftTarget: cardAnimConfig?.colorShiftTarget,
+                    brightnessLevel: cardAnimConfig?.brightnessLevel,
                     currentShadow: originalShadow,
                     isDarkUi: vibe.isDarkUi,
                   });
+                  (e.currentTarget as any).originalBgColor = originalBgColor;
                 }}
                 onMouseLeave={(e) => {
                   removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
                     duration: cardAnimConfig?.duration || 250,
                     timingFunction: cardAnimConfig?.timingFunction || "ease-out",
                     originalShadow,
+                    originalBgColor: (e.currentTarget as any).originalBgColor,
                   });
                 }}
               >
@@ -498,7 +613,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
       title: "Links & Text",
       components: [
         {
-          name: "Link",
+          name: "Primary Link",
           render: () => (
             <a
               href="#"
@@ -520,8 +635,76 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 e.currentTarget.style.textDecoration = "none";
               }}
             >
-              Hover link
+              Hover me
             </a>
+          ),
+        },
+        {
+          name: "H1 Heading",
+          render: () => (
+            <h1
+              style={{
+                fontFamily: fontPair.heading,
+                fontSize: "2.25rem",
+                fontWeight: 700,
+                color: colors.text,
+                margin: 0,
+                lineHeight: 1.2,
+              }}
+            >
+              Large Heading
+            </h1>
+          ),
+        },
+        {
+          name: "H2 Subheading",
+          render: () => (
+            <h2
+              style={{
+                fontFamily: fontPair.heading,
+                fontSize: "1.875rem",
+                fontWeight: 600,
+                color: colors.text,
+                margin: 0,
+                lineHeight: 1.3,
+              }}
+            >
+              Subheading
+            </h2>
+          ),
+        },
+        {
+          name: "Body Text",
+          render: () => (
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
+                color: colors.text,
+                margin: 0,
+                lineHeight: 1.6,
+                maxWidth: "280px",
+              }}
+            >
+              This is regular body text used for paragraphs and content. It should be readable and comfortable.
+            </p>
+          ),
+        },
+        {
+          name: "Muted Text",
+          render: () => (
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
+                color: colors.textMuted,
+                margin: 0,
+                lineHeight: 1.6,
+                maxWidth: "280px",
+              }}
+            >
+              This is muted text for secondary information and captions.
+            </p>
           ),
         },
       ],
