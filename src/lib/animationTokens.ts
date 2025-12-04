@@ -109,9 +109,14 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
     },
   },
 
-  // Dark Tech: Text-underline for all interactive elements
+  // Dark Tech: Text-underline + color shifts for interactive elements
   "dark-tech": {
-    button: { type: "text-underline", duration: 220, timingFunction: "ease-in-out" },
+    button: {
+      type: "text-underline",
+      duration: 220,
+      timingFunction: "ease-in-out",
+      brightnessLevel: 1.2, // Text color brightens on hover
+    },
     card: { type: "text-underline", duration: 280, timingFunction: "ease-in-out" },
     link: { type: "text-underline", duration: 180, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
