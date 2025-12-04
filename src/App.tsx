@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { VIBE_PRESETS } from "./lib/vibePresets";
 import { FONT_PAIRS } from "./lib/fontPairs";
 import { FONT_SETTINGS } from "./lib/config";
@@ -491,14 +491,18 @@ function App() {
     setTokens(buildDesignTokens(designState));
   }, [designState]);
 
-  // Rebuild designState when dark mode changes
-  // Set darkMode based on vibe's isDarkUi property
+  // Set darkMode based on vibe's isDarkUi when vibe changes (only on change, not on every render)
+  const prevVibeIdRef = useRef<VibeId>(vibeId);
   useEffect(() => {
-    const vibe = VIBE_PRESETS[vibeId];
-    if (vibe && vibe.isDarkUi) {
-      previewState.setDarkMode("dark");
-    } else {
-      previewState.setDarkMode("light");
+    // Only update darkMode if vibeId actually changed
+    if (prevVibeIdRef.current !== vibeId) {
+      const vibe = VIBE_PRESETS[vibeId];
+      if (vibe && vibe.isDarkUi) {
+        previewState.setDarkMode("dark");
+      } else {
+        previewState.setDarkMode("light");
+      }
+      prevVibeIdRef.current = vibeId;
     }
   }, [vibeId, previewState]);
 
