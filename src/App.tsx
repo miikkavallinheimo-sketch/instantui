@@ -491,15 +491,16 @@ function App() {
     setTokens(buildDesignTokens(designState));
   }, [designState]);
 
-  // Set darkMode based on vibe's isDarkUi when vibe changes (only on change, not on every render)
+  // Set darkMode to light when selecting light-based vibes
+  // Dark-based vibes stay locked to dark mode (nappi disabled)
   const prevVibeIdRef = useRef<VibeId>(vibeId);
   useEffect(() => {
     // Only update darkMode if vibeId actually changed
     if (prevVibeIdRef.current !== vibeId) {
       const vibe = VIBE_PRESETS[vibeId];
-      if (vibe && vibe.isDarkUi) {
-        previewState.setDarkMode("dark");
-      } else {
+      // Only set to light if vibe is not dark-based
+      // Dark-based vibes ignore the toggle and stay dark
+      if (vibe && !vibe.isDarkUi) {
         previewState.setDarkMode("light");
       }
       prevVibeIdRef.current = vibeId;
