@@ -207,17 +207,17 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["md", "lg", "xl", "full"],
-        shadowOptions: ["none", "soft"],
+        shadowOptions: ["none", "sm"],
         borderOptions: ["none", "subtle"],
       },
       buttonSecondary: {
         radiusOptions: ["md", "lg", "xl"],
         shadowOptions: ["none"],
-        borderOptions: ["subtle", "strong"],
+        borderOptions: ["subtle", "lg"],
       },
       card: {
         radiusOptions: ["lg", "xl"],
-        shadowOptions: ["none", "soft"],
+        shadowOptions: ["none", "sm"],
         borderOptions: ["subtle"],
       },
     },
@@ -240,17 +240,17 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["md", "lg", "xl", "full"],
-        shadowOptions: ["none", "soft", "strong"],
+        shadowOptions: ["none", "sm", "lg"],
         borderOptions: ["none", "subtle"],
       },
       buttonSecondary: {
         radiusOptions: ["md", "lg", "xl"],
-        shadowOptions: ["none", "soft"],
-        borderOptions: ["subtle", "strong"],
+        shadowOptions: ["none", "sm"],
+        borderOptions: ["subtle", "lg"],
       },
       card: {
         radiusOptions: ["lg", "xl"],
-        shadowOptions: ["soft", "strong"],
+        shadowOptions: ["sm", "lg"],
         borderOptions: ["subtle"],
       },
     },
@@ -276,17 +276,17 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       buttonPrimary: {
         radiusOptions: ["none", "sm", "md"],
         shadowOptions: ["none"],
-        borderOptions: ["strong"],
+        borderOptions: ["lg"],
       },
       buttonSecondary: {
         radiusOptions: ["none", "sm"],
         shadowOptions: ["none"],
-        borderOptions: ["strong"],
+        borderOptions: ["lg"],
       },
       card: {
         radiusOptions: ["none", "sm"],
         shadowOptions: ["none"],
-        borderOptions: ["strong"],
+        borderOptions: ["lg"],
       },
     },
     typography: {
@@ -311,7 +311,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["lg", "xl", "full"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -321,7 +321,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["lg", "xl"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["subtle"],
       },
     },
@@ -344,17 +344,17 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["sm", "md", "lg"],
-        shadowOptions: ["strong"],
+        shadowOptions: ["lg"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
         radiusOptions: ["sm", "md", "lg"],
         shadowOptions: ["none"],
-        borderOptions: ["subtle", "strong"],
+        borderOptions: ["subtle", "lg"],
       },
       card: {
         radiusOptions: ["md", "lg"],
-        shadowOptions: ["strong"],
+        shadowOptions: ["lg"],
         borderOptions: ["subtle"],
       },
     },
@@ -379,7 +379,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["sm", "md"],
-        shadowOptions: ["strong"],
+        shadowOptions: ["lg"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -389,7 +389,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["md", "lg"],
-        shadowOptions: ["strong"],
+        shadowOptions: ["lg"],
         borderOptions: ["subtle"],
       },
     },
@@ -414,7 +414,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["lg", "xl", "full"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -424,7 +424,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["lg", "xl"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["subtle"],
       },
     },
@@ -447,7 +447,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["lg", "xl", "full"],
-        shadowOptions: ["soft", "strong"],
+        shadowOptions: ["sm", "lg"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -457,7 +457,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["lg", "xl"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["subtle"],
       },
     },
@@ -482,7 +482,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["md", "lg"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -492,7 +492,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["lg"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["subtle"],
       },
     },
@@ -515,18 +515,18 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["none", "sm"],
-        shadowOptions: ["strong"],
-        borderOptions: ["strong"],
+        shadowOptions: ["lg"],
+        borderOptions: ["lg"],
       },
       buttonSecondary: {
         radiusOptions: ["none", "sm"],
-        shadowOptions: ["strong"],
-        borderOptions: ["strong"],
+        shadowOptions: ["lg"],
+        borderOptions: ["lg"],
       },
       card: {
         radiusOptions: ["none"],
-        shadowOptions: ["strong"],
-        borderOptions: ["strong"],
+        shadowOptions: ["lg"],
+        borderOptions: ["lg"],
       },
     },
     typography: {
@@ -550,18 +550,18 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["none", "sm"],
-        shadowOptions: ["strong"],
-        borderOptions: ["strong"],
+        shadowOptions: ["lg"],
+        borderOptions: ["lg"],
       },
       buttonSecondary: {
         radiusOptions: ["none", "sm"],
-        shadowOptions: ["strong"],
-        borderOptions: ["strong"],
+        shadowOptions: ["lg"],
+        borderOptions: ["lg"],
       },
       card: {
         radiusOptions: ["sm", "md"],
-        shadowOptions: ["soft"],
-        borderOptions: ["strong"],
+        shadowOptions: ["sm"],
+        borderOptions: ["lg"],
       },
     },
     typography: {
@@ -586,7 +586,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["sm", "md", "lg"],
-        shadowOptions: ["strong"],
+        shadowOptions: ["lg"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -596,7 +596,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["md", "lg"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["subtle"],
       },
     },
@@ -621,7 +621,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
     components: {
       buttonPrimary: {
         radiusOptions: ["sm", "md"],
-        shadowOptions: ["strong"],
+        shadowOptions: ["lg"],
         borderOptions: ["none"],
       },
       buttonSecondary: {
@@ -631,7 +631,7 @@ const VARIATION_SETTINGS: Record<VibeId, VariationSettings> = {
       },
       card: {
         radiusOptions: ["md", "lg"],
-        shadowOptions: ["soft"],
+        shadowOptions: ["sm"],
         borderOptions: ["subtle"],
       },
     },
