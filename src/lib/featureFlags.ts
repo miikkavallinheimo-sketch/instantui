@@ -63,7 +63,36 @@ export const MENU_PRESETS: MenuPreset[] = [
     description: "Horizontal bar navigation",
     tier: "FREE",
   },
-  // Centered pill and sidebar for PRO phase
+  {
+    id: "pill-nav",
+    label: "Pill Nav",
+    description: "Rounded pill buttons with hover effects",
+    tier: "FREE",
+  },
+  {
+    id: "minimal-nav",
+    label: "Minimal Nav",
+    description: "Ultra-simple text-based navigation",
+    tier: "FREE",
+  },
+  {
+    id: "card-nav",
+    label: "Card Nav",
+    description: "Card-style navigation with shadows",
+    tier: "FREE",
+  },
+  {
+    id: "underline-nav",
+    label: "Underline Nav",
+    description: "Text with animated underlines",
+    tier: "FREE",
+  },
+  {
+    id: "gradient-nav",
+    label: "Gradient Nav",
+    description: "Navigation with gradient backgrounds",
+    tier: "FREE",
+  },
 ];
 
 /**
