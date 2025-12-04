@@ -114,8 +114,8 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           render: () => (
             <div
               style={{
-                backgroundColor: colors.surfaceAlt,
-                border: `2px solid ${colors.borderSubtle}`,
+                backgroundColor: colors.surface,
+                border: `2px solid ${colors.borderStrong}`,
                 borderRadius: radiusMap[uiTokens.card.radius],
                 padding: "1.5rem",
                 boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
@@ -152,7 +152,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   color: colors.textMuted,
                 }}
               >
-                Alternate surface background
+                With strong border
               </div>
             </div>
           ),
