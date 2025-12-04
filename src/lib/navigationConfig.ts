@@ -53,6 +53,16 @@ export const NAVIGATION_CONFIG: Record<PreviewPageId, PageNavigation> = {
     ],
     activeIndex: 0, // Latest is active
   },
+
+  // Components: UI component gallery
+  components: {
+    items: [
+      { label: "Gallery" },
+      { label: "Documentation" },
+      { label: "Tokens" },
+    ],
+    activeIndex: 0, // Gallery is active
+  },
 };
 
 /**

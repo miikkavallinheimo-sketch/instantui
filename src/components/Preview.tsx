@@ -3,6 +3,7 @@ import { SharedNav } from "./SharedNav";
 import PreviewDashboard from "./PreviewDashboard";
 import PreviewLanding from "./PreviewLanding";
 import PreviewBlog from "./PreviewBlog";
+import PreviewComponents from "./PreviewComponents";
 import { ContrastCheckerPanel } from "./ContrastCheckerPanel";
 
 interface PreviewProps {
@@ -66,6 +67,7 @@ const Preview = ({
             )}
             {activePage === "landing" && <PreviewLanding designState={designState} />}
             {activePage === "blog" && <PreviewBlog designState={designState} />}
+            {activePage === "components" && <PreviewComponents designState={designState} />}
           </div>
         </div>
       </div>
