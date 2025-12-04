@@ -88,9 +88,9 @@ export const MENU_PRESETS: MenuPreset[] = [
     tier: "FREE",
   },
   {
-    id: "gradient-nav",
-    label: "Gradient Nav",
-    description: "Navigation with gradient backgrounds",
+    id: "hamburger-nav",
+    label: "Hamburger Menu",
+    description: "Dropdown menu with hamburger icon",
     tier: "FREE",
   },
 ];

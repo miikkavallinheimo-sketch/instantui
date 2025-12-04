@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { DesignState, MenuPresetId, PreviewPageId } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
 import { getAnimationsForVibe } from "../lib/animationTokens";
@@ -22,6 +23,7 @@ export const SharedNav = ({
 }: SharedNavProps) => {
   const { colors, fontPair, vibe, uiTokens } = designState;
   const vibeAnimations = getAnimationsForVibe(vibe.id);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const pages: Array<{ id: PreviewPageId; label: string }> = [
     { id: "landing", label: "Landing" },
@@ -121,9 +123,11 @@ export const SharedNav = ({
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.backgroundColor = colors.surface;
-                e.currentTarget.style.borderColor = colors.borderSubtle;
+                if (activePage !== page.id) {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.backgroundColor = colors.surface;
+                  e.currentTarget.style.borderColor = colors.borderSubtle;
+                }
               }}
             >
               {page.label}
@@ -263,53 +267,75 @@ export const SharedNav = ({
     );
   }
 
-  // Gradient Nav - Navigation with gradient backgrounds
-  if (activeMenu === "gradient-nav") {
+  // Hamburger Menu Nav - Dropdown menu with hamburger icon
+  if (activeMenu === "hamburger-nav") {
     const linkAnim = vibeAnimations.link;
     return (
-      <nav className="w-full px-6 py-6 border-b" style={{ borderColor: colors.borderSubtle }}>
-        <div className="flex items-center justify-between mb-4 pb-3 border-b" style={{ borderColor: colors.borderSubtle }}>
+      <nav className="w-full px-6 py-4 border-b" style={{ borderColor: colors.borderSubtle, fontFamily: fontPair.body }}>
+        <div className="flex items-center justify-between">
           <div className="font-semibold text-base" style={{ fontFamily: fontPair.heading, color: colors.primary }}>
             ChromUI
           </div>
-          <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          {pages.map((page, idx) => {
-            // Create gradient from primary to secondary
-            const gradientAngle = idx * 45;
-            const gradientBg = activePage === page.id
-              ? `linear-gradient(${gradientAngle}deg, ${colors.primary}, ${colors.secondary})`
-              : colors.surface;
+          <div className="relative">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-lg transition-all"
+              style={{
+                backgroundColor: isMenuOpen ? colors.primary : "transparent",
+                color: isMenuOpen ? colors.onPrimary : colors.text,
+                transitionDuration: `${linkAnim.duration}ms`,
+              }}
+              title="Menu"
+            >
+              {/* Hamburger Icon */}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
 
-            return (
-              <button
-                key={page.id}
-                onClick={() => onPageChange?.(page.id)}
-                className="px-5 py-3 rounded-lg text-sm font-medium transition-all"
+            {/* Dropdown Menu */}
+            {isMenuOpen && (
+              <div
+                className="absolute right-0 top-full mt-2 rounded-lg shadow-lg border z-50"
                 style={{
-                  background: gradientBg,
-                  color: activePage === page.id ? colors.onPrimary : colors.text,
-                  border: `1px solid ${colors.borderSubtle}`,
-                  transitionDuration: `${linkAnim.duration}ms`,
-                }}
-                onMouseEnter={(e) => {
-                  if (activePage !== page.id) {
-                    e.currentTarget.style.background = `linear-gradient(${gradientAngle}deg, ${colors.primary}dd, ${colors.secondary}dd)`;
-                    e.currentTarget.style.color = colors.onPrimary;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activePage !== page.id) {
-                    e.currentTarget.style.background = colors.surface;
-                    e.currentTarget.style.color = colors.text;
-                  }
+                  backgroundColor: colors.surface,
+                  borderColor: colors.borderSubtle,
+                  boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                  minWidth: "160px",
                 }}
               >
-                {page.label}
-              </button>
-            );
-          })}
+                {pages.map((page) => (
+                  <button
+                    key={page.id}
+                    onClick={() => {
+                      onPageChange?.(page.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2.5 transition-colors text-sm font-medium first:rounded-t-lg last:rounded-b-lg"
+                    style={{
+                      color: activePage === page.id ? colors.primary : colors.text,
+                      backgroundColor: activePage === page.id ? colors.primary + "15" : "transparent",
+                      transitionDuration: `${linkAnim.duration}ms`,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (activePage !== page.id) {
+                        e.currentTarget.style.backgroundColor = colors.primary + "10";
+                        e.currentTarget.style.color = colors.primary;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activePage !== page.id) {
+                        e.currentTarget.style.backgroundColor = "transparent";
+                        e.currentTarget.style.color = colors.text;
+                      }
+                    }}
+                  >
+                    {page.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     );

@@ -100,7 +100,7 @@ export interface PreviewPage {
 }
 
 // Menu preset types
-export type MenuPresetId = "top-nav" | "pill-nav" | "minimal-nav" | "card-nav" | "underline-nav" | "gradient-nav";
+export type MenuPresetId = "top-nav" | "pill-nav" | "minimal-nav" | "card-nav" | "underline-nav" | "hamburger-nav";
 
 export interface MenuPreset {
   id: MenuPresetId;
