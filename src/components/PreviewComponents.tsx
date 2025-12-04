@@ -110,7 +110,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
       title: "Cards",
       components: [
         {
-          name: "Card with Shadow",
+          name: "Surface Card",
           render: () => (
             <div
               style={{
@@ -143,7 +143,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   color: colors.text,
                 }}
               >
-                Card Title
+                Surface Card
               </div>
               <div
                 style={{
@@ -152,7 +152,105 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   color: colors.textMuted,
                 }}
               >
-                Hover me to see the shadow and lift animation
+                Default surface background
+              </div>
+            </div>
+          ),
+        },
+        {
+          name: "Primary Card",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.primary,
+                border: getBorderStyle(uiTokens.card.border, colors),
+                borderRadius: radiusMap[uiTokens.card.radius],
+                padding: "1.5rem",
+                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                minWidth: "200px",
+                cursor: "pointer",
+                transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
+              }}
+              onMouseEnter={(e) => {
+                const scale = uiTokens.animations?.card.scale || 1.02;
+                const ty = uiTokens.animations?.card.translateY || -4;
+                e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["lg"],
+                  fontWeight: 600,
+                  marginBottom: "0.5rem",
+                  color: colors.onPrimary,
+                }}
+              >
+                Primary Card
+              </div>
+              <div
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.onPrimary,
+                  opacity: 0.8,
+                }}
+              >
+                Accent background color
+              </div>
+            </div>
+          ),
+        },
+        {
+          name: "Secondary Card",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.secondary,
+                border: getBorderStyle(uiTokens.card.border, colors),
+                borderRadius: radiusMap[uiTokens.card.radius],
+                padding: "1.5rem",
+                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                minWidth: "200px",
+                cursor: "pointer",
+                transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
+              }}
+              onMouseEnter={(e) => {
+                const scale = uiTokens.animations?.card.scale || 1.02;
+                const ty = uiTokens.animations?.card.translateY || -4;
+                e.currentTarget.style.transform = `scale(${scale}) translateY(${ty}px)`;
+                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["lg"],
+                  fontWeight: 600,
+                  marginBottom: "0.5rem",
+                  color: colors.onSecondary,
+                }}
+              >
+                Secondary Card
+              </div>
+              <div
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.onSecondary,
+                  opacity: 0.8,
+                }}
+              >
+                Secondary background color
               </div>
             </div>
           ),
