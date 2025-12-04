@@ -623,30 +623,50 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
       components: [
         {
           name: "Primary Link",
-          render: () => (
-            <a
-              href="#"
-              style={{
-                color: colors.primary,
-                textDecoration: "none",
-                fontSize: sizeMap["sm"],
-                fontFamily: fontPair.body,
-                cursor: "pointer",
-                transition: `color ${uiTokens.animations?.link.duration || 150}ms ${uiTokens.animations?.link.timingFunction || "ease-out"}`,
-                position: "relative",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = colors.accent;
-                e.currentTarget.style.textDecoration = "underline";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = colors.primary;
-                e.currentTarget.style.textDecoration = "none";
-              }}
-            >
-              Hover me
-            </a>
-          ),
+          render: () => {
+            const linkAnimConfig = uiTokens.animations?.link;
+            const originalColor = colors.primary;
+
+            return (
+              <a
+                href="#"
+                style={{
+                  color: colors.primary,
+                  textDecoration: "none",
+                  fontSize: sizeMap["sm"],
+                  fontFamily: fontPair.body,
+                  cursor: "pointer",
+                  transition: `all ${linkAnimConfig?.duration || 150}ms ${linkAnimConfig?.timingFunction || "ease-out"}`,
+                  position: "relative",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = colors.accent;
+                  applyHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
+                    duration: linkAnimConfig?.duration || 150,
+                    timingFunction: linkAnimConfig?.timingFunction || "ease-out",
+                    scale: linkAnimConfig?.scale,
+                    glowColor: linkAnimConfig?.glowColor,
+                    translateY: linkAnimConfig?.translateY,
+                    colorShiftTarget: linkAnimConfig?.colorShiftTarget,
+                    brightnessLevel: linkAnimConfig?.brightnessLevel,
+                    currentShadow: "none",
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                  (e.currentTarget as any).originalColor = originalColor;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = (e.currentTarget as any).originalColor;
+                  removeHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
+                    duration: linkAnimConfig?.duration || 150,
+                    timingFunction: linkAnimConfig?.timingFunction || "ease-out",
+                    originalShadow: "none",
+                  });
+                }}
+              >
+                Hover me
+              </a>
+            );
+          },
         },
         {
           name: "H1 Heading",
