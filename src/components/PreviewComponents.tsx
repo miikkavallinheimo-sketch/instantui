@@ -307,6 +307,68 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           },
         },
         {
+          name: "Accent Card",
+          render: () => {
+            const cardAnimConfig = uiTokens.animations?.card;
+            const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+
+            return (
+              <div
+                style={{
+                  backgroundColor: colors.accent,
+                  border: getBorderStyle(uiTokens.card.border, colors),
+                  borderRadius: radiusMap[uiTokens.card.radius],
+                  padding: "1.5rem",
+                  boxShadow: originalShadow,
+                  minWidth: "200px",
+                  cursor: "pointer",
+                  transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    scale: cardAnimConfig?.scale,
+                    glowColor: cardAnimConfig?.glowColor,
+                    translateY: cardAnimConfig?.translateY || -4,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                    duration: cardAnimConfig?.duration || 250,
+                    timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: fontPair.heading,
+                    fontSize: sizeMap["lg"],
+                    fontWeight: 600,
+                    marginBottom: "0.5rem",
+                    color: colors.onAccent,
+                  }}
+                >
+                  Accent Card
+                </div>
+                <div
+                  style={{
+                    fontFamily: fontPair.body,
+                    fontSize: sizeMap["sm"],
+                    color: colors.onAccent,
+                    opacity: 0.8,
+                  }}
+                >
+                  Highlight card with accent color
+                </div>
+              </div>
+            );
+          },
+        },
+        {
           name: "Primary Card",
           render: () => {
             const cardAnimConfig = uiTokens.animations?.card;
@@ -362,7 +424,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     opacity: 0.8,
                   }}
                 >
-                  Accent background color
+                  Main content area card
                 </div>
               </div>
             );
@@ -424,7 +486,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     opacity: 0.8,
                   }}
                 >
-                  Secondary background color
+                  Supporting content card
                 </div>
               </div>
             );
