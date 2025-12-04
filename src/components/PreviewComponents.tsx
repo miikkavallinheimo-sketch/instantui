@@ -80,10 +80,10 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
             <button
               style={{
                 backgroundColor: "transparent",
-                color: colors.primary,
+                color: colors.secondary,
                 padding: "0.75rem 1.5rem",
                 borderRadius: radiusMap[uiTokens.buttonSecondary.radius],
-                border: getBorderStyle(uiTokens.buttonSecondary.border, colors),
+                border: `2px solid ${colors.secondary}`,
                 fontSize: sizeMap["sm"],
                 fontFamily: fontPair.heading,
                 fontWeight: 600,
@@ -92,7 +92,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `${colors.primary}10`;
+                e.currentTarget.style.backgroundColor = `${colors.secondary}15`;
                 e.currentTarget.style.boxShadow = getShadowForMode("md", vibe.isDarkUi);
               }}
               onMouseLeave={(e) => {
@@ -114,8 +114,8 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           render: () => (
             <div
               style={{
-                backgroundColor: colors.surface,
-                border: getBorderStyle(uiTokens.card.border, colors),
+                backgroundColor: colors.surfaceAlt,
+                border: `2px solid ${colors.borderSubtle}`,
                 borderRadius: radiusMap[uiTokens.card.radius],
                 padding: "1.5rem",
                 boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
@@ -152,7 +152,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   color: colors.textMuted,
                 }}
               >
-                Default surface background
+                Alternate surface background
               </div>
             </div>
           ),
