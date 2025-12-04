@@ -44,7 +44,7 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
   minimal: {
     button: { type: "subtle", duration: 150, timingFunction: "ease-out" },
     card: { type: "subtle", duration: 150, timingFunction: "ease-out" },
-    link: { type: "subtle", duration: 100, timingFunction: "ease-out" },
+    link: { type: "text-underline", duration: 100, timingFunction: "ease-out" },
     navItem: { type: "subtle", duration: 100, timingFunction: "ease-out" },
     interactive: { type: "subtle", duration: 150, timingFunction: "ease-out" },
   },
@@ -109,31 +109,13 @@ export const VIBE_ANIMATIONS: Record<string, ComponentAnimations> = {
     },
   },
 
-  // Dark Tech: Subtle lift with refined timing
+  // Dark Tech: Text-underline for all interactive elements
   "dark-tech": {
-    button: {
-      type: "lift",
-      duration: 220,
-      timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      scale: 1.03,
-      translateY: -2,
-    },
-    card: {
-      type: "lift",
-      duration: 280,
-      timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      scale: 1.02,
-      translateY: -3,
-    },
+    button: { type: "text-underline", duration: 220, timingFunction: "ease-in-out" },
+    card: { type: "text-underline", duration: 280, timingFunction: "ease-in-out" },
     link: { type: "text-underline", duration: 180, timingFunction: "ease-in-out" },
     navItem: { type: "subtle", duration: 180, timingFunction: "ease-in-out" },
-    interactive: {
-      type: "lift",
-      duration: 220,
-      timingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-      scale: 1.02,
-      translateY: -1,
-    },
+    interactive: { type: "text-underline", duration: 220, timingFunction: "ease-in-out" },
   },
 
   // Luxury: Smooth brightness shift for sophisticated feel
