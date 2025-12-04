@@ -803,7 +803,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minWidth: "280px",
                 }}
               >
-                <div>📢 Important announcement here</div>
+                <div>Important announcement here</div>
                 <button
                   onClick={() => setClosed(true)}
                   style={{
@@ -844,7 +844,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minWidth: "280px",
                 }}
               >
-                <div>⚡ Special offer – Limited time!</div>
+                <div>Special offer – Limited time!</div>
                 <button
                   onClick={() => setClosed(true)}
                   style={{
@@ -885,7 +885,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minWidth: "280px",
                 }}
               >
-                <div>ℹ️ Update: New version available</div>
+                <div>Update: New version available</div>
                 <button
                   onClick={() => setClosed(true)}
                   style={{
@@ -926,7 +926,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   minWidth: "280px",
                 }}
               >
-                <div>💡 Tip: You can customize this message</div>
+                <div>Tip: You can customize this message</div>
                 <button
                   onClick={() => setClosed(true)}
                   style={{
