@@ -347,9 +347,9 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 onMouseEnter={(e) => {
                   const originalBgColor = window.getComputedStyle(e.currentTarget).backgroundColor;
                   const originalColor = window.getComputedStyle(e.currentTarget).color;
-                  // For text-underline, brighten the text color
+                  // For text-underline, brighten the text color (use primary for accent button)
                   if (btnAnimConfig?.type === "text-underline") {
-                    e.currentTarget.style.color = colors.accent;
+                    e.currentTarget.style.color = colors.primary;
                   }
                   applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
                     duration: btnAnimConfig?.duration || 200,
