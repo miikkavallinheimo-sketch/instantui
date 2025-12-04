@@ -968,12 +968,15 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   overflow: "hidden",
                 }}
               >
-                {/* Background for visual reference */}
+                {/* Vibrant background with patterns */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `linear-gradient(135deg, ${colors.accent}20, ${colors.primary}20)`,
+                    background: `
+                      linear-gradient(45deg, ${colors.primary}40 0%, ${colors.accent}40 50%, ${colors.secondary}40 100%),
+                      repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.05) 35px, rgba(255,255,255,0.05) 70px)
+                    `,
                     zIndex: -1,
                   }}
                 />
@@ -1032,12 +1035,18 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   overflow: "hidden",
                 }}
               >
-                {/* Background for visual reference */}
+                {/* Vibrant background with dot pattern */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `linear-gradient(135deg, ${colors.accent}30, ${colors.primary}30)`,
+                    background: `
+                      radial-gradient(circle, ${colors.primary}50 1px, transparent 1px),
+                      radial-gradient(circle, ${colors.accent}50 1px, transparent 1px),
+                      linear-gradient(120deg, ${colors.secondary}35 0%, ${colors.primary}35 50%, ${colors.accent}35 100%)
+                    `,
+                    backgroundSize: "50px 50px, 80px 80px, 100% 100%",
+                    backgroundPosition: "0 0, 25px 25px, 0 0",
                     zIndex: -1,
                   }}
                 />
@@ -1096,12 +1105,20 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   overflow: "hidden",
                 }}
               >
-                {/* Background for visual reference */}
+                {/* Vibrant background with wave pattern */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `linear-gradient(135deg, ${colors.accent}40, ${colors.primary}40)`,
+                    background: `
+                      linear-gradient(45deg, ${colors.accent}50 25%, transparent 25%),
+                      linear-gradient(-45deg, ${colors.accent}50 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, ${colors.primary}50 75%),
+                      linear-gradient(-45deg, transparent 75%, ${colors.primary}50 75%),
+                      linear-gradient(to right, ${colors.secondary}40, ${colors.accent}40)
+                    `,
+                    backgroundSize: "30px 30px, 30px 30px, 30px 30px, 30px 30px, 100% 100%",
+                    backgroundPosition: "0 0, 0 15px, 15px -15px, -15px 0px, 0 0",
                     zIndex: -1,
                   }}
                 />
@@ -1159,12 +1176,17 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   overflow: "hidden",
                 }}
               >
-                {/* Background for visual reference */}
+                {/* Vibrant background with complex gradient */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: `linear-gradient(135deg, ${colors.accent}35, ${colors.primary}35)`,
+                    background: `
+                      conic-gradient(from 0deg, ${colors.primary}45, ${colors.secondary}45, ${colors.accent}45, ${colors.primary}45),
+                      linear-gradient(135deg, ${colors.accent}50 0%, ${colors.primary}50 100%)
+                    `,
+                    backgroundSize: "200px 200px, 100% 100%",
+                    backgroundPosition: "0 0, 0 0",
                     zIndex: -1,
                   }}
                 />
