@@ -32,6 +32,7 @@ export const SharedNav = ({
     { id: "landing", label: "Landing" },
     { id: "blog", label: "Blog" },
     { id: "dashboard", label: "Dashboard" },
+    { id: "components", label: "Components" },
   ];
 
   const pageNav = getPageNavigation(activePage);
