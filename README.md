@@ -1,6 +1,6 @@
-# InstantUI – Design Style Generator
+# ChromUI – Design Style Generator
 
-This project is a Vite + React + TypeScript app that implements **InstantUI**, a mini design system generator.
+This project is a Vite + React + TypeScript app that implements **ChromUI**, a mini design system generator.
 
 ## Features
 
@@ -97,6 +97,6 @@ You can iterate on:
 
 ## Domain
 
-Planned domain: **instantui.app**.
+Planned domain: **chromui.app**.
 
-This repo is the starting point for the InstantUI MVP.
+This repo is the starting point for the ChromUI MVP.

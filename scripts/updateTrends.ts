@@ -7,7 +7,7 @@ import { openai } from "../src/lib/openaiClient";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-interface InstantUiTrends {
+interface ChromUiTrends {
   lastUpdated: string;
   yearFocus: string;
   fontTrends: {
@@ -81,7 +81,7 @@ async function generateExtraQueries(): Promise<string[]> {
   const baseQueryExamples = Object.values(BASE_QUERY_GROUPS).flat();
 
   const prompt = `
-You help a tool called InstantUI discover current design trends.
+You help a tool called ChromUI discover current design trends.
 
 You are given example search queries:
 
@@ -152,7 +152,7 @@ async function fetchTrends() {
   const allQueries = [...baseQueries, ...extraQueries];
 
   const prompt = `
-You are a design trend researcher helping a tool called InstantUI.
+You are a design trend researcher helping a tool called ChromUI.
 
 We are using these search queries (both static and AI-generated) to explore the web:
 
@@ -173,7 +173,7 @@ ${JSON.stringify(allQueries, null, 2)}
 
 3. Return STRICT JSON that matches this TypeScript interface:
 
-interface InstantUiTrends {
+interface ChromUiTrends {
   lastUpdated: string;
   yearFocus: string;
   fontTrends: { name: string; category: string; description: string; exampleUse: string; }[];
@@ -218,7 +218,7 @@ interface InstantUiTrends {
   // Remove markdown backticks if present
   text = text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
 
-  let data: InstantUiTrends = JSON.parse(text);
+  let data: ChromUiTrends = JSON.parse(text);
 
   data.lastUpdated = new Date().toISOString();
   if (!data.yearFocus) {

@@ -51,7 +51,7 @@ export const SharedNav = ({
         {/* Top bar: Brand + Page switcher */}
         <div className="px-6 py-4 flex items-center justify-between border-b" style={{ borderColor: `${navText}20` }}>
           <div className="font-semibold text-lg" style={{ fontFamily: fontPair.heading }}>
-            InstantUI
+            ChromUI
           </div>
 
           <div className="flex gap-1">

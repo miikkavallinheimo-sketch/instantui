@@ -13,11 +13,11 @@ async function main() {
   const trendsRaw = await fs.readFile(trendsPath, "utf8");
 
   const promptUser = `
-You are given the latest InstantUI trend data:
+You are given the latest ChromUI trend data:
 
 ${trendsRaw}
 
-Based on this, generate NEW vibe presets for InstantUI.
+Based on this, generate NEW vibe presets for ChromUI.
 
 Follow these rules:
 - Do NOT reuse existing vibe names like "Minimal", "Modern SaaS", "Pastel", "Luxury", "Dark Tech", etc.
@@ -56,7 +56,7 @@ Return ONLY JSON, with no comments or additional text.
       {
         role: "system",
         content:
-          "You are a strict JSON API that outputs only valid JSON for InstantUI. Do NOT include any natural language outside the JSON.",
+          "You are a strict JSON API that outputs only valid JSON for ChromUI. Do NOT include any natural language outside the JSON.",
       },
       { role: "user", content: promptUser },
     ],

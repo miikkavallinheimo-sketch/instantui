@@ -102,7 +102,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               letterSpacing: "-0.5px",
             }}
           >
-            InstantUI
+            ChromUI
           </div>
 
           {/* Navigation Menu */}
@@ -284,7 +284,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
           }}
           className="max-w-xl mx-auto mb-8"
         >
-          Start with InstantUI today and create beautiful designs instantly.
+          Start with ChromUI today and create beautiful designs instantly.
         </p>
         <button
           className="px-6 py-3 rounded-lg font-semibold"
@@ -317,7 +317,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                   marginBottom: "1rem",
                 }}
               >
-                InstantUI
+                ChromUI
               </div>
               <p
                 style={{
@@ -413,7 +413,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                 textAlign: "center",
               }}
             >
-              © 2024 InstantUI. All rights reserved.
+              © 2024 ChromUI. All rights reserved.
             </p>
           </div>
         </div>

@@ -980,7 +980,7 @@ function App() {
             Tool
           </span>
           <h1 className="text-lg font-semibold">
-            InstantUI – Design Style Generator
+            ChromUI – Design Style Generator
           </h1>
         </div>
         <div className="flex items-center gap-2">

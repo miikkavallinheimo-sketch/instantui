@@ -239,7 +239,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
               className="text-lg font-semibold"
               style={{ fontFamily: fontPair.heading, color: navText }}
             >
-              InstantUI
+              ChromUI
             </div>
             <div
               className="text-xs opacity-80"
