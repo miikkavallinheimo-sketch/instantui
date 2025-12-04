@@ -55,7 +55,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 fontSize: sizeMap["sm"],
                 fontFamily: fontPair.heading,
                 fontWeight: 600,
-                boxShadow: getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi),
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
               }}
@@ -86,17 +86,17 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 fontSize: sizeMap["sm"],
                 fontFamily: fontPair.heading,
                 fontWeight: 600,
-                boxShadow: getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi),
+                boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)",
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.button.duration || 200}ms ${uiTokens.animations?.button.timingFunction || "ease-out"}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = `${colors.secondary}15`;
-                e.currentTarget.style.boxShadow = getShadowForMode("md", vibe.isDarkUi);
+                e.currentTarget.style.boxShadow = "0 8px 25px rgba(0, 0, 0, 0.15)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.buttonSecondary.shadow, vibe.isDarkUi);
+                e.currentTarget.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.1)";
               }}
             >
               Secondary
@@ -117,7 +117,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 border: `2px solid ${colors.borderStrong}`,
                 borderRadius: radiusMap[uiTokens.card.radius],
                 padding: "1.5rem",
-                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
                 minWidth: "200px",
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
@@ -164,7 +164,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 border: getBorderStyle(uiTokens.card.border, colors),
                 borderRadius: radiusMap[uiTokens.card.radius],
                 padding: "1.5rem",
-                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
                 minWidth: "200px",
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
@@ -172,11 +172,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               onMouseEnter={(e) => {
                 const ty = uiTokens.animations?.card.translateY || -4;
                 e.currentTarget.style.transform = `translateY(${ty}px)`;
-                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
+                e.currentTarget.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.3)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+                e.currentTarget.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.2)";
               }}
             >
               <div
@@ -212,7 +212,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 border: getBorderStyle(uiTokens.card.border, colors),
                 borderRadius: radiusMap[uiTokens.card.radius],
                 padding: "1.5rem",
-                boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
                 minWidth: "200px",
                 cursor: "pointer",
                 transition: `all ${uiTokens.animations?.card.duration || 250}ms ${uiTokens.animations?.card.timingFunction || "ease-out"}`,
@@ -220,11 +220,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               onMouseEnter={(e) => {
                 const ty = uiTokens.animations?.card.translateY || -4;
                 e.currentTarget.style.transform = `translateY(${ty}px)`;
-                e.currentTarget.style.boxShadow = getShadowForMode("lg", vibe.isDarkUi);
+                e.currentTarget.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.3)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+                e.currentTarget.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.2)";
               }}
             >
               <div
@@ -389,7 +389,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                       border: getBorderStyle(uiTokens.card.border, colors),
                       borderRadius: radiusMap[uiTokens.card.radius],
                       padding: "2rem",
-                      boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                      boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
