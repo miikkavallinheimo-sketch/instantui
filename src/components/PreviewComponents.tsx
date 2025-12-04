@@ -104,9 +104,20 @@ const applyHoverAnimation = (
       break;
 
     case "text-underline":
-      // Text underline: add underline decoration to text (matches text color)
-      element.style.textDecoration = "underline";
-      element.style.textDecorationColor = "currentColor";
+      // Text underline: add underline decoration to text
+      // For elements with child text divs (like cards), apply to children instead
+      const childDivs = element.querySelectorAll("div");
+      if (childDivs.length > 0) {
+        // Apply underline to all child divs (they have the actual text colors)
+        childDivs.forEach((child) => {
+          (child as HTMLElement).style.textDecoration = "underline";
+          (child as HTMLElement).style.textDecorationColor = "currentColor";
+        });
+      } else {
+        // No children, apply to element itself
+        element.style.textDecoration = "underline";
+        element.style.textDecorationColor = "currentColor";
+      }
       break;
 
     case "none":
@@ -175,8 +186,14 @@ const removeHoverAnimation = (
       break;
 
     case "text-underline":
+      // Remove underline from element and all child divs
       element.style.textDecoration = "none";
       element.style.textDecorationColor = "auto";
+      const childDivs = element.querySelectorAll("div");
+      childDivs.forEach((child) => {
+        (child as HTMLElement).style.textDecoration = "none";
+        (child as HTMLElement).style.textDecorationColor = "auto";
+      });
       break;
 
     case "none":
