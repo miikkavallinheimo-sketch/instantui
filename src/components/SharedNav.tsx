@@ -1,5 +1,6 @@
 import type { DesignState, MenuPresetId, PreviewPageId } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
+import { getAnimationsForVibe } from "../lib/animationTokens";
 
 interface SharedNavProps {
   designState: DesignState;
@@ -10,7 +11,7 @@ interface SharedNavProps {
 
 /**
  * Shared navigation component for preview pages
- * Supports 6 different menu styles, all vibe-aware
+ * Supports 6 different menu styles, all vibe-aware with custom hover effects
  * Menu items represent preview pages: Landing, Blog, Dashboard, Components
  */
 export const SharedNav = ({
@@ -20,6 +21,7 @@ export const SharedNav = ({
   onPageChange,
 }: SharedNavProps) => {
   const { colors, fontPair, vibe, uiTokens } = designState;
+  const vibeAnimations = getAnimationsForVibe(vibe.id);
 
   const pages: Array<{ id: PreviewPageId; label: string }> = [
     { id: "landing", label: "Landing" },
@@ -37,6 +39,7 @@ export const SharedNav = ({
 
   // Top Nav - Classic horizontal navigation
   if (activeMenu === "top-nav") {
+    const linkAnim = vibeAnimations.link;
     return (
       <nav
         className="w-full border-b"
@@ -56,12 +59,24 @@ export const SharedNav = ({
               <button
                 key={page.id}
                 onClick={() => onPageChange?.(page.id)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activePage === page.id ? "opacity-100" : "opacity-60 hover:opacity-80"
-                }`}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
                 style={{
                   backgroundColor: activePage === page.id ? navAccent : "transparent",
                   color: navText,
+                  opacity: activePage === page.id ? 1 : 0.6,
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (activePage !== page.id) {
+                    e.currentTarget.style.opacity = "0.8";
+                    e.currentTarget.style.backgroundColor = navAccent;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activePage !== page.id) {
+                    e.currentTarget.style.opacity = "0.6";
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }
                 }}
               >
                 {page.label}
@@ -74,11 +89,18 @@ export const SharedNav = ({
     );
   }
 
-  // Pill Nav - Rounded pill buttons
+  // Pill Nav - Rounded pill buttons with scale animation
   if (activeMenu === "pill-nav") {
+    const linkAnim = vibeAnimations.link;
     return (
       <nav className="w-full px-6 py-6 border-b" style={{ borderColor: colors.borderSubtle }}>
-        <div className="flex items-center justify-center gap-2 flex-wrap">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b" style={{ borderColor: colors.borderSubtle }}>
+          <div className="font-semibold text-base" style={{ fontFamily: fontPair.heading, color: colors.primary }}>
+            ChromUI
+          </div>
+          <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
+        </div>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           {pages.map((page) => (
             <button
               key={page.id}
@@ -87,7 +109,21 @@ export const SharedNav = ({
               style={{
                 backgroundColor: activePage === page.id ? colors.primary : colors.surface,
                 color: activePage === page.id ? colors.onPrimary : colors.text,
-                border: `1px solid ${activePage === page.id ? colors.primary : colors.borderSubtle}`,
+                border: `2px solid ${activePage === page.id ? colors.primary : colors.borderSubtle}`,
+                transform: activePage === page.id ? "scale(1.08)" : "scale(1)",
+                transitionDuration: `${linkAnim.duration}ms`,
+              }}
+              onMouseEnter={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.backgroundColor = colors.surface;
+                  e.currentTarget.style.borderColor = colors.primary;
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.backgroundColor = colors.surface;
+                e.currentTarget.style.borderColor = colors.borderSubtle;
               }}
             >
               {page.label}
@@ -100,8 +136,15 @@ export const SharedNav = ({
 
   // Minimal Nav - Ultra-simple text only
   if (activeMenu === "minimal-nav") {
+    const linkAnim = vibeAnimations.link;
     return (
       <nav className="w-full px-6 py-4 border-b" style={{ borderColor: colors.borderSubtle, fontFamily: fontPair.body }}>
+        <div className="flex items-center justify-between mb-3 pb-3 border-b" style={{ borderColor: colors.borderSubtle }}>
+          <div className="font-semibold text-base" style={{ fontFamily: fontPair.heading, color: colors.primary }}>
+            ChromUI
+          </div>
+          <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
+        </div>
         <div className="flex items-center gap-6">
           {pages.map((page) => (
             <button
@@ -110,6 +153,17 @@ export const SharedNav = ({
               className="text-sm font-medium transition-colors"
               style={{
                 color: activePage === page.id ? colors.primary : colors.textMuted,
+                transitionDuration: `${linkAnim.duration}ms`,
+              }}
+              onMouseEnter={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.color = colors.primary;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.color = colors.textMuted;
+                }
               }}
             >
               {page.label}
@@ -123,8 +177,15 @@ export const SharedNav = ({
   // Card Nav - Card-style buttons with shadows
   if (activeMenu === "card-nav") {
     const shadowToken = uiTokens.card.shadow;
+    const linkAnim = vibeAnimations.link;
     return (
       <nav className="w-full px-6 py-6 border-b" style={{ borderColor: colors.borderSubtle }}>
+        <div className="flex items-center justify-between mb-4 pb-3 border-b" style={{ borderColor: colors.borderSubtle }}>
+          <div className="font-semibold text-base" style={{ fontFamily: fontPair.heading, color: colors.primary }}>
+            ChromUI
+          </div>
+          <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
+        </div>
         <div className="flex items-center gap-3 flex-wrap">
           {pages.map((page) => (
             <button
@@ -136,6 +197,19 @@ export const SharedNav = ({
                 color: activePage === page.id ? colors.onPrimary : colors.text,
                 boxShadow: activePage === page.id ? getShadowForMode(shadowToken, vibe.isDarkUi) : "none",
                 border: `1px solid ${colors.borderSubtle}`,
+                transitionDuration: `${linkAnim.duration}ms`,
+              }}
+              onMouseEnter={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.boxShadow = getShadowForMode(shadowToken, vibe.isDarkUi);
+                  e.currentTarget.style.backgroundColor = colors.surface;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.backgroundColor = colors.surface;
+                }
               }}
             >
               {page.label}
@@ -148,8 +222,15 @@ export const SharedNav = ({
 
   // Underline Nav - Text with animated underline effect
   if (activeMenu === "underline-nav") {
+    const linkAnim = vibeAnimations.link;
     return (
       <nav className="w-full px-6 py-4 border-b" style={{ borderColor: colors.borderSubtle, fontFamily: fontPair.body }}>
+        <div className="flex items-center justify-between mb-3 pb-3 border-b" style={{ borderColor: colors.borderSubtle }}>
+          <div className="font-semibold text-base" style={{ fontFamily: fontPair.heading, color: colors.primary }}>
+            ChromUI
+          </div>
+          <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
+        </div>
         <div className="flex items-center gap-8">
           {pages.map((page) => (
             <button
@@ -159,6 +240,19 @@ export const SharedNav = ({
               style={{
                 color: activePage === page.id ? colors.primary : colors.text,
                 borderBottom: activePage === page.id ? `2px solid ${colors.primary}` : "2px solid transparent",
+                transitionDuration: `${linkAnim.duration}ms`,
+              }}
+              onMouseEnter={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.borderBottom = `2px solid ${colors.primary}`;
+                  e.currentTarget.style.color = colors.primary;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activePage !== page.id) {
+                  e.currentTarget.style.borderBottom = "2px solid transparent";
+                  e.currentTarget.style.color = colors.text;
+                }
               }}
             >
               {page.label}
@@ -171,8 +265,15 @@ export const SharedNav = ({
 
   // Gradient Nav - Navigation with gradient backgrounds
   if (activeMenu === "gradient-nav") {
+    const linkAnim = vibeAnimations.link;
     return (
       <nav className="w-full px-6 py-6 border-b" style={{ borderColor: colors.borderSubtle }}>
+        <div className="flex items-center justify-between mb-4 pb-3 border-b" style={{ borderColor: colors.borderSubtle }}>
+          <div className="font-semibold text-base" style={{ fontFamily: fontPair.heading, color: colors.primary }}>
+            ChromUI
+          </div>
+          <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
+        </div>
         <div className="flex items-center gap-2 flex-wrap">
           {pages.map((page, idx) => {
             // Create gradient from primary to secondary
@@ -185,11 +286,24 @@ export const SharedNav = ({
               <button
                 key={page.id}
                 onClick={() => onPageChange?.(page.id)}
-                className="px-5 py-3 rounded-lg text-sm font-medium transition-all text-white"
+                className="px-5 py-3 rounded-lg text-sm font-medium transition-all"
                 style={{
                   background: gradientBg,
                   color: activePage === page.id ? colors.onPrimary : colors.text,
                   border: `1px solid ${colors.borderSubtle}`,
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (activePage !== page.id) {
+                    e.currentTarget.style.background = `linear-gradient(${gradientAngle}deg, ${colors.primary}dd, ${colors.secondary}dd)`;
+                    e.currentTarget.style.color = colors.onPrimary;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activePage !== page.id) {
+                    e.currentTarget.style.background = colors.surface;
+                    e.currentTarget.style.color = colors.text;
+                  }
                 }}
               >
                 {page.label}
