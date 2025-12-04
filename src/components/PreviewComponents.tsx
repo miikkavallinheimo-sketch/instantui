@@ -112,18 +112,18 @@ const applyHoverAnimation = (
         childDivs.forEach((child) => {
           (child as HTMLElement).style.textDecoration = "underline";
           (child as HTMLElement).style.textDecorationColor = "currentColor";
-          // Optional: brighten text for buttons
+          // Optional: brighten text for buttons using filter
           if (brightnessLevel && brightnessLevel > 1) {
-            (child as HTMLElement).style.opacity = `${brightnessLevel}`;
+            (child as HTMLElement).style.filter = `brightness(${brightnessLevel})`;
           }
         });
       } else {
         // No children, apply to element itself
         element.style.textDecoration = "underline";
         element.style.textDecorationColor = "currentColor";
-        // Optional: brighten text for buttons
+        // Optional: brighten text for buttons using filter
         if (brightnessLevel && brightnessLevel > 1) {
-          element.style.opacity = `${brightnessLevel}`;
+          element.style.filter = `brightness(${brightnessLevel})`;
         }
       }
       break;
@@ -197,12 +197,12 @@ const removeHoverAnimation = (
       // Remove underline from element and all child divs
       element.style.textDecoration = "none";
       element.style.textDecorationColor = "auto";
-      element.style.opacity = "1";
+      element.style.filter = "brightness(1)";
       const childDivs = element.querySelectorAll("div");
       childDivs.forEach((child) => {
         (child as HTMLElement).style.textDecoration = "none";
         (child as HTMLElement).style.textDecorationColor = "auto";
-        (child as HTMLElement).style.opacity = "1";
+        (child as HTMLElement).style.filter = "brightness(1)";
       });
       break;
 
