@@ -1164,7 +1164,7 @@ function App() {
       </header>
 
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-800 p-4 space-y-6 overflow-y-auto lg:overflow-y-auto lg:h-screen">
+        <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-800 p-4 space-y-6 overflow-y-auto lg:sticky lg:top-0 lg:h-screen">
           <SidebarControls
             vibeId={vibeId}
             onChangeVibe={applyVibe}
