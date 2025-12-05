@@ -1277,6 +1277,440 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
         },
       ],
     },
+    {
+      title: "Headers",
+      components: [
+        {
+          name: "Simple Header",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.surface,
+                borderBottom: `1px solid ${colors.borderSubtle}`,
+                padding: `${spacingObj.xl} ${spacingObj["2xl"]}`,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["lg"],
+                  fontWeight: 700,
+                  color: colors.text,
+                }}
+              >
+                Brand
+              </div>
+              <div style={{ display: "flex", gap: spacingObj.xl }}>
+                <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>About</a>
+                <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>Docs</a>
+                <a href="#" style={{ color: colors.primary, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>Contact</a>
+              </div>
+            </div>
+          ),
+        },
+        {
+          name: "Gradient Header",
+          render: () => (
+            <div
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
+                padding: `${spacingObj["2xl"]} ${spacingObj["2xl"]}`,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["lg"],
+                  fontWeight: 700,
+                  color: colors.onPrimary,
+                }}
+              >
+                Premium Brand
+              </div>
+              <button
+                style={{
+                  backgroundColor: colors.onPrimary,
+                  color: colors.primary,
+                  padding: `${spacingObj.sm} ${spacingObj.xl}`,
+                  borderRadius: radiusMap.md,
+                  border: "none",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: sizeMap["xs"],
+                }}
+              >
+                Sign In
+              </button>
+            </div>
+          ),
+        },
+        {
+          name: "Dark Header",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.background,
+                padding: `${spacingObj.xl} ${spacingObj["2xl"]}`,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottom: `2px solid ${colors.borderStrong}`,
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["lg"],
+                  fontWeight: 700,
+                  color: colors.accent,
+                }}
+              >
+                Studio
+              </div>
+              <div style={{ display: "flex", gap: spacingObj["2xl"], alignItems: "center" }}>
+                <span style={{ color: colors.textMuted, fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>v2.0</span>
+                <div style={{ width: "2px", height: "24px", backgroundColor: colors.borderSubtle }} />
+                <a href="#" style={{ color: colors.accent, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>Settings</a>
+              </div>
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      title: "Heroes",
+      components: [
+        {
+          name: "Minimal Hero",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.surface,
+                padding: `${spacingObj["4xl"]} ${spacingObj["2xl"]}`,
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["2xl"],
+                  fontWeight: 700,
+                  color: colors.text,
+                  marginBottom: spacingObj.lg,
+                }}
+              >
+                Welcome to our platform
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                  maxWidth: "500px",
+                  margin: "0 auto",
+                }}
+              >
+                Build amazing experiences with our design system
+              </p>
+            </div>
+          ),
+        },
+        {
+          name: "Gradient Hero",
+          render: () => (
+            <div
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}15 0%, ${colors.accent}15 100%)`,
+                padding: `${spacingObj["4xl"]} ${spacingObj["2xl"]}`,
+                textAlign: "center",
+                border: `2px solid ${colors.borderSubtle}`,
+                borderRadius: radiusMap.lg,
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["2xl"],
+                  fontWeight: 700,
+                  color: colors.primary,
+                  marginBottom: spacingObj.lg,
+                }}
+              >
+                Create Something Great
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.text,
+                  maxWidth: "500px",
+                  margin: "0 auto",
+                  marginBottom: spacingObj["2xl"],
+                }}
+              >
+                Explore our powerful components and design tokens
+              </p>
+              <button
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.onPrimary,
+                  padding: `${spacingObj.md} ${spacingObj["2xl"]}`,
+                  borderRadius: radiusMap.md,
+                  border: "none",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: sizeMap["sm"],
+                }}
+              >
+                Get Started
+              </button>
+            </div>
+          ),
+        },
+        {
+          name: "Dark Hero",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.background,
+                padding: `${spacingObj["4xl"]} ${spacingObj["2xl"]}`,
+                textAlign: "center",
+                borderBottom: `1px solid ${colors.borderStrong}`,
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontSize: sizeMap["2xl"],
+                  fontWeight: 700,
+                  color: colors.accent,
+                  marginBottom: spacingObj.lg,
+                  textTransform: "uppercase",
+                  letterSpacing: "2px",
+                }}
+              >
+                Powerful
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                  maxWidth: "600px",
+                  margin: "0 auto",
+                }}
+              >
+                Build with confidence using battle-tested design patterns and components
+              </p>
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      title: "Footers",
+      components: [
+        {
+          name: "Simple Footer",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.surface,
+                borderTop: `1px solid ${colors.borderSubtle}`,
+                padding: `${spacingObj["2xl"]} ${spacingObj["2xl"]}`,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: spacingObj.xl,
+                  gap: spacingObj.xl,
+                  flexWrap: "wrap",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: fontPair.heading,
+                    fontSize: sizeMap["sm"],
+                    fontWeight: 600,
+                    color: colors.text,
+                  }}
+                >
+                  Company
+                </div>
+                <div style={{ display: "flex", gap: spacingObj.xl }}>
+                  <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Privacy</a>
+                  <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Terms</a>
+                  <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Contact</a>
+                </div>
+              </div>
+              <div
+                style={{
+                  borderTop: `1px solid ${colors.borderSubtle}`,
+                  paddingTop: spacingObj.xl,
+                  textAlign: "center",
+                  color: colors.textMuted,
+                  fontSize: sizeMap["xs"],
+                  fontFamily: fontPair.body,
+                }}
+              >
+                © 2024 Our Company. All rights reserved.
+              </div>
+            </div>
+          ),
+        },
+        {
+          name: "Multi-Column Footer",
+          render: () => (
+            <div
+              style={{
+                backgroundColor: colors.background,
+                borderTop: `1px solid ${colors.borderStrong}`,
+                padding: `${spacingObj["3xl"]} ${spacingObj["2xl"]}`,
+              }}
+            >
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: spacingObj["2xl"], marginBottom: spacingObj["2xl"] }}>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["sm"],
+                      fontWeight: 600,
+                      color: colors.text,
+                      marginBottom: spacingObj.md,
+                    }}
+                  >
+                    Product
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: spacingObj.sm }}>
+                    <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Features</a>
+                    <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Pricing</a>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["sm"],
+                      fontWeight: 600,
+                      color: colors.text,
+                      marginBottom: spacingObj.md,
+                    }}
+                  >
+                    Company
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: spacingObj.sm }}>
+                    <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>About</a>
+                    <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Blog</a>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["sm"],
+                      fontWeight: 600,
+                      color: colors.text,
+                      marginBottom: spacingObj.md,
+                    }}
+                  >
+                    Legal
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: spacingObj.sm }}>
+                    <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Privacy</a>
+                    <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Terms</a>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  borderTop: `1px solid ${colors.borderStrong}`,
+                  paddingTop: spacingObj.xl,
+                  textAlign: "center",
+                  color: colors.textMuted,
+                  fontSize: sizeMap["xs"],
+                  fontFamily: fontPair.body,
+                }}
+              >
+                © 2024 Our Company. All rights reserved.
+              </div>
+            </div>
+          ),
+        },
+        {
+          name: "Accent Footer",
+          render: () => (
+            <div
+              style={{
+                background: `linear-gradient(180deg, ${colors.surface} 0%, ${colors.accent}10 100%)`,
+                borderTop: `2px solid ${colors.accent}`,
+                padding: `${spacingObj["3xl"]} ${spacingObj["2xl"]}`,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  marginBottom: spacingObj["2xl"],
+                  gap: spacingObj.xl,
+                  flexWrap: "wrap",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["md"],
+                      fontWeight: 700,
+                      color: colors.accent,
+                      marginBottom: spacingObj.md,
+                    }}
+                  >
+                    Brand
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["xs"],
+                      color: colors.textMuted,
+                      maxWidth: "200px",
+                    }}
+                  >
+                    Creating exceptional digital experiences
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: spacingObj["2xl"] }}>
+                  <a href="#" style={{ color: colors.accent, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>Twitter</a>
+                  <a href="#" style={{ color: colors.accent, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>GitHub</a>
+                  <a href="#" style={{ color: colors.accent, textDecoration: "none", fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>LinkedIn</a>
+                </div>
+              </div>
+              <div
+                style={{
+                  borderTop: `1px solid ${colors.borderSubtle}`,
+                  paddingTop: spacingObj.xl,
+                  textAlign: "center",
+                  color: colors.textMuted,
+                  fontSize: sizeMap["xs"],
+                  fontFamily: fontPair.body,
+                }}
+              >
+                © 2024 Our Company. All rights reserved.
+              </div>
+            </div>
+          ),
+        },
+      ],
+    },
   ];
 
   return (
