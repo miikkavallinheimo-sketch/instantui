@@ -1317,11 +1317,13 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           render: () => (
             <div
               style={{
-                background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
+                background: `linear-gradient(135deg, ${colors.primary}30 0%, ${colors.accent}20 100%)`,
+                backgroundColor: colors.surface,
                 padding: `${spacingObj["2xl"]} ${spacingObj["2xl"]}`,
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                borderBottom: `1px solid ${colors.primary}40`,
               }}
             >
               <div
@@ -1329,15 +1331,15 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontSize: sizeMap["lg"],
                   fontWeight: 700,
-                  color: colors.onPrimary,
+                  color: colors.text,
                 }}
               >
                 Premium Brand
               </div>
               <button
                 style={{
-                  backgroundColor: colors.onPrimary,
-                  color: colors.primary,
+                  backgroundColor: colors.primary,
+                  color: colors.onPrimary,
                   padding: `${spacingObj.sm} ${spacingObj.xl}`,
                   borderRadius: radiusMap.md,
                   border: "none",
@@ -1356,12 +1358,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           render: () => (
             <div
               style={{
-                backgroundColor: colors.background,
+                backgroundColor: colors.surface,
                 padding: `${spacingObj.xl} ${spacingObj["2xl"]}`,
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                borderBottom: `2px solid ${colors.borderStrong}`,
+                borderBottom: `1px solid ${colors.borderSubtle}`,
               }}
             >
               <div
@@ -1369,7 +1371,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontSize: sizeMap["lg"],
                   fontWeight: 700,
-                  color: colors.accent,
+                  color: colors.primary,
                 }}
               >
                 Studio
@@ -1377,7 +1379,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               <div style={{ display: "flex", gap: spacingObj["2xl"], alignItems: "center" }}>
                 <span style={{ color: colors.textMuted, fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>v2.0</span>
                 <div style={{ width: "2px", height: "24px", backgroundColor: colors.borderSubtle }} />
-                <a href="#" style={{ color: colors.accent, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>Settings</a>
+                <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>Settings</a>
               </div>
             </div>
           ),
