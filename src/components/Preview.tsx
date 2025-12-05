@@ -3,6 +3,7 @@ import { SharedNav } from "./SharedNav";
 import PreviewDashboard from "./PreviewDashboard";
 import PreviewLanding from "./PreviewLanding";
 import PreviewBlog from "./PreviewBlog";
+import PreviewGradients from "./PreviewGradients";
 import PreviewComponents from "./PreviewComponents";
 import { ContrastCheckerPanel } from "./ContrastCheckerPanel";
 import { buildBackgroundStyles } from "../lib/backgroundStyles";
@@ -79,6 +80,7 @@ const Preview = ({
             )}
             {activePage === "landing" && <PreviewLanding designState={designState} />}
             {activePage === "blog" && <PreviewBlog designState={designState} />}
+            {activePage === "gradients" && <PreviewGradients designState={designState} />}
             {activePage === "components" && <PreviewComponents designState={designState} />}
           </div>
         </div>

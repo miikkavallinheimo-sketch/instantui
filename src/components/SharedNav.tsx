@@ -28,6 +28,7 @@ export const SharedNav = ({
   const mainPages: Array<{ id: PreviewPageId; label: string }> = [
     { id: "landing", label: "Landing" },
     { id: "blog", label: "Blog" },
+    { id: "gradients", label: "Gradients" },
     { id: "dashboard", label: "Dashboard" },
     { id: "components", label: "Components" },
   ];
