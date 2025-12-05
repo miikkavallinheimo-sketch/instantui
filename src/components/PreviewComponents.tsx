@@ -1358,12 +1358,12 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           render: () => (
             <div
               style={{
-                backgroundColor: colors.surface,
+                backgroundColor: colors.background,
                 padding: `${spacingObj.xl} ${spacingObj["2xl"]}`,
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                borderBottom: `1px solid ${colors.borderSubtle}`,
+                borderBottom: `1px solid ${colors.borderStrong}`,
               }}
             >
               <div
@@ -1378,7 +1378,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               </div>
               <div style={{ display: "flex", gap: spacingObj["2xl"], alignItems: "center" }}>
                 <span style={{ color: colors.textMuted, fontSize: sizeMap["xs"], fontFamily: fontPair.body }}>v2.0</span>
-                <div style={{ width: "2px", height: "24px", backgroundColor: colors.borderSubtle }} />
+                <div style={{ width: "2px", height: "24px", backgroundColor: colors.borderStrong }} />
                 <a href="#" style={{ color: colors.textMuted, textDecoration: "none", fontSize: sizeMap["sm"], fontFamily: fontPair.body }}>Settings</a>
               </div>
             </div>
