@@ -1825,7 +1825,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           Gradients
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginBottom: spacingObj["3xl"] }}>
-          {VIBE_GRADIENTS.find((v) => v.id === vibe.id)?.options.map((gradientId) => {
+          {VIBE_GRADIENTS[vibe.id]?.options.map((gradientId) => {
             const gradient = getGradient(gradientId);
             if (!gradient) return null;
             return (
@@ -1880,7 +1880,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           Textures
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginBottom: spacingObj["3xl"] }}>
-          {VIBE_TEXTURES.find((v) => v.id === vibe.id)?.options.map((textureId) => {
+          {VIBE_TEXTURES[vibe.id]?.options.map((textureId) => {
             const texture = getTextureContent(textureId);
             if (!texture) return null;
             const dataUrl = getTextureDataUrl(textureId);
