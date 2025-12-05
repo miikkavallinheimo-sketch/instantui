@@ -96,6 +96,14 @@ export const SharedNav = ({
                   key={page.id}
                   className="relative"
                   style={{ overflow: 'visible' }}
+                  onMouseEnter={(e) => {
+                    if (variants) {
+                      const dropdown = e.currentTarget.querySelector('[data-dropdown]');
+                      if (dropdown) {
+                        dropdown.style.display = 'flex';
+                      }
+                    }
+                  }}
                   onMouseLeave={(e) => {
                     const dropdown = e.currentTarget.querySelector('[data-dropdown]');
                     if (dropdown) {
@@ -116,13 +124,6 @@ export const SharedNav = ({
                       if (!isActive) {
                         e.currentTarget.style.opacity = "0.8";
                         e.currentTarget.style.backgroundColor = navAccent;
-                      }
-                      // Show dropdown on hover if variants exist
-                      if (variants) {
-                        const dropdown = e.currentTarget.parentElement?.querySelector('[data-dropdown]');
-                        if (dropdown) {
-                          dropdown.style.display = 'flex';
-                        }
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -148,12 +149,6 @@ export const SharedNav = ({
                         marginTop: "0.5rem",
                         display: 'none',
                         pointerEvents: 'auto',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.display = 'flex';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.display = 'none';
                       }}
                     >
                       {variants.map((variant) => (
