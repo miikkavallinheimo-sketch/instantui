@@ -24,25 +24,16 @@ export const SharedNav = ({
   const { colors, fontPair, vibe, uiTokens } = designState;
   const vibeAnimations = getAnimationsForVibe(vibe.id);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const mainPages: Array<{ id: PreviewPageId; label: string }> = [
-    { id: "landing", label: "Landing" },
-    { id: "blog", label: "Blog" },
+  const mainPages: Array<{ id: PreviewPageId; label: string; group?: string }> = [
+    { id: "landing", label: "Landing", group: "landing" },
+    { id: "landing1", label: "Landing - Clean", group: "landing" },
+    { id: "landing2", label: "Landing - Gradient", group: "landing" },
+    { id: "blog", label: "Blog", group: "blog" },
+    { id: "blog1", label: "Blog - Minimal", group: "blog" },
+    { id: "blog2", label: "Blog - Gradient", group: "blog" },
     { id: "dashboard", label: "Dashboard" },
     { id: "components", label: "Components" },
-  ];
-
-  const landingVariants: Array<{ id: PreviewPageId; label: string }> = [
-    { id: "landing", label: "Original" },
-    { id: "landing1", label: "Clean" },
-    { id: "landing2", label: "Gradient" },
-  ];
-
-  const blogVariants: Array<{ id: PreviewPageId; label: string }> = [
-    { id: "blog", label: "Original" },
-    { id: "blog1", label: "Minimal" },
-    { id: "blog2", label: "Gradient" },
   ];
 
   // Shared color scheme for all menus
@@ -51,23 +42,6 @@ export const SharedNav = ({
   const navAccent = vibe.isDarkUi
     ? `rgba(255, 255, 255, 0.15)`
     : `rgba(255, 255, 255, 0.2)`;
-
-  // Helper to check if page group is active
-  const isPageGroupActive = (pageId: PreviewPageId) => {
-    if (pageId === "landing") {
-      return activePage === "landing" || activePage === "landing1" || activePage === "landing2";
-    }
-    if (pageId === "blog") {
-      return activePage === "blog" || activePage === "blog1" || activePage === "blog2";
-    }
-    return activePage === pageId;
-  };
-
-  const getVariants = (pageId: PreviewPageId) => {
-    if (pageId === "landing") return landingVariants;
-    if (pageId === "blog") return blogVariants;
-    return null;
-  };
 
   // Top Nav - Classic horizontal navigation
   if (activeMenu === "top-nav") {
@@ -87,91 +61,34 @@ export const SharedNav = ({
           <div className="font-semibold text-lg" style={{ fontFamily: fontPair.heading }}>
             ChromUI
           </div>
-          <div className="flex gap-2 items-center" style={{ overflow: 'visible' }}>
-            {mainPages.map((page) => {
-              const isActive = isPageGroupActive(page.id);
-              const variants = getVariants(page.id);
-
-              return (
-                <div
-                  key={page.id}
-                  className="relative"
-                  style={{ overflow: 'visible' }}
-                  onMouseEnter={() => variants && setOpenDropdown(page.id)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <button
-                    onClick={() => onPageChange?.(page.id)}
-                    className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                    style={{
-                      backgroundColor: isActive ? navAccent : "transparent",
-                      color: navText,
-                      opacity: isActive ? 1 : 0.6,
-                      transitionDuration: `${linkAnim.duration}ms`,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.opacity = "0.8";
-                        e.currentTarget.style.backgroundColor = navAccent;
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.opacity = "0.6";
-                        e.currentTarget.style.backgroundColor = "transparent";
-                      }
-                    }}
-                  >
-                    {page.label}
-                  </button>
-
-                  {/* Dropdown for variants */}
-                  {variants && openDropdown === page.id && (
-                    <div
-                      className="absolute left-0 top-full flex flex-col rounded-lg overflow-hidden border"
-                      style={{
-                        backgroundColor: navBg,
-                        borderColor: `${navText}20`,
-                        minWidth: "120px",
-                        zIndex: 50,
-                        marginTop: "0.5rem",
-                        pointerEvents: 'auto',
-                      }}
-                    >
-                      {variants.map((variant) => (
-                        <button
-                          key={variant.id}
-                          onClick={() => {
-                            onPageChange?.(variant.id);
-                            setOpenDropdown(null);
-                          }}
-                          className="px-4 py-2 text-sm text-left transition-all whitespace-nowrap"
-                          style={{
-                            backgroundColor: activePage === variant.id ? navAccent : "transparent",
-                            color: navText,
-                            opacity: activePage === variant.id ? 1 : 0.7,
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = navAccent;
-                            e.currentTarget.style.opacity = "1";
-                          }}
-                          onMouseLeave={(e) => {
-                            if (activePage !== variant.id) {
-                              e.currentTarget.style.backgroundColor = "transparent";
-                              e.currentTarget.style.opacity = "0.7";
-                            }
-                          }}
-                        >
-                          {variant.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          <div className="flex gap-2 items-center flex-wrap">
+            {mainPages.map((page) => (
+              <button
+                key={page.id}
+                onClick={() => onPageChange?.(page.id)}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                style={{
+                  backgroundColor: activePage === page.id ? navAccent : "transparent",
+                  color: navText,
+                  opacity: activePage === page.id ? 1 : 0.6,
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (activePage !== page.id) {
+                    e.currentTarget.style.opacity = "0.8";
+                    e.currentTarget.style.backgroundColor = navAccent;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activePage !== page.id) {
+                    e.currentTarget.style.opacity = "0.6";
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }
+                }}
+              >
+                {page.label}
+              </button>
+            ))}
           </div>
           <div className="text-xs opacity-75">{vibe.label}</div>
         </div>
@@ -192,7 +109,7 @@ export const SharedNav = ({
         </div>
         <div className="flex items-center justify-center gap-3 flex-wrap">
           {mainPages.map((page) => {
-            const isActive = isPageGroupActive(page.id);
+            const isActive = activePage === page.id;
             return (
               <button
                 key={page.id}
@@ -242,7 +159,7 @@ export const SharedNav = ({
         </div>
         <div className="flex items-center gap-6">
           {mainPages.map((page) => {
-            const isActive = isPageGroupActive(page.id);
+            const isActive = activePage === page.id;
             return (
               <button
                 key={page.id}
@@ -286,7 +203,7 @@ export const SharedNav = ({
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           {mainPages.map((page) => {
-            const isActive = isPageGroupActive(page.id);
+            const isActive = activePage === page.id;
             return (
               <button
                 key={page.id}
@@ -334,7 +251,7 @@ export const SharedNav = ({
         </div>
         <div className="flex items-center gap-8">
           {mainPages.map((page) => {
-            const isActive = isPageGroupActive(page.id);
+            const isActive = activePage === page.id;
             return (
               <button
                 key={page.id}
@@ -405,7 +322,7 @@ export const SharedNav = ({
                 }}
               >
                 {mainPages.map((page) => {
-                  const isActive = isPageGroupActive(page.id);
+                  const isActive = activePage === page.id;
                   return (
                     <button
                       key={page.id}
