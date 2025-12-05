@@ -1163,7 +1163,7 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row">
         <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-800 p-4 space-y-6 overflow-y-auto lg:sticky lg:top-0 lg:h-screen">
           <SidebarControls
             vibeId={vibeId}
