@@ -5,8 +5,7 @@ import PreviewLanding from "./PreviewLanding";
 import PreviewBlog from "./PreviewBlog";
 import PreviewComponents from "./PreviewComponents";
 import { ContrastCheckerPanel } from "./ContrastCheckerPanel";
-import { getGradientCSSValue } from "../lib/gradientTokens";
-import { getTextureContent } from "../lib/textureTokens";
+import { buildBackgroundStyles } from "../lib/backgroundStyles";
 
 interface PreviewProps {
   designState: DesignState;
@@ -28,104 +27,17 @@ const Preview = ({
   onColorsFixed,
   showContrastChecker = true,
 }: PreviewProps) => {
-
-  // Build texture background-image URL
-  const textureContent =
-    designState.textureId && designState.textureId !== "none"
-      ? getTextureContent(designState.textureId)
-      : null;
-
-  const textureBackgroundImage = textureContent
-    ? (() => {
-        const uniqueId = `texture-${designState.textureId}-${Math.random().toString(36).substr(2, 9)}`;
-        let svgContent = textureContent.svgContent
-          .replace(/<svg([^>]*?)>/, (match, attrs) => {
-            if (!attrs.includes('viewBox')) {
-              return `<svg viewBox="0 0 512 512"${attrs}>`;
-            }
-            return match;
-          })
-          .replace(/id="([^"]+)"/g, (match, id) => `id="${uniqueId}-${id}"`)
-          .replace(/url\(#([^)]+)\)/g, (match, id) => `url(#${uniqueId}-${id})`);
-        const encoded = encodeURIComponent(svgContent.trim());
-        return `url('data:image/svg+xml,${encoded}')`;
-      })()
-    : null;
-
-  // Build gradient CSS value
-  const gradientCSS =
-    designState.gradientId && designState.gradientId !== "none"
-      ? getGradientCSSValue(designState.gradientId)
-      : null;
-
-  // Calculate opacity values
-  const gradientOpacity = (designState.gradientOpacity ?? 20) / 100;
-  const textureOpacity = (designState.textureOpacity ?? 10) / 100;
-
-
-  // Debug: check what values we have
-  console.log("Preview render:", {
-    hasGradient: !!gradientCSS,
-    hasTexture: !!textureBackgroundImage,
-    gradientOpacity,
-    textureOpacity,
-  });
+  const backgroundStyles = buildBackgroundStyles(designState);
 
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       {/* Main Preview Area */}
-      <div
-        style={{
-          flex: 1,
-          minWidth: 0,
-          minHeight: 0,
-          position: "relative",
-          borderRadius: "24px",
-          border: "1px solid rgba(30, 41, 59, 0.4)",
-          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-          backgroundColor: designState.colors.background,
-          overflow: "hidden",
-        }}
-      >
-        {/* Gradient overlay layer */}
-        {gradientCSS && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: gradientCSS,
-              opacity: gradientOpacity,
-              mixBlendMode: "overlay",
-              pointerEvents: "none",
-            }}
-          />
-        )}
-
-        {/* Texture overlay layer */}
-        {textureBackgroundImage && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: textureBackgroundImage,
-              backgroundRepeat: "repeat",
-              backgroundSize: "512px 512px",
-              opacity: textureOpacity,
-              mixBlendMode: "multiply",
-              pointerEvents: "none",
-            }}
-          />
-        )}
-
-        {/* Main content container */}
+      <div className="flex-1 min-w-0 overflow-hidden">
         <div
+          className="w-full h-full rounded-3xl border border-slate-800/40 overflow-hidden shadow-lg relative"
           style={{
+            ...backgroundStyles,
             position: "relative",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            zIndex: 2,
           }}
         >
           {isAnalyzing && (

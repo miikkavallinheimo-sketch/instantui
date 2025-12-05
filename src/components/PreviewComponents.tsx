@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 import type { DesignState, BorderToken, HoverAnimationType } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
 import { getGlassConfigForVibe, buildGlassBackground, buildGlassBorder, buildBackdropFilter } from "../lib/glassTokens";
-import { getGradient, getGradientCSSValue, VIBE_GRADIENTS } from "../lib/gradientTokens";
 import { getTextureContent, getTextureDataUrl, VIBE_TEXTURES } from "../lib/textureTokens";
 
 interface PreviewComponentsProps {
@@ -1825,44 +1824,44 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           Gradients
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginBottom: spacingObj["3xl"] }}>
-          {VIBE_GRADIENTS[vibe.id]?.options.map((gradientId) => {
-            const gradient = getGradient(gradientId);
-            if (!gradient) return null;
-            return (
-              <div key={gradient.id} style={{ display: "flex", flexDirection: "column", gap: spacingObj.md }}>
+          {[
+            { name: "Primary to Accent", description: "Primary color transitioning to accent", gradient: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})` },
+            { name: "Secondary to Primary", description: "Secondary transitioning to primary", gradient: `linear-gradient(135deg, ${colors.secondary}, ${colors.primary})` },
+            { name: "Surface to Accent", description: "Subtle surface to accent gradient", gradient: `linear-gradient(135deg, ${colors.surface}, ${colors.accent}40)` },
+          ].map((item, idx) => (
+            <div key={idx} style={{ display: "flex", flexDirection: "column", gap: spacingObj.md }}>
+              <div
+                style={{
+                  height: "120px",
+                  borderRadius: radiusMap.md,
+                  background: item.gradient,
+                  border: `1px solid ${colors.borderSubtle}`,
+                }}
+              />
+              <div>
                 <div
                   style={{
-                    height: "120px",
-                    borderRadius: radiusMap.md,
-                    background: gradient.value,
-                    border: `1px solid ${colors.borderSubtle}`,
+                    fontSize: sizeMap["sm"],
+                    fontWeight: 600,
+                    color: colors.text,
+                    fontFamily: fontPair.heading,
+                    marginBottom: spacingObj.xs,
                   }}
-                />
-                <div>
-                  <div
-                    style={{
-                      fontSize: sizeMap["sm"],
-                      fontWeight: 600,
-                      color: colors.text,
-                      fontFamily: fontPair.heading,
-                      marginBottom: spacingObj.xs,
-                    }}
-                  >
-                    {gradient.name}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: sizeMap["xs"],
-                      color: colors.textMuted,
-                      fontFamily: fontPair.body,
-                    }}
-                  >
-                    {gradient.description}
-                  </div>
+                >
+                  {item.name}
+                </div>
+                <div
+                  style={{
+                    fontSize: sizeMap["xs"],
+                    color: colors.textMuted,
+                    fontFamily: fontPair.body,
+                  }}
+                >
+                  {item.description}
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </section>
 

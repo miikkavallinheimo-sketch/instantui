@@ -104,7 +104,6 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
   };
 
   const rootStyle: CSSProperties = {
-    backgroundColor: colors.background,
     color: colors.text,
   } as React.CSSProperties;
 
