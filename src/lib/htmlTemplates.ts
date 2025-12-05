@@ -363,21 +363,38 @@ export function generateBlogPageHTML(state: DesignState): string {
     }
 
     header {
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 2rem 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 3rem 0;
       margin-bottom: 3rem;
+    }
+
+    header .container {
+      text-align: center;
     }
 
     header h1 {
       font-family: var(--font-heading);
       font-weight: var(--heading-font-weight);
-      font-size: 2rem;
-      color: var(--primary);
+      font-size: 2.5rem;
+      color: white;
       margin-bottom: 0.5rem;
     }
 
     header p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+    }
+
+    .hero {
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      font-size: 1.05rem;
       color: var(--text-muted);
     }
 
@@ -418,26 +435,29 @@ export function generateBlogPageHTML(state: DesignState): string {
 
     .article-category {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       background-color: var(--surface-alt);
       color: var(--text-muted);
-      border-radius: 4px;
-      font-size: 0.875rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
       margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     article.design .article-category {
-      color: var(--on-primary);
+      color: white;
       background-color: var(--primary);
     }
 
     article.development .article-category {
-      color: var(--on-secondary);
+      color: white;
       background-color: var(--secondary);
     }
 
     article.inspiration .article-category {
-      color: var(--on-accent);
+      color: white;
       background-color: var(--accent);
     }
 
@@ -480,16 +500,66 @@ export function generateBlogPageHTML(state: DesignState): string {
 
     footer {
       margin-top: 4rem;
-      padding: 2rem 0;
+      padding: 3rem 0;
       border-top: 1px solid var(--border-subtle);
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+    }
+
+    .footer-content {
       text-align: center;
+    }
+
+    .footer-contact {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contact-label {
+      font-size: 0.85rem;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-value {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .contact-value:hover {
+      text-decoration: underline;
+    }
+
+    .footer-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 2rem 0;
+    }
+
+    .footer-bottom {
+      color: var(--text-muted);
+      font-size: 0.9rem;
     }
 
     @media (max-width: 768px) {
       .article-footer {
         flex-direction: column;
         text-align: center;
+      }
+
+      .footer-contact {
+        gap: 1.5rem;
       }
     }
   </style>
@@ -501,6 +571,12 @@ export function generateBlogPageHTML(state: DesignState): string {
       <p>Insights, tutorials, and inspiration for designers and developers</p>
     </div>
   </header>
+
+  <section class="hero">
+    <div class="container">
+      <p>Explore our latest articles covering design systems, development practices, and industry trends. Find practical guides, case studies, and creative inspiration to elevate your work.</p>
+    </div>
+  </section>
 
   <main class="container">
     <div class="blog-grid">
@@ -547,7 +623,26 @@ export function generateBlogPageHTML(state: DesignState): string {
 
   <footer>
     <div class="container">
-      <p>&copy; 2024 Your Blog. All rights reserved.</p>
+      <div class="footer-content">
+        <div class="footer-contact">
+          <div class="contact-item">
+            <div class="contact-label">Email</div>
+            <a href="mailto:hello@example.com" class="contact-value">hello@example.com</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label">Phone</div>
+            <a href="tel:+1234567890" class="contact-value">+1 (234) 567-890</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label">Location</div>
+            <div class="contact-value">San Francisco, CA</div>
+          </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <p class="footer-bottom">&copy; 2024 Your Blog. All rights reserved. | Privacy Policy | Terms of Service</p>
+      </div>
     </div>
   </footer>
 </body>
