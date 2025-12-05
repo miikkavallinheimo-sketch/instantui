@@ -205,7 +205,7 @@ const removeHoverAnimation = (
 };
 
 const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
-  const { colors, fontPair, typography, uiTokens, vibe, spacing } = designState;
+  const { colors, fontPair, typography, uiTokens, vibe, spacing: spacingObj } = designState;
 
   const rootStyle: CSSProperties = {
     color: colors.text,
@@ -226,7 +226,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 style={{
                   backgroundColor: colors.primary,
                   color: colors.onPrimary,
-                  padding: `${spacing.lg} ${spacing["2xl"]}`,
+                  padding: `${spacingObj.lg} ${spacingObj["2xl"]}`,
                   borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
                   border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
                   fontSize: sizeMap["sm"],
@@ -286,7 +286,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 style={{
                   backgroundColor: "transparent",
                   color: colors.secondary,
-                  padding: `${spacing.lg} ${spacing["2xl"]}`,
+                  padding: `${spacingObj.lg} ${spacingObj["2xl"]}`,
                   borderRadius: radiusMap[uiTokens.buttonSecondary.radius],
                   border: `2px solid ${colors.secondary}`,
                   fontSize: sizeMap["sm"],
@@ -335,7 +335,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 style={{
                   backgroundColor: colors.accent,
                   color: colors.onAccent,
-                  padding: `${spacing.lg} ${spacing["2xl"]}`,
+                  padding: `${spacingObj.lg} ${spacingObj["2xl"]}`,
                   borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
                   border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
                   fontSize: sizeMap["sm"],
@@ -401,7 +401,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: colors.surface,
                   border: `2px solid ${colors.borderStrong}`,
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing["2xl"],
+                  padding: spacingObj["2xl"],
                   boxShadow: originalShadow,
                   minWidth: "200px",
                   cursor: "pointer",
@@ -436,7 +436,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     fontFamily: fontPair.heading,
                     fontSize: sizeMap["lg"],
                     fontWeight: 600,
-                    marginBottom: spacing.md,
+                    marginBottom: spacingObj.md,
                     color: colors.text,
                   }}
                 >
@@ -467,7 +467,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: colors.accent,
                   border: getBorderStyle(uiTokens.card.border, colors),
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing["2xl"],
+                  padding: spacingObj["2xl"],
                   boxShadow: originalShadow,
                   minWidth: "200px",
                   cursor: "pointer",
@@ -502,7 +502,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     fontFamily: fontPair.heading,
                     fontSize: sizeMap["lg"],
                     fontWeight: 600,
-                    marginBottom: spacing.md,
+                    marginBottom: spacingObj.md,
                     color: colors.onAccent,
                   }}
                 >
@@ -534,7 +534,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: colors.primary,
                   border: getBorderStyle(uiTokens.card.border, colors),
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing["2xl"],
+                  padding: spacingObj["2xl"],
                   boxShadow: originalShadow,
                   minWidth: "200px",
                   cursor: "pointer",
@@ -569,7 +569,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     fontFamily: fontPair.heading,
                     fontSize: sizeMap["lg"],
                     fontWeight: 600,
-                    marginBottom: spacing.md,
+                    marginBottom: spacingObj.md,
                     color: colors.onPrimary,
                   }}
                 >
@@ -601,7 +601,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: colors.secondary,
                   border: getBorderStyle(uiTokens.card.border, colors),
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing["2xl"],
+                  padding: spacingObj["2xl"],
                   boxShadow: originalShadow,
                   minWidth: "200px",
                   cursor: "pointer",
@@ -636,7 +636,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     fontFamily: fontPair.heading,
                     fontSize: sizeMap["lg"],
                     fontWeight: 600,
-                    marginBottom: spacing.md,
+                    marginBottom: spacingObj.md,
                     color: colors.onSecondary,
                   }}
                 >
@@ -792,11 +792,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: `${colors.primary}15`,
                   border: `1px solid ${colors.primary}`,
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing.xl,
+                  padding: spacingObj.xl,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  gap: spacing.xl,
+                  gap: spacingObj.xl,
                   fontFamily: fontPair.body,
                   fontSize: sizeMap["sm"],
                   color: colors.primary,
@@ -813,7 +813,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     cursor: "pointer",
                     fontSize: "1.25rem",
                     lineHeight: 1,
-                    padding: spacing.sm,
+                    padding: spacingObj.sm,
                   }}
                 >
                   ×
@@ -833,11 +833,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: `${colors.accent}15`,
                   border: `1px solid ${colors.accent}`,
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing.xl,
+                  padding: spacingObj.xl,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  gap: spacing.xl,
+                  gap: spacingObj.xl,
                   fontFamily: fontPair.body,
                   fontSize: sizeMap["sm"],
                   color: colors.accent,
@@ -854,7 +854,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     cursor: "pointer",
                     fontSize: "1.25rem",
                     lineHeight: 1,
-                    padding: spacing.sm,
+                    padding: spacingObj.sm,
                   }}
                 >
                   ×
@@ -874,11 +874,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: `${colors.secondary}15`,
                   border: `1px solid ${colors.secondary}`,
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing.xl,
+                  padding: spacingObj.xl,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  gap: spacing.xl,
+                  gap: spacingObj.xl,
                   fontFamily: fontPair.body,
                   fontSize: sizeMap["sm"],
                   color: colors.secondary,
@@ -895,7 +895,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     cursor: "pointer",
                     fontSize: "1.25rem",
                     lineHeight: 1,
-                    padding: spacing.sm,
+                    padding: spacingObj.sm,
                   }}
                 >
                   ×
@@ -915,11 +915,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   backgroundColor: colors.surface,
                   border: `1px solid ${colors.borderSubtle}`,
                   borderRadius: radiusMap[uiTokens.card.radius],
-                  padding: spacing.xl,
+                  padding: spacingObj.xl,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  gap: spacing.xl,
+                  gap: spacingObj.xl,
                   fontFamily: fontPair.body,
                   fontSize: sizeMap["sm"],
                   color: colors.text,
@@ -936,7 +936,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     cursor: "pointer",
                     fontSize: "1.25rem",
                     lineHeight: 1,
-                    padding: spacing.sm,
+                    padding: spacingObj.sm,
                   }}
                 >
                   ×
@@ -989,7 +989,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 <div
                   style={{
                     position: "relative",
-                    padding: spacing["2xl"],
+                    padding: spacingObj["2xl"],
                     zIndex: 1,
                   }}
                 >
@@ -998,7 +998,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                       fontFamily: fontPair.heading,
                       fontSize: sizeMap["lg"],
                       fontWeight: 600,
-                      marginBottom: spacing.md,
+                      marginBottom: spacingObj.md,
                       color: colors.text,
                     }}
                   >
@@ -1060,7 +1060,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 <div
                   style={{
                     position: "relative",
-                    padding: spacing["2xl"],
+                    padding: spacingObj["2xl"],
                     zIndex: 1,
                   }}
                 >
@@ -1069,7 +1069,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                       fontFamily: fontPair.heading,
                       fontSize: sizeMap["lg"],
                       fontWeight: 600,
-                      marginBottom: spacing.md,
+                      marginBottom: spacingObj.md,
                       color: colors.text,
                     }}
                   >
@@ -1133,7 +1133,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 <div
                   style={{
                     position: "relative",
-                    padding: spacing["2xl"],
+                    padding: spacingObj["2xl"],
                     zIndex: 1,
                   }}
                 >
@@ -1142,7 +1142,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                       fontFamily: fontPair.heading,
                       fontSize: sizeMap["lg"],
                       fontWeight: 600,
-                      marginBottom: spacing.md,
+                      marginBottom: spacingObj.md,
                       color: colors.text,
                     }}
                   >
@@ -1202,7 +1202,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                 <div
                   style={{
                     position: "relative",
-                    padding: spacing["2xl"],
+                    padding: spacingObj["2xl"],
                     zIndex: 1,
                   }}
                 >
@@ -1211,7 +1211,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                       fontFamily: fontPair.heading,
                       fontSize: sizeMap["lg"],
                       fontWeight: 600,
-                      marginBottom: spacing.md,
+                      marginBottom: spacingObj.md,
                       color: colors.text,
                     }}
                   >
@@ -1302,64 +1302,11 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               fontFamily: fontPair.body,
               fontSize: sizeMap["sm"],
               color: colors.textMuted,
-              marginTop: spacing.md,
+              marginTop: spacingObj.md,
             }}
           >
             All components with {vibe.label} vibe styling and animations
           </p>
-        </div>
-      </section>
-
-      {/* Spacing Scale Section */}
-      <section className="max-w-7xl mx-auto px-6 py-12 border-b" style={{ borderColor: colors.borderSubtle }}>
-        <div
-          style={{
-            fontFamily: fontPair.heading,
-            fontSize: sizeMap["lg"],
-            fontWeight: 600,
-            color: colors.text,
-            marginBottom: spacing["3xl"],
-          }}
-        >
-          Spacing Scale
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {Object.entries(spacing).map(([token, value]) => (
-            <div key={token}>
-              <div
-                style={{
-                  backgroundColor: colors.primary,
-                  width: value,
-                  height: value,
-                  borderRadius: radiusMap["md"],
-                  marginBottom: "0.75rem",
-                  boxShadow: getShadowForMode("sm", vibe.isDarkUi),
-                }}
-              />
-              <div
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["xs"],
-                  color: colors.textMuted,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                {token}
-              </div>
-              <div
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["xs"],
-                  color: colors.text,
-                  fontWeight: 600,
-                }}
-              >
-                {value}
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -1374,8 +1321,8 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontSize: sizeMap["lg"],
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing["3xl"],
-                  paddingBottom: spacing.xl,
+                  marginBottom: spacingObj["3xl"],
+                  paddingBottom: spacingObj.xl,
                   borderBottom: `2px solid ${colors.borderSubtle}`,
                 }}
               >
@@ -1389,13 +1336,13 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                       backgroundColor: colors.surface,
                       border: getBorderStyle(uiTokens.card.border, colors),
                       borderRadius: radiusMap[uiTokens.card.radius],
-                      padding: spacing["3xl"],
+                      padding: spacingObj["3xl"],
                       boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: spacing.xl,
+                      gap: spacingObj.xl,
                     }}
                   >
                     <div
@@ -1420,7 +1367,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
         {/* Animation & Shadow Info */}
         <section
           style={{
-            marginTop: spacing["4xl"],
+            marginTop: spacingObj["4xl"],
             padding: spacing["3xl"],
             backgroundColor: colors.surface,
             borderRadius: radiusMap[uiTokens.card.radius],
@@ -1434,7 +1381,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               fontSize: sizeMap["lg"],
               fontWeight: 600,
               color: colors.text,
-              marginBottom: spacing.xl,
+              marginBottom: spacingObj.xl,
             }}
           >
             Vibe Configuration
@@ -1446,7 +1393,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing.md,
+                  marginBottom: spacingObj.md,
                 }}
               >
                 Button Animation
@@ -1469,7 +1416,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing.md,
+                  marginBottom: spacingObj.md,
                 }}
               >
                 Card Animation
@@ -1492,7 +1439,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing.md,
+                  marginBottom: spacingObj.md,
                 }}
               >
                 Card Shadow
@@ -1513,7 +1460,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing.md,
+                  marginBottom: spacingObj.md,
                 }}
               >
                 Button Primary Shadow
@@ -1534,7 +1481,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing.md,
+                  marginBottom: spacingObj.md,
                 }}
               >
                 Button Radius
@@ -1557,7 +1504,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontWeight: 600,
                   color: colors.text,
-                  marginBottom: spacing.md,
+                  marginBottom: spacingObj.md,
                 }}
               >
                 Card Radius & Border
