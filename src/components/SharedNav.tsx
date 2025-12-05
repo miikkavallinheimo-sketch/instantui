@@ -25,11 +25,23 @@ export const SharedNav = ({
   const vibeAnimations = getAnimationsForVibe(vibe.id);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const pages: Array<{ id: PreviewPageId; label: string }> = [
+  const mainPages: Array<{ id: PreviewPageId; label: string }> = [
     { id: "landing", label: "Landing" },
     { id: "blog", label: "Blog" },
     { id: "dashboard", label: "Dashboard" },
     { id: "components", label: "Components" },
+  ];
+
+  const landingVariants: Array<{ id: PreviewPageId; label: string }> = [
+    { id: "landing", label: "Original" },
+    { id: "landing1", label: "Clean" },
+    { id: "landing2", label: "Gradient" },
+  ];
+
+  const blogVariants: Array<{ id: PreviewPageId; label: string }> = [
+    { id: "blog", label: "Original" },
+    { id: "blog1", label: "Minimal" },
+    { id: "blog2", label: "Gradient" },
   ];
 
   // Shared color scheme for all menus
@@ -56,34 +68,79 @@ export const SharedNav = ({
           <div className="font-semibold text-lg" style={{ fontFamily: fontPair.heading }}>
             ChromUI
           </div>
-          <div className="flex gap-2">
-            {pages.map((page) => (
-              <button
-                key={page.id}
-                onClick={() => onPageChange?.(page.id)}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                style={{
-                  backgroundColor: activePage === page.id ? navAccent : "transparent",
-                  color: navText,
-                  opacity: activePage === page.id ? 1 : 0.6,
-                  transitionDuration: `${linkAnim.duration}ms`,
-                }}
-                onMouseEnter={(e) => {
-                  if (activePage !== page.id) {
-                    e.currentTarget.style.opacity = "0.8";
-                    e.currentTarget.style.backgroundColor = navAccent;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activePage !== page.id) {
-                    e.currentTarget.style.opacity = "0.6";
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }
-                }}
-              >
-                {page.label}
-              </button>
-            ))}
+          <div className="flex gap-2 items-center">
+            {mainPages.map((page) => {
+              const isLanding = page.id === "landing" && (activePage === "landing" || activePage === "landing1" || activePage === "landing2");
+              const isBlog = page.id === "blog" && (activePage === "blog" || activePage === "blog1" || activePage === "blog2");
+              const isActive = isLanding || isBlog || activePage === page.id;
+              const variants = page.id === "landing" ? landingVariants : page.id === "blog" ? blogVariants : null;
+
+              return (
+                <div key={page.id} className="relative group">
+                  <button
+                    onClick={() => onPageChange?.(page.id)}
+                    className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                    style={{
+                      backgroundColor: isActive ? navAccent : "transparent",
+                      color: navText,
+                      opacity: isActive ? 1 : 0.6,
+                      transitionDuration: `${linkAnim.duration}ms`,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.opacity = "0.8";
+                        e.currentTarget.style.backgroundColor = navAccent;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.opacity = "0.6";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }
+                    }}
+                  >
+                    {page.label}
+                  </button>
+
+                  {/* Dropdown for variants */}
+                  {variants && (
+                    <div
+                      className="absolute left-0 top-full hidden group-hover:flex flex-col rounded-lg overflow-hidden border mt-2"
+                      style={{
+                        backgroundColor: navBg,
+                        borderColor: `${navText}20`,
+                        minWidth: "120px",
+                      }}
+                    >
+                      {variants.map((variant) => (
+                        <button
+                          key={variant.id}
+                          onClick={() => onPageChange?.(variant.id)}
+                          className="px-4 py-2 text-sm text-left transition-all"
+                          style={{
+                            backgroundColor: activePage === variant.id ? navAccent : "transparent",
+                            color: navText,
+                            opacity: activePage === variant.id ? 1 : 0.7,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = navAccent;
+                            e.currentTarget.style.opacity = "1";
+                          }}
+                          onMouseLeave={(e) => {
+                            if (activePage !== variant.id) {
+                              e.currentTarget.style.backgroundColor = "transparent";
+                              e.currentTarget.style.opacity = "0.7";
+                            }
+                          }}
+                        >
+                          {variant.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <div className="text-xs opacity-75">{vibe.label}</div>
         </div>

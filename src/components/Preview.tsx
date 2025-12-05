@@ -2,7 +2,11 @@ import type { DesignState, PreviewPageId, MenuPresetId } from "../lib/types";
 import { SharedNav } from "./SharedNav";
 import PreviewDashboard from "./PreviewDashboard";
 import PreviewLanding from "./PreviewLanding";
+import PreviewLanding1 from "./PreviewLanding1";
+import PreviewLanding2 from "./PreviewLanding2";
 import PreviewBlog from "./PreviewBlog";
+import PreviewBlog1 from "./PreviewBlog1";
+import PreviewBlog2 from "./PreviewBlog2";
 import PreviewComponents from "./PreviewComponents";
 import { ContrastCheckerPanel } from "./ContrastCheckerPanel";
 import { buildBackgroundStyles } from "../lib/backgroundStyles";
@@ -78,7 +82,11 @@ const Preview = ({
               <PreviewDashboard designState={designState} isAnalyzing={isAnalyzing} />
             )}
             {activePage === "landing" && <PreviewLanding designState={designState} />}
+            {activePage === "landing1" && <PreviewLanding1 designState={designState} />}
+            {activePage === "landing2" && <PreviewLanding2 designState={designState} />}
             {activePage === "blog" && <PreviewBlog designState={designState} />}
+            {activePage === "blog1" && <PreviewBlog1 designState={designState} />}
+            {activePage === "blog2" && <PreviewBlog2 designState={designState} />}
             {activePage === "components" && <PreviewComponents designState={designState} />}
           </div>
         </div>
