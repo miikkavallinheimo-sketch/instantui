@@ -90,7 +90,7 @@ export interface ComponentAnimations {
 export type FeatureTier = "FREE" | "PRO";
 
 // Preview page types
-export type PreviewPageId = "landing" | "landing1" | "landing2" | "blog" | "blog1" | "blog2" | "dashboard" | "components";
+export type PreviewPageId = "landing" | "blog" | "dashboard" | "components";
 
 export interface PreviewPage {
   id: PreviewPageId;

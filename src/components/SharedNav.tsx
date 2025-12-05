@@ -25,13 +25,9 @@ export const SharedNav = ({
   const vibeAnimations = getAnimationsForVibe(vibe.id);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const mainPages: Array<{ id: PreviewPageId; label: string; group?: string }> = [
-    { id: "landing", label: "Landing", group: "landing" },
-    { id: "landing1", label: "Landing - Clean", group: "landing" },
-    { id: "landing2", label: "Landing - Gradient", group: "landing" },
-    { id: "blog", label: "Blog", group: "blog" },
-    { id: "blog1", label: "Blog - Minimal", group: "blog" },
-    { id: "blog2", label: "Blog - Gradient", group: "blog" },
+  const mainPages: Array<{ id: PreviewPageId; label: string }> = [
+    { id: "landing", label: "Landing" },
+    { id: "blog", label: "Blog" },
     { id: "dashboard", label: "Dashboard" },
     { id: "components", label: "Components" },
   ];

@@ -1,6 +1,6 @@
-import type { CSSProperties } from "react";
 import { useState } from "react";
-import type { DesignState } from "../lib/types";
+import type { CSSProperties } from "react";
+import type { DesignState, BorderToken, HoverAnimationType } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
 
 interface PreviewBlogProps {
@@ -16,571 +16,477 @@ const sizeMap = {
   "2xl": "1.5rem",
 } as const;
 
+const radiusMap = {
+  none: "0px",
+  sm: "6px",
+  md: "10px",
+  lg: "16px",
+  xl: "24px",
+  full: "9999px",
+} as const;
+
+const getBorderStyle = (token: BorderToken, colors: DesignState["colors"]) => {
+  if (token === "none") return "0px solid transparent";
+  const color = token === "subtle" ? colors.borderSubtle : colors.borderStrong;
+  return `1px solid ${color}`;
+};
+
+const applyHoverAnimation = (
+  element: HTMLElement,
+  animationType: HoverAnimationType,
+  config: {
+    duration: number;
+    timingFunction: string;
+    scale?: number;
+    glowColor?: string;
+    translateY?: number;
+    colorShiftTarget?: string;
+    brightnessLevel?: number;
+    currentShadow: string;
+    isDarkUi: boolean;
+  }
+) => {
+  const { duration, timingFunction, scale, glowColor, translateY, colorShiftTarget, brightnessLevel, currentShadow, isDarkUi } = config;
+  element.style.transition = `all ${duration}ms ${timingFunction}`;
+
+  switch (animationType) {
+    case "lift":
+      element.style.transform = `translateY(${translateY || -4}px)`;
+      element.style.boxShadow = getShadowForMode("lg", isDarkUi);
+      break;
+    case "subtle":
+      element.style.opacity = "0.9";
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+    case "shimmer":
+      element.style.transform = `scale(${scale || 1.05})`;
+      element.style.boxShadow = getShadowForMode("lg", isDarkUi);
+      break;
+    case "glow":
+      element.style.boxShadow = glowColor ? `0 0 12px ${glowColor}, ${getShadowForMode("lg", isDarkUi)}` : getShadowForMode("lg", isDarkUi);
+      break;
+    case "color-shift":
+      if (colorShiftTarget) element.style.backgroundColor = colorShiftTarget;
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+    case "brightness":
+      element.style.filter = `brightness(${brightnessLevel || 1.1})`;
+      element.style.boxShadow = getShadowForMode("md", isDarkUi);
+      break;
+    case "scale":
+      element.style.transform = `scale(${scale || 1.05})`;
+      break;
+    case "text-underline":
+      element.style.textDecoration = "underline";
+      element.style.textDecorationColor = colorShiftTarget || "currentColor";
+      element.style.textDecorationThickness = "2px";
+      element.style.textUnderlineOffset = "4px";
+      break;
+  }
+};
+
+const removeHoverAnimation = (
+  element: HTMLElement,
+  animationType: HoverAnimationType,
+  config: { duration: number; timingFunction: string; originalShadow: string; originalBgColor?: string }
+) => {
+  const { duration, timingFunction, originalShadow } = config;
+  element.style.transition = `all ${duration}ms ${timingFunction}`;
+
+  switch (animationType) {
+    case "lift":
+    case "shimmer":
+    case "scale":
+      element.style.transform = "none";
+      element.style.boxShadow = originalShadow;
+      break;
+    case "subtle":
+    case "glow":
+    case "brightness":
+    case "color-shift":
+      element.style.opacity = "1";
+      element.style.filter = "none";
+      element.style.backgroundColor = config.originalBgColor || "";
+      element.style.boxShadow = originalShadow;
+      break;
+    case "text-underline":
+      element.style.textDecoration = "none";
+      break;
+  }
+};
+
 const PreviewBlog = ({ designState }: PreviewBlogProps) => {
-  const { colors, fontPair, typography } = designState;
+  const { colors, fontPair, typography, uiTokens, vibe, spacing: spacingObj } = designState;
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  const categories = ["All", "Design", "Typography", "Color", "Accessibility", "Workflow"];
+  const categories = ["All", "Design", "Development", "Inspiration"];
 
   const articles = [
-    {
-      title: "Getting Started with Design Systems",
-      excerpt: "Learn the fundamentals of building a scalable design system.",
-      readTime: "8 min",
-      category: "Design",
-      color: "primary",
-      componentType: "button", // Primary button showcase
-    },
-    {
-      title: "Typography Best Practices",
-      excerpt: "Master the art of typography and create visual hierarchy.",
-      readTime: "12 min",
-      category: "Typography",
-      color: "secondary",
-      componentType: "pill", // Pill/badge showcase
-    },
-    {
-      title: "Color Theory for Interfaces",
-      excerpt: "Understand how color psychology impacts user experience.",
-      readTime: "10 min",
-      category: "Color",
-      color: "accent",
-      componentType: "card", // Card component showcase
-    },
-    {
-      title: "Accessibility Fundamentals",
-      excerpt: "Build inclusive interfaces that work for everyone.",
-      readTime: "15 min",
-      category: "Accessibility",
-      color: "primary",
-      componentType: "button",
-    },
-    {
-      title: "Design System Tokens",
-      excerpt: "Organize and scale your design with proper tokenization.",
-      readTime: "11 min",
-      category: "Design",
-      color: "secondary",
-      componentType: "pill",
-    },
-    {
-      title: "Workflow Optimization",
-      excerpt: "Streamline your design process with better tools and habits.",
-      readTime: "9 min",
-      category: "Workflow",
-      color: "accent",
-      componentType: "card",
-    },
+    { title: "Designing Interactive Systems", excerpt: "Learn how to create engaging user experiences", category: "Design", date: "Mar 15" },
+    { title: "Component Architecture Patterns", excerpt: "Building scalable design systems from the ground up", category: "Development", date: "Mar 10" },
+    { title: "Color Theory in Practice", excerpt: "Using color to guide user attention and emotion", category: "Inspiration", date: "Mar 5" },
+    { title: "Animation Best Practices", excerpt: "Smooth transitions that feel natural and purposeful", category: "Design", date: "Feb 28" },
+    { title: "Accessibility First", excerpt: "Creating inclusive experiences for all users", category: "Development", date: "Feb 22" },
+    { title: "Typography Mastery", excerpt: "The art of choosing and pairing typefaces", category: "Inspiration", date: "Feb 15" },
   ];
 
-  const filteredArticles = selectedCategory === "All"
-    ? articles
-    : articles.filter(a => a.category === selectedCategory);
-
-  const getColorForArticle = (colorKey: string) => {
-    switch (colorKey) {
-      case "primary":
-        return colors.primary;
-      case "secondary":
-        return colors.secondary;
-      case "accent":
-        return colors.accent;
-      default:
-        return colors.primary;
-    }
-  };
-
-  const getOnColorForArticle = (colorKey: string) => {
-    switch (colorKey) {
-      case "primary":
-        return colors.onPrimary;
-      case "secondary":
-        return colors.onSecondary;
-      case "accent":
-        return colors.onAccent;
-      default:
-        return colors.onPrimary;
-    }
-  };
+  const filteredArticles = selectedCategory === "All" ? articles : articles.filter((a) => a.category === selectedCategory);
 
   const rootStyle: CSSProperties = {
     color: colors.text,
-  } as React.CSSProperties;
+  };
 
   return (
     <div className="w-full" style={rootStyle}>
-      {/* Top Header */}
+      {/* Header */}
       <section
-        className="px-6 py-8 border-b"
+        className="px-6 py-12 border-b"
         style={{ borderColor: colors.borderSubtle }}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div>
-            <div
-              style={{
-                fontFamily: fontPair.heading,
-                fontSize: sizeMap["2xl"],
-                fontWeight: 700,
-                color: colors.text,
-              }}
-            >
-              Design Journal
-            </div>
-            <p
-              style={{
-                fontFamily: fontPair.body,
-                fontSize: sizeMap["sm"],
-                color: colors.textMuted,
-                marginTop: "0.5rem",
-              }}
-            >
-              Stories, insights, and lessons from the design world
-            </p>
-          </div>
+        <div className="max-w-7xl mx-auto">
           <div
-            className="px-6 py-3 rounded-lg text-sm font-semibold"
             style={{
-              backgroundColor: colors.accent,
-              color: colors.onAccent,
               fontFamily: fontPair.heading,
+              fontSize: sizeMap["2xl"],
+              fontWeight: 700,
+              color: colors.text,
+              marginBottom: spacingObj.md,
             }}
           >
-            {filteredArticles.length} Articles
+            Design & Development Blog
           </div>
+          <p
+            style={{
+              fontFamily: fontPair.body,
+              fontSize: sizeMap["md"],
+              color: colors.textMuted,
+            }}
+          >
+            Insights, tutorials, and inspiration for building beautiful design systems
+          </p>
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Sidebar */}
-        <aside className="lg:col-span-1">
-          <div
-            className="sticky top-6 p-6 rounded-lg"
-            style={{
-              backgroundColor: colors.surface,
-              borderColor: colors.borderSubtle,
-              border: `1px solid ${colors.borderSubtle}`,
-              boxShadow: getShadowForMode(designState.uiTokens.card.shadow, designState.vibe.isDarkUi),
-            }}
-          >
-            <div
-              style={{
-                fontFamily: fontPair.heading,
-                fontSize: sizeMap["lg"],
-                fontWeight: 600,
-                color: colors.text,
-                marginBottom: "1rem",
-              }}
-            >
-              Categories
-            </div>
-            <div className="space-y-2">
-              {categories.map((cat) => (
+      {/* Category Filter */}
+      <section className="px-6 py-8 border-b" style={{ borderColor: colors.borderSubtle }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-wrap gap-3">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat;
+              const btnAnimConfig = uiTokens.animations?.button;
+              const originalShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
+
+              return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className="w-full text-left px-4 py-2 rounded-lg transition-all"
                   style={{
-                    backgroundColor:
-                      selectedCategory === cat
-                        ? colors.primary
-                        : "transparent",
-                    color:
-                      selectedCategory === cat
-                        ? colors.onPrimary
-                        : colors.text,
-                    fontFamily: fontPair.body,
+                    backgroundColor: isActive ? colors.primary : "transparent",
+                    color: isActive ? colors.onPrimary : colors.text,
+                    padding: `${spacingObj.md} ${spacingObj.lg}`,
+                    borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
+                    border: isActive ? "none" : `1px solid ${colors.borderSubtle}`,
                     fontSize: sizeMap["sm"],
-                    fontWeight: selectedCategory === cat ? 600 : 400,
+                    fontFamily: fontPair.heading,
+                    fontWeight: 600,
+                    boxShadow: isActive ? originalShadow : "none",
+                    cursor: "pointer",
+                    transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "subtle", {
+                        duration: btnAnimConfig?.duration || 200,
+                        timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                        scale: btnAnimConfig?.scale,
+                        glowColor: btnAnimConfig?.glowColor,
+                        translateY: btnAnimConfig?.translateY || -2,
+                        colorShiftTarget: btnAnimConfig?.colorShiftTarget,
+                        brightnessLevel: btnAnimConfig?.brightnessLevel,
+                        currentShadow: originalShadow,
+                        isDarkUi: vibe.isDarkUi,
+                      });
+                      e.currentTarget.style.borderColor = colors.primary;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "subtle", {
+                        duration: btnAnimConfig?.duration || 200,
+                        timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                        originalShadow,
+                      });
+                      e.currentTarget.style.borderColor = colors.borderSubtle;
+                    }
                   }}
                 >
                   {cat}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        </aside>
+        </div>
+      </section>
 
-        {/* Articles Grid */}
-        <section className="lg:col-span-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Articles Grid */}
+      <section className="px-6 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredArticles.map((article, idx) => {
-              const articleColor = getColorForArticle(article.color);
-              const articleOnColor = getOnColorForArticle(article.color);
-
-              // Render different UI components based on componentType
-              const renderComponentPreview = () => {
-                if (article.componentType === "button") {
-                  return (
-                    <div className="flex flex-col gap-3">
-                      <button
-                        className="px-6 py-3 font-semibold text-sm"
-                        style={{
-                          backgroundColor: articleColor,
-                          color: articleOnColor,
-                          fontFamily: fontPair.heading,
-                          borderRadius: "0.375rem",
-                        }}
-                      >
-                        Primary Button
-                      </button>
-                      <button
-                        className="px-6 py-3 font-semibold text-sm border"
-                        style={{
-                          color: articleColor,
-                          borderColor: articleColor,
-                          fontFamily: fontPair.heading,
-                          borderRadius: "0.375rem",
-                          backgroundColor: "transparent",
-                        }}
-                      >
-                        Secondary Button
-                      </button>
-                    </div>
-                  );
-                } else if (article.componentType === "pill") {
-                  return (
-                    <div className="flex flex-wrap gap-2">
-                      <span
-                        className="px-4 py-2 text-sm font-medium"
-                        style={{
-                          backgroundColor: articleColor,
-                          color: articleOnColor,
-                          fontFamily: fontPair.body,
-                          borderRadius: "9999px",
-                        }}
-                      >
-                        Design
-                      </span>
-                      <span
-                        className="px-4 py-2 text-sm font-medium"
-                        style={{
-                          backgroundColor: `${articleColor}20`,
-                          color: articleColor,
-                          fontFamily: fontPair.body,
-                          borderRadius: "9999px",
-                        }}
-                      >
-                        System
-                      </span>
-                      <span
-                        className="px-4 py-2 text-sm font-medium border"
-                        style={{
-                          color: articleColor,
-                          borderColor: articleColor,
-                          fontFamily: fontPair.body,
-                          borderRadius: "9999px",
-                          backgroundColor: "transparent",
-                        }}
-                      >
-                        Tags
-                      </span>
-                    </div>
-                  );
-                } else {
-                  // card component
-                  return (
-                    <div className="grid grid-cols-2 gap-2">
-                      <div
-                        className="p-4"
-                        style={{
-                          backgroundColor: colors.surface,
-                          borderColor: colors.borderSubtle,
-                          border: `1px solid ${colors.borderSubtle}`,
-                          borderRadius: "0.5rem",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontSize: sizeMap["xs"],
-                            color: colors.textMuted,
-                            marginBottom: "0.5rem",
-                          }}
-                        >
-                          Card 1
-                        </div>
-                        <div
-                          style={{
-                            fontSize: sizeMap["md"],
-                            fontWeight: 600,
-                            color: articleColor,
-                          }}
-                        >
-                          24
-                        </div>
-                      </div>
-                      <div
-                        className="p-4"
-                        style={{
-                          backgroundColor: `${articleColor}10`,
-                          borderColor: articleColor,
-                          border: `1px solid ${articleColor}30`,
-                          borderRadius: "0.5rem",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontSize: sizeMap["xs"],
-                            color: colors.textMuted,
-                            marginBottom: "0.5rem",
-                          }}
-                        >
-                          Card 2
-                        </div>
-                        <div
-                          style={{
-                            fontSize: sizeMap["md"],
-                            fontWeight: 600,
-                            color: articleColor,
-                          }}
-                        >
-                          12%
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              };
+              const cardAnimConfig = uiTokens.animations?.card;
+              const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
 
               return (
-                <article
+                <div
                   key={idx}
-                  className="rounded-lg overflow-hidden transition-shadow cursor-pointer"
                   style={{
                     backgroundColor: colors.surface,
-                    border: `1px solid ${colors.borderSubtle}`,
-                    boxShadow: getShadowForMode(designState.uiTokens.card.shadow, designState.vibe.isDarkUi),
+                    border: getBorderStyle(uiTokens.card.border, colors),
+                    borderRadius: radiusMap[uiTokens.card.radius],
+                    padding: spacingObj["2xl"],
+                    boxShadow: originalShadow,
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
                   }}
                   onMouseEnter={(e) => {
-                    const el = e.currentTarget;
-                    el.style.boxShadow = getShadowForMode("lg", designState.vibe.isDarkUi);
-                    el.style.transform = "translateY(-2px)";
+                    applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                      duration: cardAnimConfig?.duration || 250,
+                      timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                      scale: cardAnimConfig?.scale,
+                      glowColor: cardAnimConfig?.glowColor,
+                      translateY: cardAnimConfig?.translateY || -4,
+                      colorShiftTarget: cardAnimConfig?.colorShiftTarget,
+                      brightnessLevel: cardAnimConfig?.brightnessLevel,
+                      currentShadow: originalShadow,
+                      isDarkUi: vibe.isDarkUi,
+                    });
                   }}
                   onMouseLeave={(e) => {
-                    const el = e.currentTarget;
-                    el.style.boxShadow = getShadowForMode(designState.uiTokens.card.shadow, designState.vibe.isDarkUi);
-                    el.style.transform = "translateY(0)";
+                    removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                      duration: cardAnimConfig?.duration || 250,
+                      timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                      originalShadow,
+                    });
                   }}
                 >
                   <div
-                    className="p-6"
-                    style={{ backgroundColor: `${articleColor}08` }}
+                    style={{
+                      display: "inline-block",
+                      backgroundColor: `${colors.primary}20`,
+                      color: colors.primary,
+                      padding: `${spacingObj.xs} ${spacingObj.md}`,
+                      borderRadius: radiusMap.full,
+                      fontSize: sizeMap["xs"],
+                      fontFamily: fontPair.heading,
+                      fontWeight: 600,
+                      marginBottom: spacingObj.md,
+                      width: "fit-content",
+                    }}
                   >
-                    {renderComponentPreview()}
+                    {article.category}
                   </div>
-                  <div className="p-6">
-                    <div
-                      className="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3"
-                      style={{
-                        backgroundColor: `${articleColor}20`,
-                        color: articleColor,
-                        fontFamily: fontPair.body,
-                      }}
-                    >
-                      {article.category}
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: fontPair.heading,
-                        fontSize: sizeMap["lg"],
-                        fontWeight: 600,
-                        color: colors.text,
-                        marginBottom: "0.75rem",
-                      }}
-                    >
-                      {article.title}
-                    </div>
-                    <p
-                      style={{
-                        fontFamily: fontPair.body,
-                        fontSize: sizeMap["sm"],
-                        color: colors.textMuted,
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      {article.excerpt}
-                    </p>
-                    <div
-                      className="flex items-center justify-between"
+
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["lg"],
+                      fontWeight: 600,
+                      color: colors.text,
+                      marginBottom: spacingObj.md,
+                      flex: "1",
+                    }}
+                  >
+                    {article.title}
+                  </div>
+
+                  <p
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["sm"],
+                      color: colors.textMuted,
+                      marginBottom: spacingObj.lg,
+                      flex: "1",
+                    }}
+                  >
+                    {article.excerpt}
+                  </p>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      paddingTop: spacingObj.md,
+                      borderTop: `1px solid ${colors.borderSubtle}`,
+                    }}
+                  >
+                    <span
                       style={{
                         fontFamily: fontPair.body,
                         fontSize: sizeMap["xs"],
                         color: colors.textMuted,
                       }}
                     >
-                      <span>{article.readTime}</span>
-                      <button
-                        className="px-3 py-1 rounded-full font-semibold text-xs"
-                        style={{
-                          backgroundColor: articleColor,
-                          color: articleOnColor,
-                          fontFamily: fontPair.heading,
-                        }}
-                      >
-                        Read
-                      </button>
-                    </div>
+                      {article.date}
+                    </span>
+
+                    {/* Read More Link */}
+                    {(() => {
+                      const linkAnimConfig = uiTokens.animations?.link;
+                      const originalColor = colors.primary;
+
+                      return (
+                        <a
+                          href="#"
+                          style={{
+                            color: colors.primary,
+                            textDecoration: "none",
+                            fontSize: sizeMap["sm"],
+                            fontFamily: fontPair.body,
+                            cursor: "pointer",
+                            fontWeight: 600,
+                            transition: `all ${linkAnimConfig?.duration || 150}ms ${linkAnimConfig?.timingFunction || "ease-out"}`,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = colors.accent;
+                            applyHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
+                              duration: linkAnimConfig?.duration || 150,
+                              timingFunction: linkAnimConfig?.timingFunction || "ease-out",
+                              scale: linkAnimConfig?.scale,
+                              glowColor: linkAnimConfig?.glowColor,
+                              translateY: linkAnimConfig?.translateY,
+                              colorShiftTarget: linkAnimConfig?.colorShiftTarget,
+                              brightnessLevel: linkAnimConfig?.brightnessLevel,
+                              currentShadow: "none",
+                              isDarkUi: vibe.isDarkUi,
+                            });
+                            (e.currentTarget as any).originalColor = originalColor;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = (e.currentTarget as any).originalColor;
+                            removeHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
+                              duration: linkAnimConfig?.duration || 150,
+                              timingFunction: linkAnimConfig?.timingFunction || "ease-out",
+                              originalShadow: "none",
+                            });
+                          }}
+                        >
+                          Read →
+                        </a>
+                      );
+                    })()}
                   </div>
-                </article>
+                </div>
               );
             })}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      {/* CTA Section */}
+      {/* Newsletter Section */}
       <section
-        className="mt-12 mx-6 rounded-lg p-8 md:p-12"
-        style={{ backgroundColor: colors.secondary }}
+        className="px-6 py-16 md:py-24 border-t"
+        style={{ borderColor: colors.borderSubtle }}
       >
-        <div className="max-w-2xl mx-auto text-center space-y-4">
+        <div className="max-w-2xl mx-auto text-center">
           <div
             style={{
               fontFamily: fontPair.heading,
               fontSize: sizeMap["xl"],
               fontWeight: 600,
-              color: colors.onSecondary,
+              color: colors.text,
+              marginBottom: spacingObj.md,
             }}
           >
-            Stay Updated with Latest Insights
+            Stay Updated
           </div>
           <p
             style={{
               fontFamily: fontPair.body,
-              fontSize: sizeMap[typography.body.size],
-              color: `${colors.onSecondary}cc`,
+              fontSize: sizeMap["md"],
+              color: colors.textMuted,
+              marginBottom: spacingObj["2xl"],
             }}
           >
-            Get curated design articles and resources delivered weekly.
+            Subscribe to get the latest articles and insights delivered to your inbox
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-2">
+
+          <div
+            style={{
+              display: "flex",
+              gap: spacingObj.md,
+              maxWidth: "500px",
+              margin: "0 auto",
+              flexDirection: "column",
+            }}
+            className="sm:flex-row sm:gap-3"
+          >
             <input
               type="email"
               placeholder="your@email.com"
-              className="flex-1 px-4 py-2 rounded-lg border"
               style={{
-                borderColor: `${colors.onSecondary}30`,
-                backgroundColor: `${colors.onSecondary}10`,
-                color: colors.onSecondary,
+                flex: "1",
+                padding: `${spacingObj.md} ${spacingObj.lg}`,
+                borderRadius: radiusMap.md,
+                border: `1px solid ${colors.borderSubtle}`,
+                backgroundColor: colors.surface,
+                color: colors.text,
                 fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
               }}
             />
-            <button
-              className="px-6 py-2 rounded-lg font-semibold"
-              style={{
-                backgroundColor: colors.onSecondary,
-                color: colors.secondary,
-                fontFamily: fontPair.heading,
-              }}
-            >
-              Join
-            </button>
+
+            {/* Subscribe Button */}
+            {(() => {
+              const btnAnimConfig = uiTokens.animations?.button;
+              const originalShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
+
+              return (
+                <button
+                  style={{
+                    backgroundColor: colors.primary,
+                    color: colors.onPrimary,
+                    padding: `${spacingObj.md} ${spacingObj["2xl"]}`,
+                    borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
+                    border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
+                    fontSize: sizeMap["sm"],
+                    fontFamily: fontPair.heading,
+                    fontWeight: 600,
+                    boxShadow: originalShadow,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                      duration: btnAnimConfig?.duration || 200,
+                      timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                      scale: btnAnimConfig?.scale,
+                      glowColor: btnAnimConfig?.glowColor,
+                      translateY: btnAnimConfig?.translateY || -2,
+                      colorShiftTarget: btnAnimConfig?.colorShiftTarget,
+                      brightnessLevel: btnAnimConfig?.brightnessLevel,
+                      currentShadow: originalShadow,
+                      isDarkUi: vibe.isDarkUi,
+                    });
+                  }}
+                  onMouseLeave={(e) => {
+                    removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                      duration: btnAnimConfig?.duration || 200,
+                      timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                      originalShadow,
+                    });
+                  }}
+                >
+                  Subscribe
+                </button>
+              );
+            })()}
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer
-        className="px-6 py-12 border-t mt-12"
-        style={{
-          backgroundColor: colors.background,
-          borderColor: colors.borderSubtle,
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <div
-                style={{
-                  fontFamily: fontPair.heading,
-                  fontWeight: 600,
-                  color: colors.text,
-                  marginBottom: "1rem",
-                }}
-              >
-                About Blog
-              </div>
-              <p
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["sm"],
-                  color: colors.textMuted,
-                  lineHeight: 1.6,
-                }}
-              >
-                Sharing knowledge about design systems, typography, and creating beautiful products.
-              </p>
-            </div>
-            <div>
-              <div
-                style={{
-                  fontFamily: fontPair.heading,
-                  fontWeight: 600,
-                  color: colors.text,
-                  marginBottom: "1rem",
-                }}
-              >
-                Categories
-              </div>
-              <ul
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["sm"],
-                  color: colors.textMuted,
-                }}
-                className="space-y-2"
-              >
-                {categories.slice(1).map((cat) => (
-                  <li key={cat}>
-                    <a href="#" style={{ color: colors.text }}>
-                      {cat}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <div
-                style={{
-                  fontFamily: fontPair.heading,
-                  fontWeight: 600,
-                  color: colors.text,
-                  marginBottom: "1rem",
-                }}
-              >
-                More
-              </div>
-              <ul
-                style={{
-                  fontFamily: fontPair.body,
-                  fontSize: sizeMap["sm"],
-                  color: colors.textMuted,
-                }}
-                className="space-y-2"
-              >
-                <li><a href="#" style={{ color: colors.text }}>RSS Feed</a></li>
-                <li><a href="#" style={{ color: colors.text }}>Archive</a></li>
-                <li><a href="#" style={{ color: colors.text }}>Contact</a></li>
-              </ul>
-            </div>
-          </div>
-          <div
-            className="border-t pt-6"
-            style={{ borderColor: colors.borderSubtle }}
-          >
-            <p
-              style={{
-                fontFamily: fontPair.body,
-                fontSize: sizeMap["sm"],
-                color: colors.textMuted,
-                textAlign: "center",
-              }}
-            >
-              © 2024 ChromUI Design Journal. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
