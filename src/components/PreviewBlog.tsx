@@ -438,7 +438,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                               });
                             }}
                           >
-                            Read →
+                            Read
                           </a>
                         );
                       })()}

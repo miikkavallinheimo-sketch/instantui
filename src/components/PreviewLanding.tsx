@@ -415,7 +415,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                       color: colors.onPrimary,
                     }}
                   >
-                    ✨ Interactive
+                    Interactive
                   </div>
                   <div
                     style={{
@@ -475,7 +475,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                       color: colors.onSecondary,
                     }}
                   >
-                    🎨 Customizable
+                    Customizable
                   </div>
                   <div
                     style={{
@@ -535,7 +535,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                       color: colors.onAccent,
                     }}
                   >
-                    🚀 Ready to Use
+                    Ready to Use
                   </div>
                   <div
                     style={{
