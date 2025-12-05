@@ -91,7 +91,16 @@ export const SharedNav = ({
               const variants = getVariants(page.id);
 
               return (
-                <div key={page.id} className="relative group">
+                <div
+                  key={page.id}
+                  className="relative"
+                  onMouseLeave={(e) => {
+                    const dropdown = e.currentTarget.querySelector('[data-dropdown]');
+                    if (dropdown) {
+                      dropdown.style.display = 'none';
+                    }
+                  }}
+                >
                   <button
                     onClick={() => onPageChange?.(page.id)}
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
@@ -105,6 +114,13 @@ export const SharedNav = ({
                       if (!isActive) {
                         e.currentTarget.style.opacity = "0.8";
                         e.currentTarget.style.backgroundColor = navAccent;
+                      }
+                      // Show dropdown on hover if variants exist
+                      if (variants) {
+                        const dropdown = e.currentTarget.parentElement?.querySelector('[data-dropdown]');
+                        if (dropdown) {
+                          dropdown.style.display = 'flex';
+                        }
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -120,23 +136,35 @@ export const SharedNav = ({
                   {/* Dropdown for variants */}
                   {variants && (
                     <div
-                      className="absolute left-0 top-full hidden group-hover:flex flex-col rounded-lg overflow-hidden border mt-2"
+                      data-dropdown
+                      className="absolute left-0 top-full flex flex-col rounded-lg overflow-hidden border"
                       style={{
                         backgroundColor: navBg,
                         borderColor: `${navText}20`,
                         minWidth: "120px",
                         zIndex: 50,
+                        marginTop: "0.5rem",
+                        display: 'none',
+                        pointerEvents: 'auto',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.display = 'flex';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.display = 'none';
                       }}
                     >
                       {variants.map((variant) => (
                         <button
                           key={variant.id}
                           onClick={() => onPageChange?.(variant.id)}
-                          className="px-4 py-2 text-sm text-left transition-all"
+                          className="px-4 py-2 text-sm text-left transition-all whitespace-nowrap"
                           style={{
                             backgroundColor: activePage === variant.id ? navAccent : "transparent",
                             color: navText,
                             opacity: activePage === variant.id ? 1 : 0.7,
+                            border: 'none',
+                            cursor: 'pointer',
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = navAccent;
