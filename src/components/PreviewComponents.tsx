@@ -1371,7 +1371,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                   fontFamily: fontPair.heading,
                   fontSize: sizeMap["lg"],
                   fontWeight: 700,
-                  color: colors.primary,
+                  color: colors.text,
                 }}
               >
                 Studio
