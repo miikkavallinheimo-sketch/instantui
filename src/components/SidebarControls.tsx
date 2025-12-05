@@ -1,6 +1,7 @@
 import { VIBE_PRESETS } from "../lib/vibePresets";
 import { getAvailablePages, getAvailableMenus } from "../lib/featureFlags";
 import { TexturePanel } from "./TexturePanel";
+import { GradientPanel } from "./GradientPanel";
 import type {
   VibeId,
   DesignState,
@@ -37,6 +38,8 @@ interface SidebarControlsProps {
   onDarkModeChange?: (mode: "light" | "dark") => void;
   onTextureChange?: (textureId: string) => void;
   onTextureOpacityChange?: (opacity: number) => void;
+  onGradientChange?: (gradientId: string) => void;
+  onGradientOpacityChange?: (opacity: number) => void;
 }
 
 const SidebarControls = ({
@@ -65,6 +68,8 @@ const SidebarControls = ({
   onDarkModeChange,
   onTextureChange,
   onTextureOpacityChange,
+  onGradientChange,
+  onGradientOpacityChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
 
@@ -174,13 +179,10 @@ const SidebarControls = ({
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
-            Vibe
-          </h2>
-          <div className="text-[10px] text-slate-500">↑↓ scroll</div>
-        </div>
-        <div className="space-y-1 max-h-72 overflow-y-auto overflow-x-hidden pr-1 border border-slate-700/50 rounded-lg p-1 bg-slate-900/30">
+        <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400 mb-2">
+          Vibe
+        </h2>
+        <div className="space-y-1">
           {vibes.map(([id, vibe]) => (
             <button
               key={id}
@@ -447,6 +449,14 @@ const SidebarControls = ({
           designState={designState}
           onTextureChange={onTextureChange}
           onOpacityChange={onTextureOpacityChange}
+        />
+      )}
+
+      {onGradientChange && onGradientOpacityChange && (
+        <GradientPanel
+          designState={designState}
+          onGradientChange={onGradientChange}
+          onOpacityChange={onGradientOpacityChange}
         />
       )}
     </div>

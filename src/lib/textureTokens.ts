@@ -36,7 +36,7 @@ export interface TextureOption {
   id: TextureId;
   name: string;
   description: string;
-  svgContent?: string; // Inline SVG for simple patterns
+  svgContent?: string; // Inline SVG for simple patterns - uses dark colors with multiply blend mode
   assetPath?: string; // Path to texture file for complex patterns
 }
 
@@ -65,11 +65,14 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="noise-fine">
-            <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="4" seed="1"/>
-          </filter>
+          <pattern id="noise-fine" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="8" height="8" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="2" cy="2" r="0.5" fill="rgba(255,255,255,0.25)"/>
+            <circle cx="6" cy="4" r="0.4" fill="rgba(255,255,255,0.18)"/>
+            <circle cx="4" cy="6" r="0.3" fill="rgba(255,255,255,0.22)"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#noise-fine)" opacity="0.3"/>
+        <rect width="512" height="512" fill="url(#noise-fine)"/>
       </svg>
     `,
   },
@@ -82,7 +85,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="1" fill="#000000" opacity="0.5"/>
+            <circle cx="20" cy="20" r="1.5" fill="rgba(255,255,255,0.6)"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#dots)"/>
@@ -98,7 +101,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="lines" x="0" y="0" width="512" height="60" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="512" y2="0" stroke="#000000" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="0" x2="512" y2="0" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#lines)"/>
@@ -115,7 +118,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="grid" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.2"/>
+            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#grid)"/>
@@ -131,7 +134,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hatch" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="#000000" stroke-width="0.5" opacity="0.25"/>
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#hatch)"/>
@@ -146,11 +149,13 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="paper-texture">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="5" seed="2"/>
-          </filter>
+          <pattern id="paper-texture" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="6" height="6" fill="rgba(255,255,255,0.03)"/>
+            <line x1="0" y1="0" x2="6" y2="6" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" opacity="0.5"/>
+            <line x1="6" y1="0" x2="0" y2="6" stroke="rgba(255,255,255,0.06)" stroke-width="0.4" opacity="0.4"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#paper-texture)" opacity="0.15"/>
+        <rect width="512" height="512" fill="url(#paper-texture)"/>
       </svg>
     `,
   },
@@ -163,12 +168,13 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="brush">
-            <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="3" seed="3"/>
-            <feDisplacementMap in="SourceGraphic" scale="8"/>
-          </filter>
+          <pattern id="brush" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 5 10 Q 15 8 25 12 Q 30 14 35 10" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M 8 28 Q 20 25 32 30" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M 2 18 L 38 22" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#brush)" opacity="0.2"/>
+        <rect width="512" height="512" fill="url(#brush)"/>
       </svg>
     `,
   },
@@ -180,12 +186,16 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="splatter">
-            <feTurbulence type="fractalNoise" baseFrequency="2" numOctaves="2" seed="4"/>
-            <feThreshold in="SourceGraphic" low="0.5" high="0.8"/>
-          </filter>
+          <pattern id="splatter" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="3" fill="rgba(255,255,255,0.3)"/>
+            <circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="22" cy="18" r="1" fill="rgba(255,255,255,0.25)"/>
+            <circle cx="18" cy="22" r="1.5" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="45" cy="40" r="2" fill="rgba(255,255,255,0.25)"/>
+            <circle cx="45" cy="40" r="1" fill="rgba(255,255,255,0.35)"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#splatter)" opacity="0.25"/>
+        <rect width="512" height="512" fill="url(#splatter)"/>
       </svg>
     `,
   },
@@ -198,10 +208,10 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="weave" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="12" y2="0" stroke="#000000" stroke-width="0.5" opacity="0.15"/>
-            <line x1="0" y1="6" x2="12" y2="6" stroke="#000000" stroke-width="0.5" opacity="0.15"/>
-            <line x1="0" y1="0" x2="0" y2="12" stroke="#000000" stroke-width="0.5" opacity="0.15"/>
-            <line x1="6" y1="0" x2="6" y2="12" stroke="#000000" stroke-width="0.5" opacity="0.15"/>
+            <line x1="0" y1="0" x2="12" y2="0" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
+            <line x1="0" y1="6" x2="12" y2="6" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
+            <line x1="0" y1="0" x2="0" y2="12" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
+            <line x1="6" y1="0" x2="6" y2="12" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#weave)"/>
@@ -218,9 +228,9 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="confetti-pat" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <circle cx="16" cy="16" r="2" fill="#000000" opacity="0.3"/>
-            <rect x="32" y="24" width="3" height="3" fill="#000000" opacity="0.25"/>
-            <polygon points="48,8 50,14 56,14 51,18 53,24 48,20 43,24 45,18 40,14 46,14" fill="#000000" opacity="0.2"/>
+            <circle cx="16" cy="16" r="2" fill="#ffffff" opacity="1"/>
+            <rect x="32" y="24" width="3" height="3" fill="#ffffff" opacity="1"/>
+            <polygon points="48,8 50,14 56,14 51,18 53,24 48,20 43,24 45,18 40,14 46,14" fill="#ffffff" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#confetti-pat)"/>
@@ -236,9 +246,9 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="doodle-pat" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-            <path d="M 20 20 Q 25 15 30 20 T 40 20" stroke="#000000" stroke-width="0.5" fill="none" opacity="0.2"/>
-            <circle cx="60" cy="30" r="3" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.2"/>
-            <path d="M 10 60 L 15 55 L 20 60" stroke="#000000" stroke-width="0.5" fill="none" opacity="0.2"/>
+            <path d="M 20 20 Q 25 15 30 20 T 40 20" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="1"/>
+            <circle cx="60" cy="30" r="3" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
+            <path d="M 10 60 L 15 55 L 20 60" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#doodle-pat)"/>
@@ -254,9 +264,9 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="bubbles" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
-            <circle cx="12" cy="12" r="3" fill="#000000" opacity="0.2"/>
-            <circle cx="36" cy="24" r="2" fill="#000000" opacity="0.15"/>
-            <circle cx="24" cy="36" r="2.5" fill="#000000" opacity="0.2"/>
+            <circle cx="12" cy="12" r="3" fill="#ffffff" opacity="1"/>
+            <circle cx="36" cy="24" r="2" fill="#ffffff" opacity="1"/>
+            <circle cx="24" cy="36" r="2.5" fill="#ffffff" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#bubbles)"/>
@@ -272,11 +282,12 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="silk-texture">
-            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="6" seed="5"/>
-          </filter>
+          <pattern id="silk-texture" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="4" y2="0" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+            <line x1="0" y1="2" x2="4" y2="2" stroke="rgba(255,255,255,0.05)" stroke-width="0.3"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#silk-texture)" opacity="0.1"/>
+        <rect width="512" height="512" fill="url(#silk-texture)"/>
       </svg>
     `,
   },
@@ -288,11 +299,14 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="marble">
-            <feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="4" seed="6"/>
-          </filter>
+          <pattern id="marble" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M 0 10 Q 20 8 40 12 T 80 10" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" fill="none"/>
+            <path d="M 0 30 Q 30 28 60 32 T 80 30" stroke="rgba(255,255,255,0.08)" stroke-width="0.4" fill="none"/>
+            <path d="M 0 50 Q 25 48 50 52 T 80 50" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" fill="none"/>
+            <path d="M 0 70 Q 35 68 70 72 T 80 70" stroke="rgba(255,255,255,0.06)" stroke-width="0.3" fill="none"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#marble)" opacity="0.12"/>
+        <rect width="512" height="512" fill="url(#marble)"/>
       </svg>
     `,
   },
@@ -305,10 +319,10 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="linen-weave" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="4" y2="0" stroke="#000000" stroke-width="0.25" opacity="0.15"/>
-            <line x1="0" y1="2" x2="4" y2="2" stroke="#000000" stroke-width="0.25" opacity="0.15"/>
-            <line x1="0" y1="0" x2="0" y2="4" stroke="#000000" stroke-width="0.25" opacity="0.15"/>
-            <line x1="2" y1="0" x2="2" y2="4" stroke="#000000" stroke-width="0.25" opacity="0.15"/>
+            <line x1="0" y1="0" x2="4" y2="0" stroke="#ffffff" stroke-width="0.25" opacity="1"/>
+            <line x1="0" y1="2" x2="4" y2="2" stroke="#ffffff" stroke-width="0.25" opacity="1"/>
+            <line x1="0" y1="0" x2="0" y2="4" stroke="#ffffff" stroke-width="0.25" opacity="1"/>
+            <line x1="2" y1="0" x2="2" y2="4" stroke="#ffffff" stroke-width="0.25" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#linen-weave)"/>
@@ -324,11 +338,15 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="concrete-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="4" seed="7"/>
-          </filter>
+          <pattern id="concrete-filter" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="5" cy="5" r="1" fill="rgba(255,255,255,0.15)"/>
+            <circle cx="15" cy="10" r="0.8" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="10" cy="15" r="1.2" fill="rgba(255,255,255,0.12)"/>
+            <rect x="8" y="0" width="2" height="20" fill="rgba(255,255,255,0.06)"/>
+            <line x1="0" y1="10" x2="20" y2="10" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#concrete-filter)" opacity="0.35"/>
+        <rect width="512" height="512" fill="url(#concrete-filter)"/>
       </svg>
     `,
   },
@@ -341,8 +359,8 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="blocks" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <rect x="0" y="0" width="32" height="32" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.2"/>
-            <polygon points="0,32 32,32 48,16 16,16" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.15"/>
+            <rect x="0" y="0" width="32" height="32" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
+            <polygon points="0,32 32,32 48,16 16,16" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#blocks)"/>
@@ -358,7 +376,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="halftone-pat" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
-            <circle cx="8" cy="8" r="4" fill="#000000" opacity="0.3"/>
+            <circle cx="8" cy="8" r="4" fill="#ffffff" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#halftone-pat)"/>
@@ -374,11 +392,15 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="old-paper-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="6" seed="8"/>
-          </filter>
+          <pattern id="old-paper-filter" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="30" height="30" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="8" cy="8" r="0.5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="20" cy="12" r="0.6" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="15" cy="25" r="0.4" fill="rgba(255,255,255,0.1)"/>
+            <line x1="5" y1="15" x2="25" y2="15" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" opacity="0.6"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#old-paper-filter)" opacity="0.2"/>
+        <rect width="512" height="512" fill="url(#old-paper-filter)"/>
       </svg>
     `,
   },
@@ -390,11 +412,13 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="film">
-            <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" seed="9"/>
-          </filter>
+          <pattern id="film" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.6" fill="rgba(255,255,255,0.25)"/>
+            <circle cx="2.5" cy="2" r="0.5" fill="rgba(255,255,255,0.15)"/>
+            <circle cx="0.5" cy="2.5" r="0.4" fill="rgba(255,255,255,0.2)"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#film)" opacity="0.25"/>
+        <rect width="512" height="512" fill="url(#film)"/>
       </svg>
     `,
   },
@@ -408,7 +432,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hex" x="0" y="0" width="32" height="28" patternUnits="userSpaceOnUse">
-            <polygon points="16,0 32,8 32,20 16,28 0,20 0,8" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.2"/>
+            <polygon points="16,0 32,8 32,20 16,28 0,20 0,8" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#hex)"/>
@@ -424,9 +448,9 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="circuit" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <path d="M 0 32 L 16 32 L 16 16 L 32 16 L 32 48 L 48 48 L 48 0" stroke="#000000" stroke-width="0.5" fill="none" opacity="0.2"/>
-            <circle cx="16" cy="32" r="1.5" fill="#000000" opacity="0.25"/>
-            <circle cx="32" cy="16" r="1.5" fill="#000000" opacity="0.25"/>
+            <path d="M 0 32 L 16 32 L 16 16 L 32 16 L 32 48 L 48 48 L 48 0" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="1"/>
+            <circle cx="16" cy="32" r="1.5" fill="#ffffff" opacity="1"/>
+            <circle cx="32" cy="16" r="1.5" fill="#ffffff" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#circuit)"/>
@@ -441,11 +465,16 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="mesh">
-            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="5" seed="10"/>
-          </filter>
+          <pattern id="mesh" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="12" y2="0" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <line x1="0" y1="6" x2="12" y2="6" stroke="rgba(255,255,255,0.08)" stroke-width="0.4"/>
+            <line x1="0" y1="12" x2="12" y2="12" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="0" y2="12" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <line x1="6" y1="0" x2="6" y2="12" stroke="rgba(255,255,255,0.08)" stroke-width="0.4"/>
+            <circle cx="6" cy="6" r="0.5" fill="rgba(255,255,255,0.15)"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#mesh)" opacity="0.2"/>
+        <rect width="512" height="512" fill="url(#mesh)"/>
       </svg>
     `,
   },
@@ -458,11 +487,15 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="watercolor-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.35" numOctaves="4" seed="11"/>
-          </filter>
+          <pattern id="watercolor-filter" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+            <circle cx="15" cy="15" r="8" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="15" cy="15" r="5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="40" cy="30" r="10" fill="rgba(255,255,255,0.06)"/>
+            <circle cx="40" cy="30" r="6" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="25" cy="45" r="7" fill="rgba(255,255,255,0.07)"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#watercolor-filter)" opacity="0.18"/>
+        <rect width="512" height="512" fill="url(#watercolor-filter)"/>
       </svg>
     `,
   },
@@ -475,9 +508,9 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="wood" x="0" y="0" width="512" height="512" patternUnits="userSpaceOnUse">
-            <path d="M 0 0 Q 256 20 512 0" stroke="#000000" stroke-width="2" fill="none" opacity="0.08"/>
-            <path d="M 0 50 Q 256 70 512 50" stroke="#000000" stroke-width="1.5" fill="none" opacity="0.06"/>
-            <path d="M 0 120 Q 256 135 512 120" stroke="#000000" stroke-width="1" fill="none" opacity="0.05"/>
+            <path d="M 0 0 Q 256 20 512 0" stroke="#ffffff" stroke-width="2" fill="none" opacity="1"/>
+            <path d="M 0 50 Q 256 70 512 50" stroke="#ffffff" stroke-width="1.5" fill="none" opacity="1"/>
+            <path d="M 0 120 Q 256 135 512 120" stroke="#ffffff" stroke-width="1" fill="none" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#wood)"/>
@@ -492,11 +525,15 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="recycled">
-            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="5" seed="12"/>
-          </filter>
+          <pattern id="recycled" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="24" height="24" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="6" cy="6" r="1" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="18" cy="10" r="0.8" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="12" cy="18" r="1.2" fill="rgba(255,255,255,0.12)"/>
+            <line x1="0" y1="12" x2="24" y2="12" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" opacity="0.5"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#recycled)" opacity="0.17"/>
+        <rect width="512" height="512" fill="url(#recycled)"/>
       </svg>
     `,
   },
@@ -509,11 +546,16 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="rough">
-            <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="5" seed="13"/>
-          </filter>
+          <pattern id="rough" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="7" cy="7" r="1.5" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="7" cy="7" r="0.8" fill="rgba(255,255,255,0.15)"/>
+            <circle cx="21" cy="14" r="1.2" fill="rgba(255,255,255,0.18)"/>
+            <circle cx="14" cy="21" r="1" fill="rgba(255,255,255,0.16)"/>
+            <line x1="0" y1="14" x2="28" y2="14" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+            <line x1="14" y1="0" x2="14" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="0.7"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#rough)" opacity="0.4"/>
+        <rect width="512" height="512" fill="url(#rough)"/>
       </svg>
     `,
   },
@@ -525,11 +567,16 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
     svgContent: `
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="aggregate">
-            <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="4" seed="14"/>
-          </filter>
+          <pattern id="aggregate" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+            <circle cx="8" cy="8" r="2" fill="rgba(255,255,255,0.25)"/>
+            <circle cx="24" cy="12" r="1.8" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="16" cy="24" r="2.2" fill="rgba(255,255,255,0.22)"/>
+            <circle cx="10" cy="20" r="1.5" fill="rgba(255,255,255,0.18)"/>
+            <polygon points="28,4 30,8 26,10" fill="rgba(255,255,255,0.15)"/>
+            <line x1="0" y1="16" x2="32" y2="16" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          </pattern>
         </defs>
-        <rect width="512" height="512" fill="#000000" filter="url(#aggregate)" opacity="0.35"/>
+        <rect width="512" height="512" fill="url(#aggregate)"/>
       </svg>
     `,
   },
@@ -542,7 +589,7 @@ export const TEXTURE_LIBRARY: Record<TextureId, TextureOption> = {
       <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="stark-grid" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <rect x="0" y="0" width="64" height="64" fill="none" stroke="#000000" stroke-width="1" opacity="0.3"/>
+            <rect x="0" y="0" width="64" height="64" fill="none" stroke="#ffffff" stroke-width="1" opacity="1"/>
           </pattern>
         </defs>
         <rect width="512" height="512" fill="url(#stark-grid)"/>

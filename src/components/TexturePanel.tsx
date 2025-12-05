@@ -14,7 +14,7 @@ export const TexturePanel = ({
 }: TexturePanelProps) => {
   const vibeTextures = getVibeTextures(designState.vibe.id);
   const currentTexture = designState.textureId || vibeTextures.defaultTexture;
-  const currentOpacity = designState.textureOpacity ?? 10;
+  const currentOpacity = designState.textureOpacity ?? 25;
 
   return (
     <section className="border-t border-slate-700 pt-4">

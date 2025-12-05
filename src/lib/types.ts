@@ -247,6 +247,8 @@ export interface DesignState {
   spacingPatterns: SpacingPatterns;
   textureId?: string; // Current texture (e.g., "fine-noise", "none")
   textureOpacity?: number; // Texture opacity 0-100
+  gradientId?: string; // Current gradient (e.g., "saas-vibrant", "none")
+  gradientOpacity?: number; // Gradient opacity 0-100
 }
 
 export interface DesignTokens {

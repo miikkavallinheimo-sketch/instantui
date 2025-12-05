@@ -28,6 +28,7 @@ import type {
 import { hexToHsl, hslToHex, contrastRatio, hexToLuminance } from "./lib/colorUtils";
 import { getSpacingScale, getSpacingPatterns } from "./lib/spacingScale";
 import { getVibeTextures } from "./lib/textureTokens";
+import { getVibeGradients } from "./lib/gradientTokens";
 import aiVibesData from "./data/generatedVibes.json";
 import SidebarControls from "./components/SidebarControls";
 import { TexturePanel } from "./components/TexturePanel";
@@ -350,8 +351,9 @@ function buildDesignState(
     };
   }
 
-  const previousState =
-    prev && prev.vibe.id === vibeId ? prev : undefined;
+  const previousState = prev && prev.vibe.id === vibeId ? prev : undefined;
+  const vibeTextures = getVibeTextures(vibeId);
+  const vibeGradients = getVibeGradients(vibeId);
 
   const baseColors = generateColors(
     vibe,
@@ -400,6 +402,7 @@ function buildDesignState(
   const spacingDensity = vibe.ui?.spacing?.density || "default";
   const spacingScale = getSpacingScale(spacingDensity);
   const spacingPatterns = getSpacingPatterns(spacingScale);
+  const shouldPreserveSurface = Boolean(previousState);
 
   return {
     vibe,
@@ -410,6 +413,18 @@ function buildDesignState(
     typography,
     spacing: spacingScale,
     spacingPatterns,
+    textureId: shouldPreserveSurface
+      ? previousState?.textureId ?? vibeTextures.defaultTexture
+      : vibeTextures.defaultTexture,
+    textureOpacity: shouldPreserveSurface
+      ? previousState?.textureOpacity ?? 25
+      : 25,
+    gradientId: shouldPreserveSurface
+      ? previousState?.gradientId ?? vibeGradients.defaultGradient
+      : vibeGradients.defaultGradient,
+    gradientOpacity: shouldPreserveSurface
+      ? previousState?.gradientOpacity ?? 20
+      : 20,
   };
 }
 
@@ -468,11 +483,25 @@ function App() {
       false,
       previewState.darkMode
     );
-    return {
+    const vibeTextures = getVibeTextures(initialAppState.vibeId);
+    const vibeGradients = getVibeGradients(initialAppState.vibeId);
+    const initialState = {
       ...baseState,
-      textureId: "none",
-      textureOpacity: 10,
+      textureId: vibeTextures.defaultTexture,
+      textureOpacity: 25,
+      gradientId: vibeGradients.defaultGradient,
+      gradientOpacity: 20,
     };
+    console.log("[App] Initial designState:", {
+      vibeId: initialAppState.vibeId,
+      defaultTexture: vibeTextures.defaultTexture,
+      defaultGradient: vibeGradients.defaultGradient,
+      textureId: initialState.textureId,
+      textureOpacity: initialState.textureOpacity,
+      gradientId: initialState.gradientId,
+      gradientOpacity: initialState.gradientOpacity,
+    });
+    return initialState;
   });
 
   const [tokens, setTokens] = useState<DesignTokens>(() =>
@@ -485,7 +514,7 @@ function App() {
 
   // Texture state
   const [textureId, setTextureId] = useState<string>("none");
-  const [textureOpacity, setTextureOpacity] = useState<number>(10);
+  const [textureOpacity, setTextureOpacity] = useState<number>(25);
 
   // History for undo/redo
   const history = useHistory<AppState>({
@@ -519,8 +548,8 @@ function App() {
   }, [vibeId, previewState]);
 
   useEffect(() => {
-    setDesignState((prev) =>
-      buildDesignState(
+    setDesignState((prev) => {
+      const newState = buildDesignState(
         vibeId,
         seed,
         colorLocks,
@@ -530,8 +559,31 @@ function App() {
         prev,
         false,
         previewState.darkMode
-      )
-    );
+      );
+
+      // If vibe changed, reset to vibe defaults for texture/gradient
+      // Otherwise preserve the current settings
+      if (prev.vibe.id !== vibeId) {
+        const newVibeTextures = getVibeTextures(vibeId);
+        const newVibeGradients = getVibeGradients(vibeId);
+        return {
+          ...newState,
+          textureId: newVibeTextures.defaultTexture,
+          textureOpacity: 25,
+          gradientId: newVibeGradients.defaultGradient,
+          gradientOpacity: 20,
+        };
+      }
+
+      // Preserve texture and gradient settings when other parameters change
+      return {
+        ...newState,
+        textureId: prev.textureId,
+        textureOpacity: prev.textureOpacity,
+        gradientId: prev.gradientId,
+        gradientOpacity: prev.gradientOpacity,
+      };
+    });
   }, [previewState.darkMode, vibeId, seed, colorLocks, fontLockMode, hueShift, saturationShift]);
 
   useEffect(() => {
@@ -542,6 +594,10 @@ function App() {
     designState.fontPair.body,
     designState.fontPair.source,
   ]);
+
+  // Gradient state
+  const [gradientId, setGradientId] = useState<string>("none");
+  const [gradientOpacity, setGradientOpacity] = useState<number>(20);
 
   // Handle texture changes
   const handleTextureChange = (newTextureId: string) => {
@@ -557,6 +613,23 @@ function App() {
     setDesignState((prev) => ({
       ...prev,
       textureOpacity: opacity,
+    }));
+  };
+
+  // Handle gradient changes
+  const handleGradientChange = (newGradientId: string) => {
+    setGradientId(newGradientId);
+    setDesignState((prev) => ({
+      ...prev,
+      gradientId: newGradientId,
+    }));
+  };
+
+  const handleGradientOpacityChange = (opacity: number) => {
+    setGradientOpacity(opacity);
+    setDesignState((prev) => ({
+      ...prev,
+      gradientOpacity: opacity,
     }));
   };
 
@@ -636,9 +709,11 @@ function App() {
       setActiveGeneratedName(null);
       setAiTuned(false);
 
-      // Reset texture to default when changing vibe
+      // Reset texture and gradient to defaults when changing vibe
       const newVibeTextures = getVibeTextures(newVibeId);
+      const newVibeGradients = getVibeGradients(newVibeId);
       setTextureId(newVibeTextures.defaultTexture);
+      setGradientId(newVibeGradients.defaultGradient);
 
       setDesignState((prev) =>
         buildDesignState(
@@ -654,10 +729,11 @@ function App() {
         )
       );
 
-      // Update designState with default texture for new vibe
+      // Update designState with default texture and gradient for new vibe
       setDesignState((prev) => ({
         ...prev,
         textureId: newVibeTextures.defaultTexture,
+        gradientId: newVibeGradients.defaultGradient,
       }));
     },
     [seed, colorLocks, fontLockMode, hueShift, saturationShift, previewState.darkMode]
@@ -671,11 +747,15 @@ function App() {
     setSaturationShift(0);
     setAiTuned(false);
 
-    // Randomize texture
+    // Randomize texture and gradient
     const vibeTextures = getVibeTextures(vibeId);
-    const randomIndex = Math.floor(Math.random() * vibeTextures.options.length);
-    const randomTexture = vibeTextures.options[randomIndex];
+    const vibeGradients = getVibeGradients(vibeId);
+    const randomTextureIndex = Math.floor(Math.random() * vibeTextures.options.length);
+    const randomTexture = vibeTextures.options[randomTextureIndex];
+    const randomGradientIndex = Math.floor(Math.random() * vibeGradients.options.length);
+    const randomGradient = vibeGradients.options[randomGradientIndex];
     setTextureId(randomTexture);
+    setGradientId(randomGradient);
 
     setDesignState((prev) =>
       buildDesignState(
@@ -691,10 +771,11 @@ function App() {
       )
     );
 
-    // Update designState with new texture
+    // Update designState with new texture and gradient
     setDesignState((prev) => ({
       ...prev,
       textureId: randomTexture,
+      gradientId: randomGradient,
     }));
 
     // Trigger auto-refresh if enabled
@@ -728,6 +809,13 @@ function App() {
       [key]: !prev[key],
     }));
   }, []);
+
+  // Auto-refresh when dark mode changes
+  useEffect(() => {
+    if (autoRefresh && previewState.darkMode) {
+      setTriggerAutoRefresh(true);
+    }
+  }, [previewState.darkMode, autoRefresh]);
 
   const setLockMode = useCallback((mode: FontLockMode) => {
     setFontLockMode(mode);
@@ -1075,8 +1163,8 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col lg:flex-row">
-        <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-800 p-4 space-y-6">
+      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-800 p-4 space-y-6 overflow-y-auto lg:max-h-screen">
           <SidebarControls
             vibeId={vibeId}
             onChangeVibe={applyVibe}
@@ -1103,6 +1191,8 @@ function App() {
             onDarkModeChange={previewState.setDarkMode}
             onTextureChange={handleTextureChange}
             onTextureOpacityChange={handleTextureOpacityChange}
+            onGradientChange={handleGradientChange}
+            onGradientOpacityChange={handleGradientOpacityChange}
           />
 
           <div className="border-t border-slate-800 pt-4">
@@ -1114,7 +1204,7 @@ function App() {
 
         </aside>
 
-        <section className="flex-1 flex flex-col">
+        <section className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 p-4 lg:p-6 relative">
             <Preview
               designState={designState}
