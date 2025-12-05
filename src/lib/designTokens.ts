@@ -3,6 +3,7 @@ import { fontWeightVariants, fontWeightCombinations } from "./fontWeightVariants
 import { getVibeGradients, GRADIENT_LIBRARY } from "./gradientTokens";
 import { SHADOW_DEFINITIONS, SHADOW_DEFINITIONS_DARK } from "./shadowTokens";
 import { getSpacingScale, getSpacingPatterns } from "./spacingScale";
+import { generateLandingPageHTML, generateBlogPageHTML, generatePortfolioPageHTML } from "./htmlTemplates";
 
 const radiusMap = {
   none: "0px",
@@ -773,9 +774,17 @@ module.exports = {
 
   const jsonTokens = JSON.stringify(jsonTokensObj, null, 2);
 
+  // Generate HTML pages
+  const landingPageHTML = generateLandingPageHTML(state);
+  const blogPageHTML = generateBlogPageHTML(state);
+  const portfolioPageHTML = generatePortfolioPageHTML(state);
+
   return {
     cssVariables,
     tailwindConfig,
     jsonTokens,
+    landingPageHTML,
+    blogPageHTML,
+    portfolioPageHTML,
   };
 }

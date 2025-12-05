@@ -255,6 +255,9 @@ export interface DesignTokens {
   cssVariables: string;
   tailwindConfig: string;
   jsonTokens: string;
+  landingPageHTML?: string;
+  blogPageHTML?: string;
+  portfolioPageHTML?: string;
 }
 
 export interface ColorLocks {

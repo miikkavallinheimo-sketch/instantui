@@ -5,7 +5,7 @@ interface ExportPanelProps {
   tokens: DesignTokens;
 }
 
-type TabId = "css" | "tailwind" | "json";
+type TabId = "css" | "tailwind" | "json" | "landing" | "blog" | "portfolio";
 
 const ExportPanel = ({ tokens }: ExportPanelProps) => {
   const [tab, setTab] = useState<TabId>("css");
@@ -16,7 +16,13 @@ const ExportPanel = ({ tokens }: ExportPanelProps) => {
       ? tokens.cssVariables
       : tab === "tailwind"
       ? tokens.tailwindConfig
-      : tokens.jsonTokens;
+      : tab === "json"
+      ? tokens.jsonTokens
+      : tab === "landing"
+      ? tokens.landingPageHTML || ""
+      : tab === "blog"
+      ? tokens.blogPageHTML || ""
+      : tokens.portfolioPageHTML || "";
 
   const handleCopy = async () => {
     try {
@@ -28,23 +34,42 @@ const ExportPanel = ({ tokens }: ExportPanelProps) => {
     }
   };
 
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([currentText], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+
+    let filename = "export";
+    if (tab === "css") filename = "styles.css";
+    else if (tab === "tailwind") filename = "tailwind.config.js";
+    else if (tab === "json") filename = "tokens.json";
+    else if (tab === "landing") filename = "landing.html";
+    else if (tab === "blog") filename = "blog.html";
+    else if (tab === "portfolio") filename = "portfolio.html";
+
+    element.download = filename;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
         <div className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
           Export
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="inline-flex rounded-full border border-slate-700 p-0.5 text-[11px]">
-            {(["css", "tailwind", "json"] as TabId[]).map((t) => (
+            {(["css", "tailwind", "json", "landing", "blog", "portfolio"] as TabId[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`px-2 py-1 rounded-full ${
+                className={`px-2 py-1 rounded-full whitespace-nowrap ${
                   tab === t ? "bg-slate-700 text-slate-50" : "text-slate-300"
                 }`}
               >
-                {t.toUpperCase()}
+                {t === "landing" ? "HTML" : t === "blog" ? "BLOG" : t === "portfolio" ? "PORT" : t.toUpperCase()}
               </button>
             ))}
           </div>
@@ -53,6 +78,12 @@ const ExportPanel = ({ tokens }: ExportPanelProps) => {
             className="text-[11px] px-3 py-1 rounded-full border border-emerald-500 text-emerald-300 hover:bg-emerald-500/10"
           >
             {copied ? "Copied!" : "Copy"}
+          </button>
+          <button
+            onClick={handleDownload}
+            className="text-[11px] px-3 py-1 rounded-full border border-blue-500 text-blue-300 hover:bg-blue-500/10"
+          >
+            Download
           </button>
         </div>
       </div>
