@@ -1,4 +1,5 @@
 import type { DesignState } from "./types";
+import { getGlassConfigForVibe, buildGlassBackground, buildBackdropFilter } from "./glassTokens";
 
 export function generateLandingPageHTML(state: DesignState): string {
   const { colors, fontPair, typography, spacing } = state;
@@ -651,7 +652,6 @@ export function generateBlogPageHTML(state: DesignState): string {
 
 export function generatePortfolioPageHTML(state: DesignState): string {
   const { colors, fontPair, typography, vibe } = state;
-  const { getGlassConfigForVibe, buildGlassBackground, buildBackdropFilter } = require("./glassTokens");
 
   const glassConfig = getGlassConfigForVibe(vibe.id);
   const glassBackground = buildGlassBackground(colors.surface, glassConfig);
