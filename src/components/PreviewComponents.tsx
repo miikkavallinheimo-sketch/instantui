@@ -1368,7 +1368,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
         <section
           style={{
             marginTop: spacingObj["4xl"],
-            padding: spacing["3xl"],
+            padding: spacingObj["3xl"],
             backgroundColor: colors.surface,
             borderRadius: radiusMap[uiTokens.card.radius],
             border: getBorderStyle(uiTokens.card.border, colors),
