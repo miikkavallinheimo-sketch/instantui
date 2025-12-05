@@ -685,6 +685,7 @@ export function getTextureContent(textureId: TextureId): TextureOption {
 
 /**
  * Convert texture SVG to data URL for use as background-image
+ * Converts rgba() syntax to proper SVG fill + opacity attributes
  */
 export function getTextureDataUrl(textureId: TextureId): string {
   const texture = TEXTURE_LIBRARY[textureId];
@@ -692,6 +693,13 @@ export function getTextureDataUrl(textureId: TextureId): string {
     return "";
   }
 
-  const encoded = encodeURIComponent(texture.svgContent.trim());
+  let svgContent = texture.svgContent.trim();
+
+  // Convert rgba(255,255,255,opacity) to fill="#ffffff" opacity="opacity"
+  svgContent = svgContent.replace(/rgba\(255\s*,\s*255\s*,\s*255\s*,\s*([\d.]+)\)/g, (_match, opacity) => {
+    return `fill="#ffffff" opacity="${opacity}"`;
+  });
+
+  const encoded = encodeURIComponent(svgContent);
   return `data:image/svg+xml,${encoded}`;
 }
