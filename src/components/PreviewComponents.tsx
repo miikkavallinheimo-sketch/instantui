@@ -205,7 +205,7 @@ const removeHoverAnimation = (
 };
 
 const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
-  const { colors, fontPair, typography, uiTokens, vibe } = designState;
+  const { colors, fontPair, typography, uiTokens, vibe, spacing } = designState;
 
   const rootStyle: CSSProperties = {
     backgroundColor: colors.background,
@@ -1308,6 +1308,59 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
           >
             All components with {vibe.label} vibe styling and animations
           </p>
+        </div>
+      </section>
+
+      {/* Spacing Scale Section */}
+      <section className="max-w-7xl mx-auto px-6 py-12 border-b" style={{ borderColor: colors.borderSubtle }}>
+        <div
+          style={{
+            fontFamily: fontPair.heading,
+            fontSize: sizeMap["lg"],
+            fontWeight: 600,
+            color: colors.text,
+            marginBottom: "2rem",
+          }}
+        >
+          Spacing Scale
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {Object.entries(spacing).map(([token, value]) => (
+            <div key={token}>
+              <div
+                style={{
+                  backgroundColor: colors.primary,
+                  width: value,
+                  height: value,
+                  borderRadius: radiusMap["md"],
+                  marginBottom: "0.75rem",
+                  boxShadow: getShadowForMode("sm", vibe.isDarkUi),
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["xs"],
+                  color: colors.textMuted,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                {token}
+              </div>
+              <div
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["xs"],
+                  color: colors.text,
+                  fontWeight: 600,
+                }}
+              >
+                {value}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
