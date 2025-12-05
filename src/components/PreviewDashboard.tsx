@@ -183,7 +183,6 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
   ];
 
   const rootStyle: CSSProperties = {
-    backgroundColor: colors.background,
     color: colors.text,
     "--radius-card": radiusMap[uiTokens.card.radius],
     "--shadow-card": shadowMap[uiTokens.card.shadow],
@@ -299,7 +298,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             gap: spacingPatterns.verticalRhythm.loose,
           }}
         >
-          <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <header className="flex flex-col md:flex-row md:items-center md:justify-between" style={{ gap: spacingPatterns.gridGap.md }}>
             <div>
               <div
               style={{
@@ -357,7 +356,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
           </header>
 
-          <div className="flex flex-col gap-2 sm:flex-row text-xs" style={{ fontFamily: fontPair.body }}>
+          <div className="flex flex-col sm:flex-row text-xs" style={{ fontFamily: fontPair.body, gap: spacingPatterns.gridGap.sm }}>
             <div
               className="token-pill px-3 py-2"
               style={{ backgroundColor: surface, color: colors.text }}
@@ -378,11 +377,11 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
         </div>
 
-          <section className="space-y-3">
+          <section style={{ display: "flex", flexDirection: "column", gap: spacingPatterns.verticalRhythm.normal }}>
             <div className="text-xs font-semibold uppercase tracking-wide opacity-60" style={{ fontFamily: fontPair.body }}>
               Buttons
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap" style={{ gap: spacingPatterns.gridGap.md }}>
               <button
                 className="token-button token-button-primary px-5 py-2"
                 style={{
@@ -446,13 +445,14 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             {summaryCards.map((card) => (
               <div
                 key={card.label}
-                className={`token-card p-4 ${
+                className={`token-card ${
                   designState.vibe.id === "gradient-bloom"
                     ? "token-card-bloom"
                     : ""
                 }`}
                 style={{
                   backgroundColor: card.background,
+                  padding: spacingPatterns.containerPadding.md,
                 }}
               >
                 <div
@@ -492,8 +492,14 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
            style={{ gap: spacingPatterns.gridGap.md, fontFamily: fontPair.body }}
           >
             <div
-              className="token-card p-4 space-y-3"
-              style={{ backgroundColor: surface }}
+              className="token-card"
+              style={{
+                backgroundColor: surface,
+                padding: spacingPatterns.containerPadding.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingPatterns.verticalRhythm.normal,
+              }}
             >
               <div className="text-xs uppercase tracking-wide opacity-70">
                 Headings (H1 & H2) — {fontPair.heading}
@@ -514,8 +520,14 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
               ))}
             </div>
             <div
-              className="token-card p-4 space-y-3"
-              style={{ backgroundColor: surfaceAlt }}
+              className="token-card"
+              style={{
+                backgroundColor: surfaceAlt,
+                padding: spacingPatterns.containerPadding.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingPatterns.verticalRhythm.normal,
+              }}
             >
               <div className="text-xs uppercase tracking-wide opacity-70">
                 Body / Light — {fontPair.body}
@@ -547,10 +559,16 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
               </div>
             </div>
           </section>
-          <section className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: spacingPatterns.gridGap.md }}>
             <div
-              className="token-card p-4 flex flex-col gap-4 col-span-1 xl:col-span-2"
-              style={{ backgroundColor: surface }}
+              className="token-card col-span-1 xl:col-span-2"
+              style={{
+                backgroundColor: surface,
+                padding: spacingPatterns.containerPadding.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingPatterns.gridGap.md,
+              }}
             >
               <div className="flex items-center justify-between">
                 <div
@@ -566,10 +584,10 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                   This year
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-                <div className="flex flex-col justify-end gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 flex-1" style={{ gap: spacingPatterns.gridGap.md }}>
+                <div className="flex flex-col justify-end" style={{ gap: spacingPatterns.gridGap.sm }}>
                   {trendData.map((row) => (
-                    <div key={row.month} className="flex items-end gap-1">
+                    <div key={row.month} className="flex items-end" style={{ gap: spacingPatterns.gridGap.xs }}>
                       {row.values.map((value, idx) => {
                         const color = [colors.primary, colors.secondary, colors.accent][idx];
                         return (
@@ -593,8 +611,12 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                   ))}
                 </div>
                 <div
-                  className="rounded-lg p-4 flex flex-col justify-center"
-                  style={{ backgroundColor: surfaceAlt, color: bodyTextColor }}
+                  className="rounded-lg flex flex-col justify-center"
+                  style={{
+                    backgroundColor: surfaceAlt,
+                    color: bodyTextColor,
+                    padding: spacingPatterns.containerPadding.md,
+                  }}
                 >
                   <div
                     style={{
@@ -617,17 +639,21 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                     Secondary headline
                   </div>
                   <p
-                    className="mt-3"
-                    style={{ fontFamily: fontPair.body, fontSize: sizeMap[typography.body.size], textTransform: bodyTransform }}
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap[typography.body.size],
+                      textTransform: bodyTransform,
+                      marginTop: spacingPatterns.verticalRhythm.normal,
+                    }}
                   >
                     Body copy preview demonstrates long-form typography on this background. Use
                     this block to verify contrast between headings and paragraph text.
                   </p>
                 </div>
               </div>
-                <div className="flex gap-4 text-xs" style={{ fontFamily: fontPair.body, color: bodyTextColor }}>
+                <div className="flex text-xs" style={{ fontFamily: fontPair.body, color: bodyTextColor, gap: spacingPatterns.gridGap.md }}>
                 {["New", "Renewals", "Churns"].map((label, idx) => (
-                  <div key={label} className="flex items-center gap-2">
+                  <div key={label} className="flex items-center" style={{ gap: spacingPatterns.gridGap.sm }}>
                     <span
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: [colors.primary, colors.secondary, colors.accent][idx] }}
@@ -639,8 +665,14 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
 
             <div
-              className="token-card p-4 flex flex-col gap-4"
-              style={{ backgroundColor: surface }}
+              className="token-card"
+              style={{
+                backgroundColor: surface,
+                padding: spacingPatterns.containerPadding.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingPatterns.gridGap.md,
+              }}
             >
               <div className="flex items-center justify-between">
                 <div className="font-semibold" style={{ fontFamily: fontPair.heading }}>
@@ -674,9 +706,9 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                   />
                 ))}
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs" style={{ fontFamily: fontPair.body, color: bodyTextColor }}>
+              <div className="grid grid-cols-2 text-xs" style={{ fontFamily: fontPair.body, color: bodyTextColor, gap: spacingPatterns.gridGap.sm }}>
                 {donutSections.map((segment) => (
-                  <div key={segment.label} className="flex items-center gap-2">
+                  <div key={segment.label} className="flex items-center" style={{ gap: spacingPatterns.gridGap.sm }}>
                     <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: segment.color }} />
                     <span style={{ color: textMuted }}>{segment.label}</span>
                   </div>
@@ -685,10 +717,16 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
           </section>
 
-          <section className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: spacingPatterns.gridGap.md }}>
             <div
-              className="token-card p-4 space-y-4"
-              style={{ backgroundColor: surface }}
+              className="token-card"
+              style={{
+                backgroundColor: surface,
+                padding: spacingPatterns.containerPadding.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingPatterns.gridGap.md,
+              }}
             >
               <div className="flex items-center justify-between">
                 <div className="font-semibold" style={{ fontFamily: fontPair.heading }}>
@@ -698,7 +736,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                   This week
                 </div>
               </div>
-              <div className="flex gap-2 text-xs flex-wrap" style={{ fontFamily: fontPair.body }}>
+              <div className="flex text-xs flex-wrap" style={{ fontFamily: fontPair.body, gap: spacingPatterns.gridGap.sm }}>
                 {["All", "Open", "Pending", "Closed"].map((filter, index) => (
                   <span
                     key={filter}
@@ -712,9 +750,9 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                   </span>
                 ))}
               </div>
-              <div className="space-y-3">
+              <div style={{ display: "flex", flexDirection: "column", gap: spacingPatterns.verticalRhythm.normal }}>
                 {supportTickets.map((ticket) => (
-                  <div key={ticket.name} className="flex items-center justify-between gap-3 text-xs" style={{ fontFamily: fontPair.body }}>
+                  <div key={ticket.name} className="flex items-center justify-between text-xs" style={{ fontFamily: fontPair.body, gap: spacingPatterns.gridGap.md }}>
                     <div>
                       <div className="font-medium" style={{ color: colors.text }}>
                         {ticket.name}
@@ -733,8 +771,14 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
 
             <div
-              className="token-card p-4 space-y-4 col-span-1 xl:col-span-2"
-              style={{ backgroundColor: surface }}
+              className="token-card col-span-1 xl:col-span-2"
+              style={{
+                backgroundColor: surface,
+                padding: spacingPatterns.containerPadding.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingPatterns.gridGap.md,
+              }}
             >
               <div className="flex items-center justify-between">
                 <div className="font-semibold" style={{ fontFamily: fontPair.heading }}>
@@ -747,7 +791,7 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
                   View all
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm" style={{ fontFamily: fontPair.body }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 text-sm" style={{ fontFamily: fontPair.body, gap: spacingPatterns.gridGap.md }}>
                 {transactions.map((transaction) => (
                   <div
                     key={transaction.name}
@@ -775,14 +819,14 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
           </section>
 
-          <section className="space-y-3">
+          <section style={{ display: "flex", flexDirection: "column", gap: spacingPatterns.verticalRhythm.normal }}>
             <div
               className="text-xs font-semibold opacity-60"
               style={{ fontFamily: fontPair.body }}
             >
               Palette Tokens
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 text-xs" style={{ gap: spacingPatterns.gridGap.md }}>
               {[
                 { name: "Primary", color: colors.primary },
                 { name: "Secondary", color: colors.secondary },
@@ -797,8 +841,13 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
               ].map((swatch) => (
                 <div
                   key={swatch.name}
-                  className="rounded-xl p-3 border flex flex-col gap-2 justify-between h-24"
-                  style={{ borderColor: subtle, backgroundColor: surface }}
+                  className="rounded-xl border flex flex-col justify-between h-24"
+                  style={{
+                    borderColor: subtle,
+                    backgroundColor: surface,
+                    padding: spacingPatterns.containerPadding.sm,
+                    gap: spacingPatterns.gridGap.sm,
+                  }}
                 >
                   <div
                     className="w-full h-8 rounded-md border"
