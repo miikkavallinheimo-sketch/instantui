@@ -3,6 +3,7 @@ import { fontWeightVariants, fontWeightCombinations } from "./fontWeightVariants
 import { getVibeGradients, GRADIENT_LIBRARY } from "./gradientTokens";
 import { SHADOW_DEFINITIONS, SHADOW_DEFINITIONS_DARK } from "./shadowTokens";
 import { getSpacingScale, getSpacingPatterns } from "./spacingScale";
+import { getGlassConfigForVibe, buildGlassBackground, buildBackdropFilter, buildGlassBorder } from "./glassTokens";
 import { generateLandingPageHTML, generateBlogPageHTML, generatePortfolioPageHTML } from "./htmlTemplates";
 
 const radiusMap = {
@@ -208,6 +209,23 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
   --focus-ring-width: 2px;
 
   /* ============================================
+     GLASSMORPHISM - Glass effect configuration
+     ============================================ */
+  ${(() => {
+    const glassConfig = getGlassConfigForVibe(vibe.id);
+    const glassBackground = buildGlassBackground(colors.surface, glassConfig);
+    const backdropBlur = buildBackdropFilter(glassConfig.blur);
+    const glassBorder = buildGlassBorder(colors.borderSubtle, glassConfig);
+
+    return `--glass-blur: ${glassConfig.blur}px;
+  --glass-opacity: ${glassConfig.opacity};
+  --glass-border-opacity: ${glassConfig.borderOpacity};
+  --glass-background: ${glassBackground};
+  --glass-backdrop-filter: ${backdropBlur};
+  --glass-border: ${glassBorder};`;
+  })()}
+
+  /* ============================================
      GRADIENT VARIABLES - Define your gradients here
      ============================================ */
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -223,6 +241,107 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
 .gradient-secondary { background: var(--gradient-secondary); }
 .gradient-accent { background: var(--gradient-accent); }
 .gradient-subtle { background: var(--gradient-subtle); }
+
+/* ============================================
+   GLASSMORPHISM UTILITY CLASSES
+   ============================================ */
+.glass {
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border: var(--glass-border);
+  border-radius: var(--radius-card);
+}
+
+.glass-subtle {
+  background: rgba(var(--surface), 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-card);
+}
+
+.glass-moderate {
+  background: rgba(var(--surface), 0.55);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-card);
+}
+
+.glass-strong {
+  background: rgba(var(--surface), 0.5);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-card);
+}
+
+/* ============================================
+   LAYOUT UTILITY CLASSES
+   ============================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.portfolio {
+  padding: 3rem 0;
+}
+
+.portfolio h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-font-weight);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.footer-contact {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.contact-value {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-value:hover {
+  text-decoration: underline;
+}
+
+.footer-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 2rem 0;
+}
+
+.footer-bottom {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
 
 /* ============================================
    BUTTON STYLES
@@ -562,9 +681,32 @@ module.exports = {
         "ease-in-out": "ease-in-out",
         "cubic-smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
       },
+
+      /* ============================================
+         GLASSMORPHISM
+         ============================================ */
+      backdropBlur: {
+        "glass-subtle": "8px",
+        "glass-moderate": "16px",
+        "glass-strong": "24px",
+      },
     },
   },
   components: {
+    /* Glassmorphism components */
+    ".glass": {
+      "@apply": "backdrop-blur-glass-moderate rounded-card border border-white border-opacity-30",
+    },
+    ".glass-subtle": {
+      "@apply": "backdrop-blur-glass-subtle rounded-card border border-white border-opacity-20",
+    },
+    ".glass-moderate": {
+      "@apply": "backdrop-blur-glass-moderate rounded-card border border-white border-opacity-30",
+    },
+    ".glass-strong": {
+      "@apply": "backdrop-blur-glass-strong rounded-card border border-white border-opacity-40",
+    },
+
     /* Button components */
     ".btn-primary": {
       "@apply": "bg-primary text-onPrimary px-lg py-md rounded-button font-semibold transition-all duration-150 hover:shadow-lg hover:-translate-y-0.5",
@@ -758,6 +900,22 @@ module.exports = {
       description: GRADIENT_LIBRARY[id]?.description,
       value: GRADIENT_LIBRARY[id]?.value,
     })),
+
+    /* ============================================
+       GLASSMORPHISM
+       ============================================ */
+    glassmorphism: (() => {
+      const glassConfig = getGlassConfigForVibe(vibe.id);
+      return {
+        config: glassConfig,
+        cssClasses: {
+          glass: "Glass effect with vibe-specific blur",
+          "glass-subtle": "Subtle glass effect (8px blur)",
+          "glass-moderate": "Moderate glass effect (16px blur)",
+          "glass-strong": "Strong glass effect (24px blur)",
+        },
+      };
+    })(),
 
     /* ============================================
        BORDER RADIUS SCALE

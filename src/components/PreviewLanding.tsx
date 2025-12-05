@@ -238,7 +238,6 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               fontFamily: fontPair.body,
               fontSize: sizeMap["lg"],
               color: colors.textMuted,
-              marginBottom: spacingObj["2xl"],
               maxWidth: "600px",
               margin: "0 auto",
               marginBottom: spacingObj["2xl"],

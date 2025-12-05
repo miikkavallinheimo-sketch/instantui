@@ -1,8 +1,12 @@
 import type { DesignState } from "./types";
-import { getGlassConfigForVibe, buildGlassBackground, buildBackdropFilter } from "./glassTokens";
+import { getGlassConfigForVibe, buildGlassBackground, buildBackdropFilter, buildGlassBorder } from "./glassTokens";
 
 export function generateLandingPageHTML(state: DesignState): string {
-  const { colors, fontPair, typography, spacing } = state;
+  const { colors, fontPair, typography } = state;
+  const glassConfig = getGlassConfigForVibe("modern-saas");
+  const glassBackground = buildGlassBackground(colors.surface, glassConfig);
+  const backdropBlur = buildBackdropFilter(glassConfig.blur);
+  const glassBorder = buildGlassBorder(colors.borderSubtle, glassConfig);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -10,7 +14,6 @@ export function generateLandingPageHTML(state: DesignState): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing Page</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
     :root {
       --primary: ${colors.primary};
@@ -26,232 +29,72 @@ export function generateLandingPageHTML(state: DesignState): string {
       --on-primary: ${colors.onPrimary};
       --on-secondary: ${colors.onSecondary};
       --on-accent: ${colors.onAccent};
-
-      --font-heading: "${fontPair.heading}", system-ui, sans-serif;
-      --font-body: "${fontPair.body}", system-ui, sans-serif;
-
-      --heading-font-size: ${typography.heading.size === "2xl" ? "2rem" : "1.875rem"};
+      --font-heading: "${fontPair.heading}", system-ui, -apple-system, sans-serif;
+      --font-body: "${fontPair.body}", system-ui, -apple-system, sans-serif;
+      --heading-font-size: 2rem;
       --heading-font-weight: ${typography.heading.weight};
-      --subheading-font-size: ${typography.subheading?.size === "xl" ? "1.25rem" : "1.125rem"};
-      --subheading-font-weight: ${typography.subheading?.weight ?? typography.heading.weight};
-      --body-font-size: ${typography.body.size === "md" ? "1rem" : "0.875rem"};
+      --subheading-font-size: 1.25rem;
+      --body-font-size: 1rem;
       --body-font-weight: ${typography.body.weight};
-
-      --spacing-xs: 0.5rem;
       --spacing-sm: 0.75rem;
       --spacing-md: 1rem;
       --spacing-lg: 1.5rem;
       --spacing-xl: 2rem;
       --spacing-2xl: 3rem;
-
-      --radius-sm: 6px;
-      --radius-md: 10px;
       --radius-lg: 16px;
-      --radius-xl: 24px;
-
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-      --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
       --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
-
+      --glass-blur: ${glassConfig.blur}px;
+      --glass-background: ${glassBackground};
+      --glass-backdrop-filter: ${backdropBlur};
+      --glass-border: ${glassBorder};
       --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
       --gradient-accent: linear-gradient(135deg, var(--accent), var(--primary));
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: var(--font-body);
-      font-size: var(--body-font-size);
-      color: var(--text);
-      background-color: var(--background);
-      line-height: 1.6;
-    }
-
-    h1, h2, h3 {
-      font-family: var(--font-heading);
-      font-weight: var(--heading-font-weight);
-      margin-bottom: var(--spacing-lg);
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); font-size: var(--body-font-size); color: var(--text); background-color: var(--background); line-height: 1.6; }
+    h1, h2, h3 { font-family: var(--font-heading); font-weight: var(--heading-font-weight); margin-bottom: var(--spacing-lg); }
     h1 { font-size: var(--heading-font-size); }
     h2 { font-size: var(--subheading-font-size); }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 var(--spacing-lg);
-    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-lg); }
+    nav { background-color: var(--surface); border-bottom: 1px solid var(--border-subtle); padding: var(--spacing-md) 0; position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { font-weight: var(--heading-font-weight); font-size: var(--subheading-font-size); color: var(--text); }
+    nav a { color: var(--text); text-decoration: none; margin-left: var(--spacing-lg); transition: color 0.2s; }
+    nav a:hover { color: var(--text-muted); }
 
-    /* Navigation */
-    nav {
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: var(--spacing-md) 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+    .hero { background: var(--gradient-primary); color: var(--on-primary); padding: var(--spacing-2xl) 0; text-align: center; }
+    .hero h1 { color: var(--on-primary); margin-bottom: var(--spacing-md); }
+    .hero p { color: var(--on-primary); opacity: 0.95; max-width: 600px; margin: var(--spacing-lg) auto; }
 
-    nav .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .btn-primary { background-color: var(--primary); color: var(--on-primary); padding: var(--spacing-md) var(--spacing-lg); border-radius: var(--radius-lg); text-decoration: none; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; font-size: var(--body-font-size); display: inline-block; }
+    .btn-primary:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .btn-secondary { background-color: var(--secondary); color: var(--on-secondary); padding: var(--spacing-md) var(--spacing-lg); border-radius: var(--radius-lg); margin-left: var(--spacing-md); text-decoration: none; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; font-size: var(--body-font-size); display: inline-block; }
+    .btn-secondary:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
 
-    nav .logo {
-      font-weight: var(--heading-font-weight);
-      font-size: var(--subheading-font-size);
-      color: var(--primary);
-    }
+    .features { padding: var(--spacing-2xl) 0; }
+    .features h2 { text-align: center; margin-bottom: var(--spacing-2xl); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-xl); }
 
-    nav a {
-      color: var(--text);
-      text-decoration: none;
-      margin-left: var(--spacing-lg);
-      transition: color 0.2s;
-    }
+    .card { background-color: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-xl); transition: all 0.3s; }
+    .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .card h3 { color: var(--text); margin-bottom: var(--spacing-md); }
+    .card p { color: var(--text-muted); }
 
-    nav a:hover {
-      color: var(--primary);
-    }
+    .cta { background: var(--gradient-accent); color: var(--on-accent); padding: var(--spacing-2xl) 0; text-align: center; }
+    .cta h2 { color: var(--on-accent); margin-bottom: var(--spacing-lg); }
 
-    /* Hero */
-    .hero {
-      background: var(--gradient-primary);
-      color: var(--on-primary);
-      padding: var(--spacing-2xl) 0;
-      text-align: center;
-    }
-
-    .hero h1 {
-      color: var(--on-primary);
-      margin-bottom: var(--spacing-md);
-    }
-
-    .hero p {
-      color: var(--on-primary);
-      opacity: 0.95;
-      max-width: 600px;
-      margin: var(--spacing-lg) auto;
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      padding: var(--spacing-md) var(--spacing-lg);
-      border-radius: var(--radius-lg);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.2s;
-      border: none;
-      cursor: pointer;
-      font-size: var(--body-font-size);
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      color: var(--on-primary);
-    }
-
-    .btn-primary:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background-color: var(--secondary);
-      color: var(--on-secondary);
-      margin-left: var(--spacing-md);
-    }
-
-    .btn-secondary:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
-    }
-
-    /* Features */
-    .features {
-      padding: var(--spacing-2xl) 0;
-    }
-
-    .features h2 {
-      text-align: center;
-      margin-bottom: var(--spacing-2xl);
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--spacing-xl);
-    }
-
-    .feature-card {
-      background-color: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: var(--spacing-xl);
-      transition: all 0.3s;
-    }
-
-    .feature-card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-4px);
-    }
-
-    .feature-card h3 {
-      color: var(--primary);
-      margin-bottom: var(--spacing-md);
-    }
-
-    .feature-card p {
-      color: var(--text-muted);
-    }
-
-    /* CTA Section */
-    .cta {
-      background: var(--gradient-accent);
-      color: var(--on-accent);
-      padding: var(--spacing-2xl) 0;
-      text-align: center;
-    }
-
-    .cta h2 {
-      color: var(--on-accent);
-      margin-bottom: var(--spacing-lg);
-    }
-
-    .cta .btn {
-      background-color: var(--on-accent);
-      color: var(--accent);
-    }
-
-    /* Footer */
-    footer {
-      background-color: var(--surface);
-      border-top: 1px solid var(--border-subtle);
-      padding: var(--spacing-xl) 0;
-      text-align: center;
-      color: var(--text-muted);
-    }
+    footer { background-color: var(--surface); border-top: 1px solid var(--border-subtle); padding: var(--spacing-xl) 0; text-align: center; color: var(--text-muted); }
 
     @media (max-width: 768px) {
       h1 { font-size: 1.5rem; }
       h2 { font-size: 1.25rem; }
-
-      .btn-secondary {
-        display: block;
-        margin-left: 0;
-        margin-top: var(--spacing-md);
-      }
+      .btn-secondary { display: block; margin-left: 0; margin-top: var(--spacing-md); }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
   <nav>
     <div class="container">
       <div class="logo">Brand</div>
@@ -263,49 +106,57 @@ export function generateLandingPageHTML(state: DesignState): string {
     </div>
   </nav>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container">
       <h1>Welcome to Your Amazing Product</h1>
       <p>Build something incredible with our design system. Everything you need to create beautiful, cohesive digital experiences.</p>
-      <div style="margin-top: var(--spacing-xl);">
-        <button class="btn btn-primary">Get Started</button>
-        <button class="btn btn-secondary">Learn More</button>
+      <div style="margin-top: 2rem;">
+        <button class="btn-primary">Get Started</button>
+        <button class="btn-secondary">Learn More</button>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
   <section class="features" id="features">
     <div class="container">
       <h2>Why Choose Us?</h2>
       <div class="features-grid">
-        <div class="feature-card">
-          <h3>Beautiful</h3>
-          <p>Professionally designed components and layouts that look stunning out of the box.</p>
+        <div class="card">
+          <h3>Beautiful Design</h3>
+          <p>Professionally designed components and layouts that look stunning out of the box. Every element is crafted with attention to detail.</p>
         </div>
-        <div class="feature-card">
-          <h3>Fast</h3>
-          <p>Optimized for performance with minimal CSS and clean HTML structure.</p>
+        <div class="card">
+          <h3>Lightning Fast</h3>
+          <p>Optimized for performance with minimal CSS and clean HTML structure. Load times under 1 second guaranteed.</p>
         </div>
-        <div class="feature-card">
-          <h3>Flexible</h3>
-          <p>Customize every aspect with CSS variables and semantic design tokens.</p>
+        <div class="card">
+          <h3>Highly Flexible</h3>
+          <p>Customize every aspect with CSS variables and semantic design tokens. Adapt to any design requirement effortlessly.</p>
+        </div>
+        <div class="card">
+          <h3>Accessible</h3>
+          <p>Built with accessibility in mind. WCAG 2.1 compliant components ensure everyone can use your product.</p>
+        </div>
+        <div class="card">
+          <h3>Responsive</h3>
+          <p>Mobile-first design approach. Your designs look perfect on any screen size, from mobile to desktop.</p>
+        </div>
+        <div class="card">
+          <h3>Dark Mode Ready</h3>
+          <p>Pre-built dark mode support with carefully chosen color palettes. Switch themes seamlessly.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
   <section class="cta">
     <div class="container">
       <h2>Ready to Get Started?</h2>
-      <p style="margin-bottom: var(--spacing-lg);">Join thousands of designers and developers building with our system.</p>
-      <button class="btn" style="background-color: var(--on-accent); color: var(--accent);">Start Building Now</button>
+      <p style="margin-bottom: 1.5rem;">Join thousands of designers and developers building with our system.</p>
+      <button class="btn-primary">Start Building Now</button>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
       <p>&copy; 2024 Your Company. All rights reserved.</p>
@@ -317,6 +168,10 @@ export function generateLandingPageHTML(state: DesignState): string {
 
 export function generateBlogPageHTML(state: DesignState): string {
   const { colors, fontPair, typography } = state;
+  const glassConfig = getGlassConfigForVibe("modern-saas");
+  const glassBackground = buildGlassBackground(colors.surface, glassConfig);
+  const backdropBlur = buildBackdropFilter(glassConfig.blur);
+  const glassBorder = buildGlassBorder(colors.borderSubtle, glassConfig);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -324,7 +179,6 @@ export function generateBlogPageHTML(state: DesignState): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
     :root {
       --primary: ${colors.primary};
@@ -337,231 +191,50 @@ export function generateBlogPageHTML(state: DesignState): string {
       --text-muted: ${colors.textMuted};
       --border-subtle: ${colors.borderSubtle};
       --border-strong: ${colors.borderStrong};
-
-      --font-heading: "${fontPair.heading}", system-ui, sans-serif;
-      --font-body: "${fontPair.body}", system-ui, sans-serif;
+      --font-heading: "${fontPair.heading}", system-ui, -apple-system, sans-serif;
+      --font-body: "${fontPair.body}", system-ui, -apple-system, sans-serif;
       --heading-font-weight: ${typography.heading.weight};
       --body-font-weight: ${typography.body.weight};
+      --glass-blur: ${glassConfig.blur}px;
+      --glass-background: ${glassBackground};
+      --glass-backdrop-filter: ${backdropBlur};
+      --glass-border: ${glassBorder};
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); color: var(--text); background-color: var(--background); line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
 
-    body {
-      font-family: var(--font-body);
-      color: var(--text);
-      background-color: var(--background);
-      line-height: 1.6;
-    }
+    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 3rem 0; margin-bottom: 3rem; }
+    header .container { text-align: center; }
+    header h1 { font-family: var(--font-heading); font-weight: var(--heading-font-weight); font-size: 2.5rem; color: var(--on-primary); margin-bottom: 0.5rem; }
+    header p { color: var(--on-primary); font-size: 1.1rem; opacity: 0.9; }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
+    .hero { padding: 3rem 0; margin-bottom: 3rem; text-align: center; }
+    .hero p { max-width: 700px; margin: 0 auto 2rem; font-size: 1.05rem; color: var(--text-muted); }
 
-    header {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      padding: 3rem 0;
-      margin-bottom: 3rem;
-    }
+    .blog-grid { display: grid; gap: 2rem; }
+    article { background-color: var(--surface); border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden; transition: all 0.3s; padding: 2rem; }
+    article:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(-4px); }
+    article h2 { font-family: var(--font-heading); font-weight: var(--heading-font-weight); font-size: 1.5rem; color: var(--text); margin-bottom: 0.5rem; }
+    article p { color: var(--text-muted); margin-bottom: 1rem; }
 
-    header .container {
-      text-align: center;
-    }
+    .article-category { display: inline-block; padding: 0.35rem 0.85rem; background-color: var(--surface-alt); color: var(--text-muted); border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .read-more { color: var(--text); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    .read-more:hover { color: var(--text-muted); }
 
-    header h1 {
-      font-family: var(--font-heading);
-      font-weight: var(--heading-font-weight);
-      font-size: 2.5rem;
-      color: white;
-      margin-bottom: 0.5rem;
-    }
-
-    header p {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 1.1rem;
-    }
-
-    .hero {
-      padding: 3rem 0;
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-
-    .hero p {
-      max-width: 700px;
-      margin: 0 auto 2rem;
-      font-size: 1.05rem;
-      color: var(--text-muted);
-    }
-
-    .blog-grid {
-      display: grid;
-      gap: 2rem;
-    }
-
-    article {
-      background-color: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: all 0.3s;
-    }
-
-    article:hover {
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      transform: translateY(-4px);
-    }
-
-    .article-header {
-      padding: 2rem;
-      border-bottom: 4px solid var(--primary);
-    }
-
-    article.design .article-header {
-      border-bottom-color: var(--primary);
-    }
-
-    article.development .article-header {
-      border-bottom-color: var(--secondary);
-    }
-
-    article.inspiration .article-header {
-      border-bottom-color: var(--accent);
-    }
-
-    .article-category {
-      display: inline-block;
-      padding: 0.35rem 0.85rem;
-      background-color: var(--surface-alt);
-      color: var(--text-muted);
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    article.design .article-category {
-      color: white;
-      background-color: var(--primary);
-    }
-
-    article.development .article-category {
-      color: white;
-      background-color: var(--secondary);
-    }
-
-    article.inspiration .article-category {
-      color: white;
-      background-color: var(--accent);
-    }
-
-    .article-header h2 {
-      font-family: var(--font-heading);
-      font-weight: var(--heading-font-weight);
-      font-size: 1.5rem;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-
-    .article-excerpt {
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-    }
-
-    .article-meta {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
-
-    .article-footer {
-      padding: 1.5rem 2rem;
-      background-color: var(--surface-alt);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .read-more {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-
-    .read-more:hover {
-      color: var(--accent);
-    }
-
-    footer {
-      margin-top: 4rem;
-      padding: 3rem 0;
-      border-top: 1px solid var(--border-subtle);
-      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-    }
-
-    .footer-content {
-      text-align: center;
-    }
-
-    .footer-contact {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .contact-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .contact-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-value {
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .contact-value:hover {
-      text-decoration: underline;
-    }
-
-    .footer-divider {
-      height: 1px;
-      background: var(--border-subtle);
-      margin: 2rem 0;
-    }
-
-    .footer-bottom {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+    footer { margin-top: 4rem; padding: 3rem 0; border-top: 1px solid var(--border-subtle); background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%); }
+    .footer-content { text-align: center; }
+    .footer-contact { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem; }
+    .contact-item { display: flex; flex-direction: column; align-items: center; }
+    .contact-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .contact-value { color: var(--text); font-weight: 600; text-decoration: none; }
+    .contact-value:hover { color: var(--text-muted); text-decoration: underline; }
+    .footer-divider { height: 1px; background: var(--border-subtle); margin: 2rem 0; }
+    .footer-bottom { color: var(--text-muted); font-size: 0.9rem; }
 
     @media (max-width: 768px) {
-      .article-footer {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .footer-contact {
-        gap: 1.5rem;
-      }
+      .footer-contact { gap: 1.5rem; }
     }
   </style>
 </head>
@@ -581,41 +254,42 @@ export function generateBlogPageHTML(state: DesignState): string {
 
   <main class="container">
     <div class="blog-grid">
-      <article class="design">
-        <div class="article-header">
-          <span class="article-category">Design</span>
-          <h2>Creating Cohesive Design Systems</h2>
-          <p class="article-excerpt">Learn how to build design systems that scale with your product and team.</p>
-          <div class="article-meta">Published on January 15, 2024</div>
-        </div>
-        <div class="article-footer">
-          <div></div>
+      <article>
+        <span class="article-category">Design</span>
+        <h2>Creating Cohesive Design Systems</h2>
+        <p>Build design systems that scale with your product and team. Learn best practices for color palettes, typography scales, component architecture, and design documentation that keeps everyone aligned.</p>
+        <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 1rem;">Published on January 15, 2024 • 8 min read</div>
+        <div style="margin-top: 1.5rem;">
           <a href="#" class="read-more">Read Article →</a>
         </div>
       </article>
 
-      <article class="development">
-        <div class="article-header">
-          <span class="article-category">Development</span>
-          <h2>Building with CSS Variables</h2>
-          <p class="article-excerpt">Master CSS custom properties for flexible and maintainable styling.</p>
-          <div class="article-meta">Published on January 10, 2024</div>
-        </div>
-        <div class="article-footer">
-          <div></div>
+      <article>
+        <span class="article-category">Development</span>
+        <h2>Building with CSS Variables</h2>
+        <p>Master CSS custom properties for flexible and maintainable styling. Discover how to create theming systems, dynamic color schemes, and responsive layouts using modern CSS techniques.</p>
+        <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 1rem;">Published on January 10, 2024 • 10 min read</div>
+        <div style="margin-top: 1.5rem;">
           <a href="#" class="read-more">Read Article →</a>
         </div>
       </article>
 
-      <article class="inspiration">
-        <div class="article-header">
-          <span class="article-category">Inspiration</span>
-          <h2>Best Design Trends of 2024</h2>
-          <p class="article-excerpt">Explore the latest design trends and how they're reshaping digital products.</p>
-          <div class="article-meta">Published on January 5, 2024</div>
+      <article>
+        <span class="article-category">Inspiration</span>
+        <h2>Best Design Trends of 2024</h2>
+        <p>Explore glassmorphism, micro-interactions, variable fonts, and bold color schemes reshaping digital design. See real-world examples and learn how to incorporate these trends into your projects.</p>
+        <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 1rem;">Published on January 5, 2024 • 12 min read</div>
+        <div style="margin-top: 1.5rem;">
+          <a href="#" class="read-more">Read Article →</a>
         </div>
-        <div class="article-footer">
-          <div></div>
+      </article>
+
+      <article>
+        <span class="article-category">Design</span>
+        <h2>Accessible Color Contrast Guide</h2>
+        <p>Understand WCAG standards and create accessible color combinations. Learn how proper contrast ratios improve usability for everyone and implement testing tools in your workflow.</p>
+        <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 1rem;">Published on December 28, 2023 • 7 min read</div>
+        <div style="margin-top: 1.5rem;">
           <a href="#" class="read-more">Read Article →</a>
         </div>
       </article>
@@ -639,9 +313,7 @@ export function generateBlogPageHTML(state: DesignState): string {
             <div class="contact-value">San Francisco, CA</div>
           </div>
         </div>
-
         <div class="footer-divider"></div>
-
         <p class="footer-bottom">&copy; 2024 Your Blog. All rights reserved. | Privacy Policy | Terms of Service</p>
       </div>
     </div>
@@ -651,12 +323,11 @@ export function generateBlogPageHTML(state: DesignState): string {
 }
 
 export function generatePortfolioPageHTML(state: DesignState): string {
-  const { colors, fontPair, typography, vibe } = state;
-
-  const glassConfig = getGlassConfigForVibe(vibe.id);
+  const { colors, fontPair, typography } = state;
+  const glassConfig = getGlassConfigForVibe("modern-saas");
   const glassBackground = buildGlassBackground(colors.surface, glassConfig);
   const backdropBlur = buildBackdropFilter(glassConfig.blur);
-  const glassBorder = `1px solid rgba(255, 255, 255, ${glassConfig.borderOpacity})`;
+  const glassBorder = buildGlassBorder(colors.borderSubtle, glassConfig);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -664,7 +335,6 @@ export function generatePortfolioPageHTML(state: DesignState): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
     :root {
       --primary: ${colors.primary};
@@ -676,203 +346,44 @@ export function generatePortfolioPageHTML(state: DesignState): string {
       --text: ${colors.text};
       --text-muted: ${colors.textMuted};
       --border-subtle: ${colors.borderSubtle};
-
-      --font-heading: "${fontPair.heading}", system-ui, sans-serif;
-      --font-body: "${fontPair.body}", system-ui, sans-serif;
+      --font-heading: "${fontPair.heading}", system-ui, -apple-system, sans-serif;
+      --font-body: "${fontPair.body}", system-ui, -apple-system, sans-serif;
       --heading-font-weight: ${typography.heading.weight};
+      --glass-blur: ${glassConfig.blur}px;
+      --glass-background: ${glassBackground};
+      --glass-backdrop-filter: ${backdropBlur};
+      --glass-border: ${glassBorder};
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); color: var(--text); background-color: var(--background); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
-    body {
-      font-family: var(--font-body);
-      color: var(--text);
-      background-color: var(--background);
-    }
+    .hero { padding: 4rem 0; text-align: center; }
+    .hero h1 { font-family: var(--font-heading); font-weight: var(--heading-font-weight); font-size: 3rem; color: var(--text); margin-bottom: 1rem; }
+    .hero p { font-size: 1.125rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
+    .portfolio { padding: 3rem 0; }
+    .portfolio h2 { font-family: var(--font-heading); font-weight: var(--heading-font-weight); font-size: 2rem; text-align: center; margin-bottom: 3rem; color: var(--text); }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 
-    /* Hero */
-    .hero {
-      padding: 4rem 0;
-      text-align: center;
-    }
+    .glass { background: var(--glass-background); backdrop-filter: var(--glass-backdrop-filter); border: var(--glass-border); border-radius: 10px; padding: 1.5rem; }
+    .glass h3 { font-family: var(--font-heading); color: var(--text); margin-bottom: 0.5rem; }
+    .glass p { color: var(--text-muted); font-size: 0.9rem; }
 
-    .hero h1 {
-      font-family: var(--font-heading);
-      font-weight: var(--heading-font-weight);
-      font-size: 3rem;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: 1.125rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    /* Portfolio Grid */
-    .portfolio {
-      padding: 3rem 0;
-    }
-
-    .portfolio h2 {
-      font-family: var(--font-heading);
-      font-weight: var(--heading-font-weight);
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .portfolio-item {
-      background: ${glassBackground};
-      backdrop-filter: ${backdropBlur};
-      border-radius: 16px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      border: ${glassBorder};
-    }
-
-    .portfolio-item:hover {
-      background: rgba(255, 255, 255, ${Math.min(glassConfig.opacity + 0.08, 1)});
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-      transform: translateY(-8px);
-      border-color: var(--primary);
-    }
-
-    .portfolio-image {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .portfolio-image::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent);
-    }
-
-    .portfolio-content {
-      padding: 1.5rem;
-    }
-
-    .portfolio-content h3 {
-      font-family: var(--font-heading);
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .portfolio-content p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .portfolio-tags {
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      background-color: var(--surface-alt);
-      color: var(--text-muted);
-      border-radius: 4px;
-      font-size: 0.75rem;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 4rem;
-      padding: 3rem 0;
-      border-top: 1px solid var(--border-subtle);
-      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-    }
-
-    .footer-content {
-      text-align: center;
-    }
-
-    .footer-contact {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .contact-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .contact-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-value {
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .contact-value:hover {
-      text-decoration: underline;
-    }
-
-    .footer-divider {
-      height: 1px;
-      background: var(--border-subtle);
-      margin: 2rem 0;
-    }
-
-    .footer-bottom {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+    footer { margin-top: 4rem; padding: 3rem 0; border-top: 1px solid var(--border-subtle); background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%); }
+    .footer-content { text-align: center; }
+    .footer-contact { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem; }
+    .contact-item { display: flex; flex-direction: column; align-items: center; }
+    .contact-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .contact-value { color: var(--text); font-weight: 600; text-decoration: none; }
+    .contact-value:hover { color: var(--text-muted); text-decoration: underline; }
+    .footer-divider { height: 1px; background: var(--border-subtle); margin: 2rem 0; }
+    .footer-bottom { color: var(--text-muted); font-size: 0.9rem; }
 
     @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
-
-      .footer-contact {
-        gap: 1.5rem;
-      }
+      .hero h1 { font-size: 2rem; }
+      .footer-contact { gap: 1.5rem; }
     }
   </style>
 </head>
@@ -881,15 +392,9 @@ export function generatePortfolioPageHTML(state: DesignState): string {
     <div class="container">
       <h1>My Work</h1>
       <div style="max-width: 800px; margin: 2rem auto; line-height: 1.8;">
-        <p style="font-size: 1.1rem; color: var(--text); margin-bottom: 1.5rem;">
-          I'm a <strong>creative designer and developer</strong> passionate about crafting beautiful digital experiences. With expertise spanning <em>UI/UX design, web development, and brand identity</em>, I transform ideas into elegant, functional solutions that resonate with users.
-        </p>
-        <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1.5rem;">
-          My approach combines <strong>strategic thinking</strong> with <em>meticulous attention to detail</em>. I believe in creating not just visually appealing interfaces, but intuitive experiences that guide users effortlessly toward their goals. Every project is an opportunity to push creative boundaries while maintaining accessibility and performance.
-        </p>
-        <p style="font-size: 1rem; color: var(--text-muted);">
-          Explore my featured projects below to see how I blend <strong>innovation, design thinking, and technical expertise</strong> to deliver impactful digital solutions.
-        </p>
+        <p>I'm a <strong>creative designer and developer</strong> passionate about crafting beautiful digital experiences. With expertise spanning <em>UI/UX design, web development, and brand identity</em>, I transform ideas into elegant, functional solutions that resonate with users.</p>
+        <p style="margin-top: 1rem;">My approach combines <strong>strategic thinking</strong> with <em>meticulous attention to detail</em>. I believe in creating not just visually appealing interfaces, but intuitive experiences that guide users effortlessly toward their goals. Every project is an opportunity to push creative boundaries while maintaining accessibility and performance.</p>
+        <p style="margin-top: 1rem;">Explore my featured projects below to see how I blend <strong>innovation, design thinking, and technical expertise</strong> to deliver impactful digital solutions.</p>
       </div>
     </div>
   </div>
@@ -898,43 +403,34 @@ export function generatePortfolioPageHTML(state: DesignState): string {
     <div class="container">
       <h2>Featured Projects</h2>
       <div class="portfolio-grid">
-        <div class="portfolio-item">
-          <div class="portfolio-image" style="font-size: 0; position: relative; background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1));"></div>
-          <div class="portfolio-content">
-            <h3>E-Commerce Platform</h3>
-            <p>Designed and developed a modern e-commerce platform with seamless user experience, product filtering, and secure checkout flow. Increased conversion rates through intuitive navigation.</p>
-            <div class="portfolio-tags">
-              <span class="tag">Design</span>
-              <span class="tag">Development</span>
-              <span class="tag">2024</span>
-            </div>
-          </div>
+        <div class="glass">
+          <h3>E-Commerce Platform</h3>
+          <p>Designed and developed a modern e-commerce platform with seamless user experience, advanced product filtering, smart recommendations, and secure checkout flow. Increased conversion rates by 45% through intuitive navigation and optimized checkout process.</p>
         </div>
 
-        <div class="portfolio-item">
-          <div class="portfolio-image" style="font-size: 0; position: relative; background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.05));"></div>
-          <div class="portfolio-content">
-            <h3>Analytics Dashboard</h3>
-            <p>Built an interactive analytics dashboard enabling real-time data visualization with customizable widgets. Implemented complex data processing and responsive design for all device sizes.</p>
-            <div class="portfolio-tags">
-              <span class="tag">Development</span>
-              <span class="tag">UI/UX</span>
-              <span class="tag">2024</span>
-            </div>
-          </div>
+        <div class="glass">
+          <h3>Analytics Dashboard</h3>
+          <p>Built an interactive analytics dashboard enabling real-time data visualization with customizable widgets, trend analysis, and predictive insights. Implemented complex data processing and fully responsive design for all device sizes.</p>
         </div>
 
-        <div class="portfolio-item">
-          <div class="portfolio-image" style="font-size: 0; position: relative; background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.2));"></div>
-          <div class="portfolio-content">
-            <h3>Mobile Travel App</h3>
-            <p>Created a comprehensive mobile application for travel planning with map integration, itinerary management, and social features. Launched successfully on iOS and Android platforms.</p>
-            <div class="portfolio-tags">
-              <span class="tag">Mobile</span>
-              <span class="tag">Design</span>
-              <span class="tag">2023</span>
-            </div>
-          </div>
+        <div class="glass">
+          <h3>Mobile Travel App</h3>
+          <p>Created a comprehensive mobile application for travel planning with integrated maps, intelligent itinerary management, social collaboration, and offline functionality. Successfully launched on iOS and Android with 4.8-star ratings.</p>
+        </div>
+
+        <div class="glass">
+          <h3>Project Management Suite</h3>
+          <p>Engineered an enterprise project management platform with real-time collaboration, team workspaces, task automation, and comprehensive reporting. Supports teams of all sizes from startups to Fortune 500 companies.</p>
+        </div>
+
+        <div class="glass">
+          <h3>Design System Library</h3>
+          <p>Created a comprehensive design system with reusable components, detailed documentation, and interactive component explorer. Used across multiple products and teams to ensure design consistency and accelerate development.</p>
+        </div>
+
+        <div class="glass">
+          <h3>SaaS Platform</h3>
+          <p>Developed a secure Software-as-a-Service platform with advanced user authentication, role-based access control, and comprehensive audit logging. Achieved SOC 2 compliance and serves thousands of enterprise customers.</p>
         </div>
       </div>
     </div>
@@ -957,9 +453,7 @@ export function generatePortfolioPageHTML(state: DesignState): string {
             <div class="contact-value">San Francisco, CA</div>
           </div>
         </div>
-
         <div class="footer-divider"></div>
-
         <p class="footer-bottom">&copy; 2024 Your Name. All rights reserved. | Privacy Policy | Terms of Service</p>
       </div>
     </div>
