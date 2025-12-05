@@ -205,17 +205,23 @@ export function buildDesignTokens(state: DesignState): DesignTokens {
   --outline-offset: 2px;
   --focus-ring-color: ${colors.accent};
   --focus-ring-width: 2px;
+
+  /* ============================================
+     GRADIENT VARIABLES - Define your gradients here
+     ============================================ */
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+  --gradient-secondary: linear-gradient(135deg, var(--secondary), var(--accent));
+  --gradient-accent: linear-gradient(135deg, var(--accent), var(--primary));
+  --gradient-subtle: linear-gradient(135deg, var(--primary)20, var(--secondary)20);
 }
 
 /* ============================================
-   GRADIENT DEFINITIONS
+   GRADIENT UTILITY CLASSES
    ============================================ */
-${ Object.entries(GRADIENT_LIBRARY).map(([id, gradient]) => `
-/* ${gradient.name} - ${gradient.description} */
-.gradient-${id} {
-  background: ${gradient.value};
-}
-`).join("")}
+.gradient-primary { background: var(--gradient-primary); }
+.gradient-secondary { background: var(--gradient-secondary); }
+.gradient-accent { background: var(--gradient-accent); }
+.gradient-subtle { background: var(--gradient-subtle); }
 
 /* ============================================
    BUTTON STYLES
