@@ -122,12 +122,12 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
   const categories = ["All", "Design", "Development", "Inspiration"];
 
   const articles = [
-    { title: "Designing Interactive Systems", excerpt: "Learn how to create engaging user experiences", category: "Design", date: "Mar 15" },
-    { title: "Component Architecture Patterns", excerpt: "Building scalable design systems from the ground up", category: "Development", date: "Mar 10" },
-    { title: "Color Theory in Practice", excerpt: "Using color to guide user attention and emotion", category: "Inspiration", date: "Mar 5" },
-    { title: "Animation Best Practices", excerpt: "Smooth transitions that feel natural and purposeful", category: "Design", date: "Feb 28" },
-    { title: "Accessibility First", excerpt: "Creating inclusive experiences for all users", category: "Development", date: "Feb 22" },
-    { title: "Typography Mastery", excerpt: "The art of choosing and pairing typefaces", category: "Inspiration", date: "Feb 15" },
+    { title: "Designing Interactive Systems", excerpt: "Learn how to create engaging user experiences", category: "Design", date: "Mar 15", color: colors.primary },
+    { title: "Component Architecture Patterns", excerpt: "Building scalable design systems from the ground up", category: "Development", date: "Mar 10", color: colors.secondary },
+    { title: "Color Theory in Practice", excerpt: "Using color to guide user attention and emotion", category: "Inspiration", date: "Mar 5", color: colors.accent },
+    { title: "Animation Best Practices", excerpt: "Smooth transitions that feel natural and purposeful", category: "Design", date: "Feb 28", color: colors.primary },
+    { title: "Accessibility First", excerpt: "Creating inclusive experiences for all users", category: "Development", date: "Feb 22", color: colors.secondary },
+    { title: "Typography Mastery", excerpt: "The art of choosing and pairing typefaces", category: "Inspiration", date: "Feb 15", color: colors.accent },
   ];
 
   const filteredArticles = selectedCategory === "All" ? articles : articles.filter((a) => a.category === selectedCategory);
@@ -139,9 +139,44 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
   return (
     <div className="w-full" style={rootStyle}>
       {/* Header */}
+      <header
+        className="sticky top-0 z-40 px-6 py-4 border-b"
+        style={{
+          backgroundColor: colors.surface,
+          borderColor: colors.borderSubtle,
+        }}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div
+            style={{
+              fontFamily: fontPair.heading,
+              fontSize: sizeMap["lg"],
+              fontWeight: 700,
+              color: colors.primary,
+            }}
+          >
+            Design Insights
+          </div>
+          <div
+            style={{
+              fontFamily: fontPair.body,
+              fontSize: sizeMap["sm"],
+              color: colors.textMuted,
+            }}
+          >
+            Explore articles about design, development, and inspiration
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
       <section
-        className="px-6 py-12 border-b"
-        style={{ borderColor: colors.borderSubtle }}
+        className="px-6 py-16 md:py-24"
+        style={{
+          backgroundColor: colors.background,
+          background: `linear-gradient(135deg, ${colors.primary}08 0%, ${colors.secondary}08 100%)`,
+          borderBottom: `1px solid ${colors.borderSubtle}`,
+        }}
       >
         <div className="max-w-7xl mx-auto">
           <div
@@ -153,22 +188,29 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
               marginBottom: spacingObj.md,
             }}
           >
-            Design & Development Blog
+            Latest Articles
           </div>
           <p
             style={{
               fontFamily: fontPair.body,
               fontSize: sizeMap["md"],
               color: colors.textMuted,
+              maxWidth: "600px",
             }}
           >
-            Insights, tutorials, and inspiration for building beautiful design systems
+            Discover insights, best practices, and inspiration from the world of design and development
           </p>
         </div>
       </section>
 
       {/* Category Filter */}
-      <section className="px-6 py-8 border-b" style={{ borderColor: colors.borderSubtle }}>
+      <section
+        className="px-6 py-8 border-b"
+        style={{
+          backgroundColor: colors.surface,
+          borderColor: colors.borderSubtle,
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-wrap gap-3">
             {categories.map((cat) => {
@@ -229,7 +271,10 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
       </section>
 
       {/* Articles Grid */}
-      <section className="px-6 py-16 md:py-24">
+      <section
+        className="px-6 py-16 md:py-24"
+        style={{ backgroundColor: colors.background }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredArticles.map((article, idx) => {
@@ -243,7 +288,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                     backgroundColor: colors.surface,
                     border: getBorderStyle(uiTokens.card.border, colors),
                     borderRadius: radiusMap[uiTokens.card.radius],
-                    padding: spacingObj["2xl"],
+                    overflow: "hidden",
                     boxShadow: originalShadow,
                     cursor: "pointer",
                     display: "flex",
@@ -271,112 +316,133 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                     });
                   }}
                 >
+                  {/* Color header bar */}
                   <div
                     style={{
-                      display: "inline-block",
-                      backgroundColor: `${colors.primary}20`,
-                      color: colors.primary,
-                      padding: `${spacingObj.xs} ${spacingObj.md}`,
-                      borderRadius: radiusMap.full,
-                      fontSize: sizeMap["xs"],
-                      fontFamily: fontPair.heading,
-                      fontWeight: 600,
-                      marginBottom: spacingObj.md,
-                      width: "fit-content",
+                      height: "4px",
+                      background: article.color,
                     }}
-                  >
-                    {article.category}
-                  </div>
+                  />
 
+                  {/* Content */}
                   <div
                     style={{
-                      fontFamily: fontPair.heading,
-                      fontSize: sizeMap["lg"],
-                      fontWeight: 600,
-                      color: colors.text,
-                      marginBottom: spacingObj.md,
-                      flex: "1",
-                    }}
-                  >
-                    {article.title}
-                  </div>
-
-                  <p
-                    style={{
-                      fontFamily: fontPair.body,
-                      fontSize: sizeMap["sm"],
-                      color: colors.textMuted,
-                      marginBottom: spacingObj.lg,
-                      flex: "1",
-                    }}
-                  >
-                    {article.excerpt}
-                  </p>
-
-                  <div
-                    style={{
+                      padding: spacingObj["2xl"],
                       display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      paddingTop: spacingObj.md,
-                      borderTop: `1px solid ${colors.borderSubtle}`,
+                      flexDirection: "column",
+                      gap: spacingObj.md,
+                      flex: "1",
                     }}
                   >
-                    <span
+                    {/* Category badge */}
+                    <div
                       style={{
-                        fontFamily: fontPair.body,
+                        display: "inline-block",
+                        backgroundColor: `${article.color}20`,
+                        color: article.color,
+                        padding: `${spacingObj.xs} ${spacingObj.md}`,
+                        borderRadius: radiusMap.full,
                         fontSize: sizeMap["xs"],
-                        color: colors.textMuted,
+                        fontFamily: fontPair.heading,
+                        fontWeight: 600,
+                        width: "fit-content",
                       }}
                     >
-                      {article.date}
-                    </span>
+                      {article.category}
+                    </div>
 
-                    {/* Read More Link */}
-                    {(() => {
-                      const linkAnimConfig = uiTokens.animations?.link;
-                      const originalColor = colors.primary;
+                    {/* Title */}
+                    <div
+                      style={{
+                        fontFamily: fontPair.heading,
+                        fontSize: sizeMap["lg"],
+                        fontWeight: 600,
+                        color: colors.text,
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      {article.title}
+                    </div>
 
-                      return (
-                        <a
-                          href="#"
-                          style={{
-                            color: colors.primary,
-                            textDecoration: "none",
-                            fontSize: sizeMap["sm"],
-                            fontFamily: fontPair.body,
-                            cursor: "pointer",
-                            fontWeight: 600,
-                            transition: `all ${linkAnimConfig?.duration || 150}ms ${linkAnimConfig?.timingFunction || "ease-out"}`,
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = colors.accent;
-                            applyHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
-                              duration: linkAnimConfig?.duration || 150,
-                              timingFunction: linkAnimConfig?.timingFunction || "ease-out",
-                              scale: linkAnimConfig?.scale,
-                              glowColor: linkAnimConfig?.glowColor,
-                              translateY: linkAnimConfig?.translateY,
-                              colorShiftTarget: linkAnimConfig?.colorShiftTarget,
-                              brightnessLevel: linkAnimConfig?.brightnessLevel,
-                              currentShadow: "none",
-                              isDarkUi: vibe.isDarkUi,
-                            });
-                            (e.currentTarget as any).originalColor = originalColor;
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = (e.currentTarget as any).originalColor;
-                            removeHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
-                              duration: linkAnimConfig?.duration || 150,
-                              timingFunction: linkAnimConfig?.timingFunction || "ease-out",
-                              originalShadow: "none",
-                            });
-                          }}
-                        >
-                          Read →
-                        </a>
-                      );
-                    })()}
+                    {/* Excerpt */}
+                    <p
+                      style={{
+                        fontFamily: fontPair.body,
+                        fontSize: sizeMap["sm"],
+                        color: colors.textMuted,
+                        flex: "1",
+                      }}
+                    >
+                      {article.excerpt}
+                    </p>
+
+                    {/* Footer with date and link */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingTop: spacingObj.md,
+                        borderTop: `1px solid ${colors.borderSubtle}`,
+                        marginTop: "auto",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: fontPair.body,
+                          fontSize: sizeMap["xs"],
+                          color: colors.textMuted,
+                        }}
+                      >
+                        {article.date}
+                      </span>
+
+                      {/* Read More Link */}
+                      {(() => {
+                        const linkAnimConfig = uiTokens.animations?.link;
+                        const originalColor = article.color;
+
+                        return (
+                          <a
+                            href="#"
+                            style={{
+                              color: article.color,
+                              textDecoration: "none",
+                              fontSize: sizeMap["sm"],
+                              fontFamily: fontPair.body,
+                              cursor: "pointer",
+                              fontWeight: 600,
+                              transition: `all ${linkAnimConfig?.duration || 150}ms ${linkAnimConfig?.timingFunction || "ease-out"}`,
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = colors.accent;
+                              applyHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
+                                duration: linkAnimConfig?.duration || 150,
+                                timingFunction: linkAnimConfig?.timingFunction || "ease-out",
+                                scale: linkAnimConfig?.scale,
+                                glowColor: linkAnimConfig?.glowColor,
+                                translateY: linkAnimConfig?.translateY,
+                                colorShiftTarget: linkAnimConfig?.colorShiftTarget,
+                                brightnessLevel: linkAnimConfig?.brightnessLevel,
+                                currentShadow: "none",
+                                isDarkUi: vibe.isDarkUi,
+                              });
+                              (e.currentTarget as any).originalColor = originalColor;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = (e.currentTarget as any).originalColor;
+                              removeHoverAnimation(e.currentTarget, linkAnimConfig?.type || "subtle", {
+                                duration: linkAnimConfig?.duration || 150,
+                                timingFunction: linkAnimConfig?.timingFunction || "ease-out",
+                                originalShadow: "none",
+                              });
+                            }}
+                          >
+                            Read →
+                          </a>
+                        );
+                      })()}
+                    </div>
                   </div>
                 </div>
               );
@@ -387,8 +453,11 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
 
       {/* Newsletter Section */}
       <section
-        className="px-6 py-16 md:py-24 border-t"
-        style={{ borderColor: colors.borderSubtle }}
+        className="px-6 py-16 md:py-24"
+        style={{
+          backgroundColor: colors.surface,
+          borderTop: `1px solid ${colors.borderSubtle}`,
+        }}
       >
         <div className="max-w-2xl mx-auto text-center">
           <div
@@ -419,9 +488,8 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
               gap: spacingObj.md,
               maxWidth: "500px",
               margin: "0 auto",
-              flexDirection: "column",
             }}
-            className="sm:flex-row sm:gap-3"
+            className="flex-col sm:flex-row sm:gap-3"
           >
             <input
               type="email"
@@ -431,7 +499,7 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
                 padding: `${spacingObj.md} ${spacingObj.lg}`,
                 borderRadius: radiusMap.md,
                 border: `1px solid ${colors.borderSubtle}`,
-                backgroundColor: colors.surface,
+                backgroundColor: colors.background,
                 color: colors.text,
                 fontFamily: fontPair.body,
                 fontSize: sizeMap["sm"],
@@ -487,6 +555,141 @@ const PreviewBlog = ({ designState }: PreviewBlogProps) => {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer
+        className="px-6 py-12 border-t"
+        style={{
+          borderColor: colors.borderSubtle,
+          backgroundColor: colors.background,
+        }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: spacingObj.md,
+                }}
+              >
+                Design Insights
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+              >
+                Curated articles about design systems, user experience, and creative inspiration
+              </p>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: spacingObj.md,
+                }}
+              >
+                Categories
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                {["Design", "Development", "Inspiration"].map((item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      style={{
+                        color: "inherit",
+                        textDecoration: "none",
+                        transition: "color 200ms ease-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = colors.primary;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = colors.textMuted;
+                      }}
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: spacingObj.md,
+                }}
+              >
+                More
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                {["Archive", "About", "Contact"].map((item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      style={{
+                        color: "inherit",
+                        textDecoration: "none",
+                        transition: "color 200ms ease-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = colors.primary;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = colors.textMuted;
+                      }}
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="border-t pt-6"
+            style={{ borderColor: colors.borderSubtle }}
+          >
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
+                color: colors.textMuted,
+                textAlign: "center",
+              }}
+            >
+              © 2024 Design Insights. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

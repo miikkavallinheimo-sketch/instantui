@@ -124,12 +124,104 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
 
   return (
     <div className="w-full" style={rootStyle}>
+      {/* Header */}
+      <header
+        className="sticky top-0 z-40 px-6 py-4 border-b"
+        style={{
+          backgroundColor: colors.surface,
+          borderColor: colors.borderSubtle,
+        }}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div
+            style={{
+              fontFamily: fontPair.heading,
+              fontSize: sizeMap["lg"],
+              fontWeight: 700,
+              color: colors.primary,
+            }}
+          >
+            DesignUI
+          </div>
+          <nav className="flex gap-8 items-center">
+            {["Features", "Components", "Pricing"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.text,
+                  textDecoration: "none",
+                  transition: "color 200ms ease-out",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = colors.primary;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = colors.text;
+                }}
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+          {/* Sign Up Button */}
+          {(() => {
+            const btnAnimConfig = uiTokens.animations?.button;
+            const originalShadow = getShadowForMode(uiTokens.buttonPrimary.shadow, vibe.isDarkUi);
+            return (
+              <button
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.onPrimary,
+                  padding: `${spacingObj.md} ${spacingObj.lg}`,
+                  borderRadius: radiusMap[uiTokens.buttonPrimary.radius],
+                  border: getBorderStyle(uiTokens.buttonPrimary.border, colors),
+                  fontSize: sizeMap["sm"],
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  boxShadow: originalShadow,
+                  cursor: "pointer",
+                  transition: `all ${btnAnimConfig?.duration || 200}ms ${btnAnimConfig?.timingFunction || "ease-out"}`,
+                }}
+                onMouseEnter={(e) => {
+                  applyHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    scale: btnAnimConfig?.scale,
+                    glowColor: btnAnimConfig?.glowColor,
+                    translateY: btnAnimConfig?.translateY || -2,
+                    colorShiftTarget: btnAnimConfig?.colorShiftTarget,
+                    brightnessLevel: btnAnimConfig?.brightnessLevel,
+                    currentShadow: originalShadow,
+                    isDarkUi: vibe.isDarkUi,
+                  });
+                }}
+                onMouseLeave={(e) => {
+                  removeHoverAnimation(e.currentTarget, btnAnimConfig?.type || "lift", {
+                    duration: btnAnimConfig?.duration || 200,
+                    timingFunction: btnAnimConfig?.timingFunction || "ease-out",
+                    originalShadow,
+                  });
+                }}
+              >
+                Sign Up
+              </button>
+            );
+          })()}
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section
-        className="px-6 py-16 md:py-28 text-center border-b"
-        style={{ borderColor: colors.borderSubtle }}
+        className="px-6 py-20 md:py-32"
+        style={{
+          backgroundColor: colors.background,
+          background: `linear-gradient(135deg, ${colors.primary}08 0%, ${colors.secondary}08 100%)`,
+        }}
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto text-center">
           <div
             style={{
               fontFamily: fontPair.heading,
@@ -139,7 +231,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               marginBottom: spacingObj.lg,
             }}
           >
-            Experience Beautiful Design
+            Build Beautiful User Interfaces
           </div>
           <p
             style={{
@@ -152,9 +244,9 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               marginBottom: spacingObj["2xl"],
             }}
           >
-            Built with precision and attention to detail using our interactive component system
+            A complete design system with interactive components, smooth animations, and consistent styling
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {/* Primary Button */}
             {(() => {
               const btnAnimConfig = uiTokens.animations?.button;
@@ -195,7 +287,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                     });
                   }}
                 >
-                  Get Started
+                  Get Started Free
                 </button>
               );
             })()}
@@ -242,7 +334,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                     });
                   }}
                 >
-                  Learn More
+                  View Components
                 </button>
               );
             })()}
@@ -250,83 +342,36 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
         </div>
       </section>
 
-      {/* Features Section with Cards */}
-      <section className="px-6 py-16 md:py-24">
+      {/* Features Section */}
+      <section className="px-6 py-20 md:py-28" style={{ backgroundColor: colors.background }}>
         <div className="max-w-7xl mx-auto">
-          <div
-            style={{
-              fontFamily: fontPair.heading,
-              fontSize: sizeMap["xl"],
-              fontWeight: 600,
-              color: colors.text,
-              textAlign: "center",
-              marginBottom: spacingObj["2xl"],
-            }}
-          >
-            Featured Components
+          <div className="text-center mb-16">
+            <div
+              style={{
+                fontFamily: fontPair.heading,
+                fontSize: sizeMap["xl"],
+                fontWeight: 600,
+                color: colors.text,
+                marginBottom: spacingObj.md,
+              }}
+            >
+              Powerful Features
+            </div>
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["md"],
+                color: colors.textMuted,
+                maxWidth: "500px",
+                margin: "0 auto",
+              }}
+            >
+              Everything you need to build stunning interfaces
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Surface Card */}
-            {(() => {
-              const cardAnimConfig = uiTokens.animations?.card;
-              const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
-              return (
-                <div
-                  style={{
-                    backgroundColor: colors.surface,
-                    border: `2px solid ${colors.borderStrong}`,
-                    borderRadius: radiusMap[uiTokens.card.radius],
-                    padding: spacingObj["2xl"],
-                    boxShadow: originalShadow,
-                    cursor: "pointer",
-                    transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
-                  }}
-                  onMouseEnter={(e) => {
-                    applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
-                      duration: cardAnimConfig?.duration || 250,
-                      timingFunction: cardAnimConfig?.timingFunction || "ease-out",
-                      scale: cardAnimConfig?.scale,
-                      glowColor: cardAnimConfig?.glowColor,
-                      translateY: cardAnimConfig?.translateY || -4,
-                      colorShiftTarget: cardAnimConfig?.colorShiftTarget,
-                      brightnessLevel: cardAnimConfig?.brightnessLevel,
-                      currentShadow: originalShadow,
-                      isDarkUi: vibe.isDarkUi,
-                    });
-                  }}
-                  onMouseLeave={(e) => {
-                    removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
-                      duration: cardAnimConfig?.duration || 250,
-                      timingFunction: cardAnimConfig?.timingFunction || "ease-out",
-                      originalShadow,
-                    });
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: fontPair.heading,
-                      fontSize: sizeMap["lg"],
-                      fontWeight: 600,
-                      marginBottom: spacingObj.md,
-                      color: colors.text,
-                    }}
-                  >
-                    Customizable
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: fontPair.body,
-                      fontSize: sizeMap["sm"],
-                      color: colors.textMuted,
-                    }}
-                  >
-                    Every component respects your design system with colors, spacing and animations
-                  </div>
-                </div>
-              );
-            })()}
 
-            {/* Primary Card */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Feature 1 - Primary */}
             {(() => {
               const cardAnimConfig = uiTokens.animations?.card;
               const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
@@ -334,7 +379,6 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                 <div
                   style={{
                     backgroundColor: colors.primary,
-                    border: getBorderStyle(uiTokens.card.border, colors),
                     borderRadius: radiusMap[uiTokens.card.radius],
                     padding: spacingObj["2xl"],
                     boxShadow: originalShadow,
@@ -371,23 +415,23 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                       color: colors.onPrimary,
                     }}
                   >
-                    Interactive
+                    ✨ Interactive
                   </div>
                   <div
                     style={{
                       fontFamily: fontPair.body,
                       fontSize: sizeMap["sm"],
                       color: colors.onPrimary,
-                      opacity: 0.8,
+                      opacity: 0.9,
                     }}
                   >
-                    Smooth animations and hover effects bring your design to life
+                    Smooth animations and hover effects that respond to user interaction
                   </div>
                 </div>
               );
             })()}
 
-            {/* Secondary Card */}
+            {/* Feature 2 - Secondary */}
             {(() => {
               const cardAnimConfig = uiTokens.animations?.card;
               const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
@@ -395,7 +439,6 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                 <div
                   style={{
                     backgroundColor: colors.secondary,
-                    border: getBorderStyle(uiTokens.card.border, colors),
                     borderRadius: radiusMap[uiTokens.card.radius],
                     padding: spacingObj["2xl"],
                     boxShadow: originalShadow,
@@ -432,17 +475,77 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                       color: colors.onSecondary,
                     }}
                   >
-                    Accessible
+                    🎨 Customizable
                   </div>
                   <div
                     style={{
                       fontFamily: fontPair.body,
                       fontSize: sizeMap["sm"],
                       color: colors.onSecondary,
-                      opacity: 0.8,
+                      opacity: 0.9,
                     }}
                   >
-                    Built with accessibility in mind for all users
+                    Full control over colors, typography, spacing, and animations
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Feature 3 - Accent */}
+            {(() => {
+              const cardAnimConfig = uiTokens.animations?.card;
+              const originalShadow = getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi);
+              return (
+                <div
+                  style={{
+                    backgroundColor: colors.accent,
+                    borderRadius: radiusMap[uiTokens.card.radius],
+                    padding: spacingObj["2xl"],
+                    boxShadow: originalShadow,
+                    cursor: "pointer",
+                    transition: `all ${cardAnimConfig?.duration || 250}ms ${cardAnimConfig?.timingFunction || "ease-out"}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    applyHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                      duration: cardAnimConfig?.duration || 250,
+                      timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                      scale: cardAnimConfig?.scale,
+                      glowColor: cardAnimConfig?.glowColor,
+                      translateY: cardAnimConfig?.translateY || -4,
+                      colorShiftTarget: cardAnimConfig?.colorShiftTarget,
+                      brightnessLevel: cardAnimConfig?.brightnessLevel,
+                      currentShadow: originalShadow,
+                      isDarkUi: vibe.isDarkUi,
+                    });
+                  }}
+                  onMouseLeave={(e) => {
+                    removeHoverAnimation(e.currentTarget, cardAnimConfig?.type || "lift", {
+                      duration: cardAnimConfig?.duration || 250,
+                      timingFunction: cardAnimConfig?.timingFunction || "ease-out",
+                      originalShadow,
+                    });
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: fontPair.heading,
+                      fontSize: sizeMap["lg"],
+                      fontWeight: 600,
+                      marginBottom: spacingObj.md,
+                      color: colors.onAccent,
+                    }}
+                  >
+                    🚀 Ready to Use
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: fontPair.body,
+                      fontSize: sizeMap["sm"],
+                      color: colors.onAccent,
+                      opacity: 0.9,
+                    }}
+                  >
+                    Copy-paste components with working animations and interactions
                   </div>
                 </div>
               );
@@ -453,8 +556,11 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
 
       {/* CTA Section */}
       <section
-        className="px-6 py-16 md:py-24 border-t"
-        style={{ borderColor: colors.borderSubtle }}
+        className="px-6 py-20 md:py-28 border-t"
+        style={{
+          borderColor: colors.borderSubtle,
+          backgroundColor: colors.surface,
+        }}
       >
         <div className="max-w-2xl mx-auto text-center">
           <div
@@ -466,7 +572,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               marginBottom: spacingObj.md,
             }}
           >
-            Ready to explore more?
+            Ready to build something amazing?
           </div>
           <p
             style={{
@@ -476,7 +582,7 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
               marginBottom: spacingObj["2xl"],
             }}
           >
-            Visit the Components page to see the full component gallery
+            Start exploring the full component library with all animations and interactions
           </p>
 
           {/* Accent Button */}
@@ -519,12 +625,147 @@ const PreviewLanding = ({ designState }: PreviewLandingProps) => {
                   });
                 }}
               >
-                View All Components
+                Explore Components
               </button>
             );
           })()}
         </div>
       </section>
+
+      {/* Footer */}
+      <footer
+        className="px-6 py-12 border-t"
+        style={{
+          borderColor: colors.borderSubtle,
+          backgroundColor: colors.background,
+        }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: spacingObj.md,
+                }}
+              >
+                DesignUI
+              </div>
+              <p
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+              >
+                A complete design system for building beautiful interfaces
+              </p>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: spacingObj.md,
+                }}
+              >
+                Product
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                {["Components", "Documentation", "Examples"].map((item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      style={{
+                        color: "inherit",
+                        textDecoration: "none",
+                        transition: "color 200ms ease-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = colors.primary;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = colors.textMuted;
+                      }}
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontFamily: fontPair.heading,
+                  fontWeight: 600,
+                  color: colors.text,
+                  marginBottom: spacingObj.md,
+                }}
+              >
+                Company
+              </div>
+              <ul
+                style={{
+                  fontFamily: fontPair.body,
+                  fontSize: sizeMap["sm"],
+                  color: colors.textMuted,
+                }}
+                className="space-y-2"
+              >
+                {["About", "Blog", "Contact"].map((item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      style={{
+                        color: "inherit",
+                        textDecoration: "none",
+                        transition: "color 200ms ease-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = colors.primary;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = colors.textMuted;
+                      }}
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="border-t pt-6"
+            style={{ borderColor: colors.borderSubtle }}
+          >
+            <p
+              style={{
+                fontFamily: fontPair.body,
+                fontSize: sizeMap["sm"],
+                color: colors.textMuted,
+                textAlign: "center",
+              }}
+            >
+              © 2024 DesignUI. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
