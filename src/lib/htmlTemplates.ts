@@ -640,16 +640,19 @@ export function generatePortfolioPageHTML(state: DesignState): string {
     }
 
     .portfolio-item {
-      background-color: var(--surface);
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
       overflow: hidden;
-      transition: all 0.3s;
-      border: 1px solid var(--border-subtle);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .portfolio-item:hover {
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
       transform: translateY(-8px);
+      border-color: var(--primary);
     }
 
     .portfolio-image {
@@ -661,6 +664,18 @@ export function generatePortfolioPageHTML(state: DesignState): string {
       justify-content: center;
       color: white;
       font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portfolio-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent);
     }
 
     .portfolio-content {
@@ -697,15 +712,65 @@ export function generatePortfolioPageHTML(state: DesignState): string {
     /* Footer */
     footer {
       margin-top: 4rem;
-      padding: 2rem 0;
+      padding: 3rem 0;
       border-top: 1px solid var(--border-subtle);
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+    }
+
+    .footer-content {
       text-align: center;
+    }
+
+    .footer-contact {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contact-label {
+      font-size: 0.85rem;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-value {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .contact-value:hover {
+      text-decoration: underline;
+    }
+
+    .footer-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 2rem 0;
+    }
+
+    .footer-bottom {
+      color: var(--text-muted);
+      font-size: 0.9rem;
     }
 
     @media (max-width: 768px) {
       .hero h1 {
         font-size: 2rem;
+      }
+
+      .footer-contact {
+        gap: 1.5rem;
       }
     }
   </style>
@@ -714,7 +779,17 @@ export function generatePortfolioPageHTML(state: DesignState): string {
   <div class="hero">
     <div class="container">
       <h1>My Work</h1>
-      <p>A collection of projects showcasing design and development expertise</p>
+      <div style="max-width: 800px; margin: 2rem auto; line-height: 1.8;">
+        <p style="font-size: 1.1rem; color: var(--text); margin-bottom: 1.5rem;">
+          I'm a <strong>creative designer and developer</strong> passionate about crafting beautiful digital experiences. With expertise spanning <em>UI/UX design, web development, and brand identity</em>, I transform ideas into elegant, functional solutions that resonate with users.
+        </p>
+        <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          My approach combines <strong>strategic thinking</strong> with <em>meticulous attention to detail</em>. I believe in creating not just visually appealing interfaces, but intuitive experiences that guide users effortlessly toward their goals. Every project is an opportunity to push creative boundaries while maintaining accessibility and performance.
+        </p>
+        <p style="font-size: 1rem; color: var(--text-muted);">
+          Explore my featured projects below to see how I blend <strong>innovation, design thinking, and technical expertise</strong> to deliver impactful digital solutions.
+        </p>
+      </div>
     </div>
   </div>
 
@@ -723,10 +798,10 @@ export function generatePortfolioPageHTML(state: DesignState): string {
       <h2>Featured Projects</h2>
       <div class="portfolio-grid">
         <div class="portfolio-item">
-          <div class="portfolio-image">🎨</div>
+          <div class="portfolio-image" style="font-size: 0; position: relative; background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1));"></div>
           <div class="portfolio-content">
-            <h3>Project One</h3>
-            <p>A beautiful e-commerce platform built with modern design principles and cutting-edge technology.</p>
+            <h3>E-Commerce Platform</h3>
+            <p>Designed and developed a modern e-commerce platform with seamless user experience, product filtering, and secure checkout flow. Increased conversion rates through intuitive navigation.</p>
             <div class="portfolio-tags">
               <span class="tag">Design</span>
               <span class="tag">Development</span>
@@ -736,10 +811,10 @@ export function generatePortfolioPageHTML(state: DesignState): string {
         </div>
 
         <div class="portfolio-item">
-          <div class="portfolio-image">💻</div>
+          <div class="portfolio-image" style="font-size: 0; position: relative; background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.05));"></div>
           <div class="portfolio-content">
-            <h3>Project Two</h3>
-            <p>A comprehensive dashboard for data visualization and analytics with real-time updates.</p>
+            <h3>Analytics Dashboard</h3>
+            <p>Built an interactive analytics dashboard enabling real-time data visualization with customizable widgets. Implemented complex data processing and responsive design for all device sizes.</p>
             <div class="portfolio-tags">
               <span class="tag">Development</span>
               <span class="tag">UI/UX</span>
@@ -749,10 +824,10 @@ export function generatePortfolioPageHTML(state: DesignState): string {
         </div>
 
         <div class="portfolio-item">
-          <div class="portfolio-image">🚀</div>
+          <div class="portfolio-image" style="font-size: 0; position: relative; background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.2));"></div>
           <div class="portfolio-content">
-            <h3>Project Three</h3>
-            <p>A mobile app bringing seamless experiences across iOS and Android platforms.</p>
+            <h3>Mobile Travel App</h3>
+            <p>Created a comprehensive mobile application for travel planning with map integration, itinerary management, and social features. Launched successfully on iOS and Android platforms.</p>
             <div class="portfolio-tags">
               <span class="tag">Mobile</span>
               <span class="tag">Design</span>
@@ -766,7 +841,26 @@ export function generatePortfolioPageHTML(state: DesignState): string {
 
   <footer>
     <div class="container">
-      <p>&copy; 2024 Your Name. All rights reserved.</p>
+      <div class="footer-content">
+        <div class="footer-contact">
+          <div class="contact-item">
+            <div class="contact-label">Email</div>
+            <a href="mailto:hello@example.com" class="contact-value">hello@example.com</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label">Phone</div>
+            <a href="tel:+1234567890" class="contact-value">+1 (234) 567-890</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label">Location</div>
+            <div class="contact-value">San Francisco, CA</div>
+          </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <p class="footer-bottom">&copy; 2024 Your Name. All rights reserved. | Privacy Policy | Terms of Service</p>
+      </div>
     </div>
   </footer>
 </body>
