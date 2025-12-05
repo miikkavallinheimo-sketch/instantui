@@ -51,6 +51,23 @@ export const SharedNav = ({
     ? `rgba(255, 255, 255, 0.15)`
     : `rgba(255, 255, 255, 0.2)`;
 
+  // Helper to check if page group is active
+  const isPageGroupActive = (pageId: PreviewPageId) => {
+    if (pageId === "landing") {
+      return activePage === "landing" || activePage === "landing1" || activePage === "landing2";
+    }
+    if (pageId === "blog") {
+      return activePage === "blog" || activePage === "blog1" || activePage === "blog2";
+    }
+    return activePage === pageId;
+  };
+
+  const getVariants = (pageId: PreviewPageId) => {
+    if (pageId === "landing") return landingVariants;
+    if (pageId === "blog") return blogVariants;
+    return null;
+  };
+
   // Top Nav - Classic horizontal navigation
   if (activeMenu === "top-nav") {
     const linkAnim = vibeAnimations.link;
@@ -70,10 +87,8 @@ export const SharedNav = ({
           </div>
           <div className="flex gap-2 items-center">
             {mainPages.map((page) => {
-              const isLanding = page.id === "landing" && (activePage === "landing" || activePage === "landing1" || activePage === "landing2");
-              const isBlog = page.id === "blog" && (activePage === "blog" || activePage === "blog1" || activePage === "blog2");
-              const isActive = isLanding || isBlog || activePage === page.id;
-              const variants = page.id === "landing" ? landingVariants : page.id === "blog" ? blogVariants : null;
+              const isActive = isPageGroupActive(page.id);
+              const variants = getVariants(page.id);
 
               return (
                 <div key={page.id} className="relative group">
@@ -110,6 +125,7 @@ export const SharedNav = ({
                         backgroundColor: navBg,
                         borderColor: `${navText}20`,
                         minWidth: "120px",
+                        zIndex: 50,
                       }}
                     >
                       {variants.map((variant) => (
