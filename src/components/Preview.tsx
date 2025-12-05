@@ -67,7 +67,7 @@ const Preview = ({
           )}
 
           {/* Navigation */}
-          <div className="relative z-10">
+          <div className="relative z-50">
             <SharedNav
               designState={designState}
               activePage={activePage}
@@ -77,7 +77,7 @@ const Preview = ({
           </div>
 
           {/* Page Content */}
-          <div className="min-h-[640px] overflow-y-auto relative z-10">
+          <div className="min-h-[640px] overflow-y-auto relative z-0">
             {activePage === "dashboard" && (
               <PreviewDashboard designState={designState} isAnalyzing={isAnalyzing} />
             )}

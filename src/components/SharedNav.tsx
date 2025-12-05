@@ -73,19 +73,20 @@ export const SharedNav = ({
     const linkAnim = vibeAnimations.link;
     return (
       <nav
-        className="w-full border-b"
+        className="w-full border-b relative"
         style={{
           backgroundColor: navBg,
           color: navText,
           borderColor: `${navText}20`,
           fontFamily: fontPair.body,
+          overflow: 'visible',
         }}
       >
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="font-semibold text-lg" style={{ fontFamily: fontPair.heading }}>
             ChromUI
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center" style={{ overflow: 'visible' }}>
             {mainPages.map((page) => {
               const isActive = isPageGroupActive(page.id);
               const variants = getVariants(page.id);
@@ -94,6 +95,7 @@ export const SharedNav = ({
                 <div
                   key={page.id}
                   className="relative"
+                  style={{ overflow: 'visible' }}
                   onMouseLeave={(e) => {
                     const dropdown = e.currentTarget.querySelector('[data-dropdown]');
                     if (dropdown) {
