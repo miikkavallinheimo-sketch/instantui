@@ -24,6 +24,7 @@ export const SharedNav = ({
   const { colors, fontPair, vibe, uiTokens } = designState;
   const vibeAnimations = getAnimationsForVibe(vibe.id);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const mainPages: Array<{ id: PreviewPageId; label: string }> = [
     { id: "landing", label: "Landing" },
@@ -96,20 +97,8 @@ export const SharedNav = ({
                   key={page.id}
                   className="relative"
                   style={{ overflow: 'visible' }}
-                  onMouseEnter={(e) => {
-                    if (variants) {
-                      const dropdown = e.currentTarget.querySelector('[data-dropdown]');
-                      if (dropdown) {
-                        dropdown.style.display = 'flex';
-                      }
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    const dropdown = e.currentTarget.querySelector('[data-dropdown]');
-                    if (dropdown) {
-                      dropdown.style.display = 'none';
-                    }
-                  }}
+                  onMouseEnter={() => variants && setOpenDropdown(page.id)}
+                  onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <button
                     onClick={() => onPageChange?.(page.id)}
@@ -137,9 +126,8 @@ export const SharedNav = ({
                   </button>
 
                   {/* Dropdown for variants */}
-                  {variants && (
+                  {variants && openDropdown === page.id && (
                     <div
-                      data-dropdown
                       className="absolute left-0 top-full flex flex-col rounded-lg overflow-hidden border"
                       style={{
                         backgroundColor: navBg,
@@ -147,14 +135,16 @@ export const SharedNav = ({
                         minWidth: "120px",
                         zIndex: 50,
                         marginTop: "0.5rem",
-                        display: 'none',
                         pointerEvents: 'auto',
                       }}
                     >
                       {variants.map((variant) => (
                         <button
                           key={variant.id}
-                          onClick={() => onPageChange?.(variant.id)}
+                          onClick={() => {
+                            onPageChange?.(variant.id);
+                            setOpenDropdown(null);
+                          }}
                           className="px-4 py-2 text-sm text-left transition-all whitespace-nowrap"
                           style={{
                             backgroundColor: activePage === variant.id ? navAccent : "transparent",
