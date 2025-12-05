@@ -89,71 +89,28 @@ const Preview = ({
   const previewClassId = `preview-${Math.random().toString(36).substr(2, 9)}`;
 
   // Build CSS for texture and gradient backgrounds
-  let cssRules = `background-color: ${designState.colors.background} !important;`;
+  // Use simple gradient as test
+  let cssRules = `
+    background-color: ${designState.colors.background} !important;
+    background-image: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(8, 145, 178, 0.3) 100%) !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  `;
 
-  // Build background-image with multiple layers (gradient + texture)
-  const backgroundLayers: string[] = [];
-  if (gradientCSS) {
-    backgroundLayers.push(gradientCSS);
-  }
-  if (textureBackgroundImage) {
-    backgroundLayers.push(textureBackgroundImage);
-  }
-
-  if (backgroundLayers.length > 0) {
-    cssRules += `
-      background-image: ${backgroundLayers.join(", ")} !important;
-    `;
-  }
-
-  // Build background-size for each layer
-  if (backgroundLayers.length > 0) {
-    const sizes: string[] = [];
-    if (gradientCSS) sizes.push("100% 100%");
-    if (textureBackgroundImage) sizes.push("512px 512px");
-    if (sizes.length > 0) {
-      cssRules += `
-        background-size: ${sizes.join(", ")} !important;
-      `;
-    }
-  }
-
-  // Build background-repeat for each layer
-  if (backgroundLayers.length > 0) {
-    const repeats: string[] = [];
-    if (gradientCSS) repeats.push("no-repeat");
-    if (textureBackgroundImage) repeats.push("repeat");
-    if (repeats.length > 0) {
-      cssRules += `
-        background-repeat: ${repeats.join(", ")} !important;
-      `;
-    }
-  }
-
-  // Set background-position
-  if (backgroundLayers.length > 0) {
-    const positions: string[] = [];
-    if (gradientCSS) positions.push("center");
-    if (textureBackgroundImage) positions.push("0 0");
-    if (positions.length > 0) {
-      cssRules += `
-        background-position: ${positions.join(", ")} !important;
-      `;
-    }
-  }
-
-  console.log("[Preview] Generated CSS:", {
+  console.log("[Preview] Generated CSS with test gradient:", {
     previewClassId,
-    gradientCSS: gradientCSS ? `${gradientCSS.substring(0, 50)}...` : null,
-    textureBackgroundImage: textureBackgroundImage ? `${textureBackgroundImage.substring(0, 80)}...` : null,
-    backgroundLayers: backgroundLayers.length,
-    cssRules: cssRules.substring(0, 200),
+    cssRules: cssRules.substring(0, 300),
   });
 
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       <style>{`
         .${previewClassId} {
+          position: relative !important;
+          width: 100% !important;
+          height: 100% !important;
+          display: block !important;
           ${cssRules}
         }
         .${previewClassId}::before {
@@ -171,11 +128,13 @@ const Preview = ({
         }
       `}</style>
       {/* Main Preview Area */}
-      <div className="flex-1 min-w-0">
+      <div style={{ flex: 1, minWidth: 0 }}>
         <div
-          className={`w-full h-full rounded-3xl border border-slate-800/40 shadow-lg ${previewClassId}`}
+          className={previewClassId}
           style={{
-            position: "relative",
+            borderRadius: "24px",
+            border: "1px solid rgba(30, 41, 59, 0.4)",
+            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
           }}
         >
 
