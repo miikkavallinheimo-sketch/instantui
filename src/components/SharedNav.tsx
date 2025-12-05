@@ -176,36 +176,39 @@ export const SharedNav = ({
           <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
         </div>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          {pages.map((page) => (
-            <button
-              key={page.id}
-              onClick={() => onPageChange?.(page.id)}
-              className="px-6 py-2.5 rounded-full text-sm font-medium transition-all"
-              style={{
-                backgroundColor: activePage === page.id ? colors.primary : colors.surface,
-                color: activePage === page.id ? colors.onPrimary : colors.text,
-                border: `2px solid ${activePage === page.id ? colors.primary : colors.borderSubtle}`,
-                transform: activePage === page.id ? "scale(1.08)" : "scale(1)",
-                transitionDuration: `${linkAnim.duration}ms`,
-              }}
-              onMouseEnter={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.transform = "scale(1.05)";
-                  e.currentTarget.style.backgroundColor = colors.surface;
-                  e.currentTarget.style.borderColor = colors.primary;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.backgroundColor = colors.surface;
-                  e.currentTarget.style.borderColor = colors.borderSubtle;
-                }
-              }}
-            >
-              {page.label}
-            </button>
-          ))}
+          {mainPages.map((page) => {
+            const isActive = isPageGroupActive(page.id);
+            return (
+              <button
+                key={page.id}
+                onClick={() => onPageChange?.(page.id)}
+                className="px-6 py-2.5 rounded-full text-sm font-medium transition-all"
+                style={{
+                  backgroundColor: isActive ? colors.primary : colors.surface,
+                  color: isActive ? colors.onPrimary : colors.text,
+                  border: `2px solid ${isActive ? colors.primary : colors.borderSubtle}`,
+                  transform: isActive ? "scale(1.08)" : "scale(1)",
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.backgroundColor = colors.surface;
+                    e.currentTarget.style.borderColor = colors.primary;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.backgroundColor = colors.surface;
+                    e.currentTarget.style.borderColor = colors.borderSubtle;
+                  }
+                }}
+              >
+                {page.label}
+              </button>
+            );
+          })}
         </div>
       </nav>
     );
@@ -223,29 +226,32 @@ export const SharedNav = ({
           <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
         </div>
         <div className="flex items-center gap-6">
-          {pages.map((page) => (
-            <button
-              key={page.id}
-              onClick={() => onPageChange?.(page.id)}
-              className="text-sm font-medium transition-colors"
-              style={{
-                color: activePage === page.id ? colors.primary : colors.textMuted,
-                transitionDuration: `${linkAnim.duration}ms`,
-              }}
-              onMouseEnter={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.color = colors.primary;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.color = colors.textMuted;
-                }
-              }}
-            >
-              {page.label}
-            </button>
-          ))}
+          {mainPages.map((page) => {
+            const isActive = isPageGroupActive(page.id);
+            return (
+              <button
+                key={page.id}
+                onClick={() => onPageChange?.(page.id)}
+                className="text-sm font-medium transition-colors"
+                style={{
+                  color: isActive ? colors.primary : colors.textMuted,
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = colors.primary;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = colors.textMuted;
+                  }
+                }}
+              >
+                {page.label}
+              </button>
+            );
+          })}
         </div>
       </nav>
     );
@@ -264,34 +270,37 @@ export const SharedNav = ({
           <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
-          {pages.map((page) => (
-            <button
-              key={page.id}
-              onClick={() => onPageChange?.(page.id)}
-              className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
-              style={{
-                backgroundColor: activePage === page.id ? colors.primary : colors.surface,
-                color: activePage === page.id ? colors.onPrimary : colors.text,
-                boxShadow: activePage === page.id ? getShadowForMode(shadowToken, vibe.isDarkUi) : "none",
-                border: `1px solid ${colors.borderSubtle}`,
-                transitionDuration: `${linkAnim.duration}ms`,
-              }}
-              onMouseEnter={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.boxShadow = getShadowForMode(shadowToken, vibe.isDarkUi);
-                  e.currentTarget.style.backgroundColor = colors.surface;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.backgroundColor = colors.surface;
-                }
-              }}
-            >
-              {page.label}
-            </button>
-          ))}
+          {mainPages.map((page) => {
+            const isActive = isPageGroupActive(page.id);
+            return (
+              <button
+                key={page.id}
+                onClick={() => onPageChange?.(page.id)}
+                className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
+                style={{
+                  backgroundColor: isActive ? colors.primary : colors.surface,
+                  color: isActive ? colors.onPrimary : colors.text,
+                  boxShadow: isActive ? getShadowForMode(shadowToken, vibe.isDarkUi) : "none",
+                  border: `1px solid ${colors.borderSubtle}`,
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.boxShadow = getShadowForMode(shadowToken, vibe.isDarkUi);
+                    e.currentTarget.style.backgroundColor = colors.surface;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.backgroundColor = colors.surface;
+                  }
+                }}
+              >
+                {page.label}
+              </button>
+            );
+          })}
         </div>
       </nav>
     );
@@ -309,32 +318,35 @@ export const SharedNav = ({
           <div className="text-xs" style={{ color: colors.textMuted }}>{vibe.label}</div>
         </div>
         <div className="flex items-center gap-8">
-          {pages.map((page) => (
-            <button
-              key={page.id}
-              onClick={() => onPageChange?.(page.id)}
-              className="text-sm font-medium pb-2 transition-all relative"
-              style={{
-                color: activePage === page.id ? colors.primary : colors.text,
-                borderBottom: activePage === page.id ? `2px solid ${colors.primary}` : "2px solid transparent",
-                transitionDuration: `${linkAnim.duration}ms`,
-              }}
-              onMouseEnter={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.borderBottom = `2px solid ${colors.primary}`;
-                  e.currentTarget.style.color = colors.primary;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activePage !== page.id) {
-                  e.currentTarget.style.borderBottom = "2px solid transparent";
-                  e.currentTarget.style.color = colors.text;
-                }
-              }}
-            >
-              {page.label}
-            </button>
-          ))}
+          {mainPages.map((page) => {
+            const isActive = isPageGroupActive(page.id);
+            return (
+              <button
+                key={page.id}
+                onClick={() => onPageChange?.(page.id)}
+                className="text-sm font-medium pb-2 transition-all relative"
+                style={{
+                  color: isActive ? colors.primary : colors.text,
+                  borderBottom: isActive ? `2px solid ${colors.primary}` : "2px solid transparent",
+                  transitionDuration: `${linkAnim.duration}ms`,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderBottom = `2px solid ${colors.primary}`;
+                    e.currentTarget.style.color = colors.primary;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderBottom = "2px solid transparent";
+                    e.currentTarget.style.color = colors.text;
+                  }
+                }}
+              >
+                {page.label}
+              </button>
+            );
+          })}
         </div>
       </nav>
     );
@@ -377,35 +389,38 @@ export const SharedNav = ({
                   minWidth: "160px",
                 }}
               >
-                {pages.map((page) => (
-                  <button
-                    key={page.id}
-                    onClick={() => {
-                      onPageChange?.(page.id);
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 transition-colors text-sm font-medium first:rounded-t-lg last:rounded-b-lg"
-                    style={{
-                      color: activePage === page.id ? colors.primary : colors.text,
-                      backgroundColor: activePage === page.id ? colors.primary + "15" : "transparent",
-                      transitionDuration: `${linkAnim.duration}ms`,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (activePage !== page.id) {
-                        e.currentTarget.style.backgroundColor = colors.primary + "10";
-                        e.currentTarget.style.color = colors.primary;
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (activePage !== page.id) {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                        e.currentTarget.style.color = colors.text;
-                      }
-                    }}
-                  >
-                    {page.label}
-                  </button>
-                ))}
+                {mainPages.map((page) => {
+                  const isActive = isPageGroupActive(page.id);
+                  return (
+                    <button
+                      key={page.id}
+                      onClick={() => {
+                        onPageChange?.(page.id);
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 transition-colors text-sm font-medium first:rounded-t-lg last:rounded-b-lg"
+                      style={{
+                        color: isActive ? colors.primary : colors.text,
+                        backgroundColor: isActive ? colors.primary + "15" : "transparent",
+                        transitionDuration: `${linkAnim.duration}ms`,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = colors.primary + "10";
+                          e.currentTarget.style.color = colors.primary;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                          e.currentTarget.style.color = colors.text;
+                        }
+                      }}
+                    >
+                      {page.label}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
