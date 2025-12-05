@@ -85,48 +85,99 @@ const Preview = ({
     finalBackgroundImage: finalBackgroundImage ? `${finalBackgroundImage.substring(0, 100)}...` : "none",
   });
 
+  // Generate unique class name for this preview instance
+  const previewClassId = `preview-${Math.random().toString(36).substr(2, 9)}`;
+
+  // Build CSS for texture and gradient backgrounds
+  let cssRules = `background-color: ${designState.colors.background} !important;`;
+
+  // Build background-image with multiple layers (gradient + texture)
+  const backgroundLayers: string[] = [];
+  if (gradientCSS) {
+    backgroundLayers.push(gradientCSS);
+  }
+  if (textureBackgroundImage) {
+    backgroundLayers.push(textureBackgroundImage);
+  }
+
+  if (backgroundLayers.length > 0) {
+    cssRules += `
+      background-image: ${backgroundLayers.join(", ")} !important;
+    `;
+  }
+
+  // Build background-size for each layer
+  if (backgroundLayers.length > 0) {
+    const sizes: string[] = [];
+    if (gradientCSS) sizes.push("100% 100%");
+    if (textureBackgroundImage) sizes.push("512px 512px");
+    if (sizes.length > 0) {
+      cssRules += `
+        background-size: ${sizes.join(", ")} !important;
+      `;
+    }
+  }
+
+  // Build background-repeat for each layer
+  if (backgroundLayers.length > 0) {
+    const repeats: string[] = [];
+    if (gradientCSS) repeats.push("no-repeat");
+    if (textureBackgroundImage) repeats.push("repeat");
+    if (repeats.length > 0) {
+      cssRules += `
+        background-repeat: ${repeats.join(", ")} !important;
+      `;
+    }
+  }
+
+  // Set background-position
+  if (backgroundLayers.length > 0) {
+    const positions: string[] = [];
+    if (gradientCSS) positions.push("center");
+    if (textureBackgroundImage) positions.push("0 0");
+    if (positions.length > 0) {
+      cssRules += `
+        background-position: ${positions.join(", ")} !important;
+      `;
+    }
+  }
+
+  console.log("[Preview] Generated CSS:", {
+    previewClassId,
+    gradientCSS: gradientCSS ? `${gradientCSS.substring(0, 50)}...` : null,
+    textureBackgroundImage: textureBackgroundImage ? `${textureBackgroundImage.substring(0, 80)}...` : null,
+    backgroundLayers: backgroundLayers.length,
+    cssRules: cssRules.substring(0, 200),
+  });
+
   return (
     <div className="flex flex-col gap-4 w-full h-full">
+      <style>{`
+        .${previewClassId} {
+          ${cssRules}
+        }
+        .${previewClassId}::before {
+          content: "DEBUG: CSS Applied";
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          color: red;
+          font-size: 14px;
+          font-weight: bold;
+          background: rgba(255, 0, 0, 0.2);
+          padding: 4px 8px;
+          border-radius: 4px;
+          z-index: 999;
+        }
+      `}</style>
       {/* Main Preview Area */}
       <div className="flex-1 min-w-0">
         <div
-          className="w-full h-full rounded-3xl border border-slate-800/40 shadow-lg"
+          className={`w-full h-full rounded-3xl border border-slate-800/40 shadow-lg ${previewClassId}`}
           style={{
             position: "relative",
-            backgroundColor: designState.colors.background,
-            // FIRST TEST: Apply a hardcoded gradient to verify CSS works
-            backgroundImage: "linear-gradient(135deg, rgba(0, 100, 200, 0.3) 0%, rgba(100, 200, 0, 0.3) 100%), " + (gradientCSS && textureBackgroundImage
-              ? `${textureBackgroundImage}, ${gradientCSS}`
-              : textureBackgroundImage
-              ? textureBackgroundImage
-              : gradientCSS
-              ? gradientCSS
-              : ""),
-            // Size and position for texture
-            backgroundSize: textureBackgroundImage && gradientCSS
-              ? "100% 100%, 512px 512px, 100% 100%"
-              : textureBackgroundImage
-              ? "100% 100%, 512px 512px"
-              : "100% 100%",
-            backgroundRepeat: textureBackgroundImage && gradientCSS
-              ? "no-repeat, repeat, no-repeat"
-              : textureBackgroundImage
-              ? "no-repeat, repeat"
-              : "no-repeat",
-            backgroundPosition: "0 0",
-            backgroundAttachment: "fixed",
           }}
         >
-          {/* Debug: Show gradient CSS value if present */}
-          {gradientCSS ? (
-            <div style={{ position: "static", padding: "10px", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "#fff", fontSize: "12px", zIndex: 1, pointerEvents: "none" }}>
-              ✓ Gradient applied: {gradientCSS.substring(0, 40)}...
-            </div>
-          ) : (
-            <div style={{ position: "static", padding: "10px", backgroundColor: "rgba(255, 0, 0, 0.8)", color: "#fff", fontSize: "12px", zIndex: 1, pointerEvents: "none" }}>
-              ✗ NO GRADIENT - gradientId: {designState.gradientId}
-            </div>
-          )}
 
           {isAnalyzing && (
             <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
