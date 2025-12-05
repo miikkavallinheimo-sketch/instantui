@@ -3,6 +3,8 @@ import type { CSSProperties } from "react";
 import type { DesignState, BorderToken, HoverAnimationType } from "../lib/types";
 import { getShadowForMode } from "../lib/shadowTokens";
 import { getGlassConfigForVibe, buildGlassBackground, buildGlassBorder, buildBackdropFilter } from "../lib/glassTokens";
+import { getGradient, getGradientCSSValue, VIBE_GRADIENTS } from "../lib/gradientTokens";
+import { getTextureContent, getTextureDataUrl, VIBE_TEXTURES } from "../lib/textureTokens";
 
 interface PreviewComponentsProps {
   designState: DesignState;
@@ -1806,6 +1808,119 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Gradients */}
+      <section className="max-w-7xl mx-auto px-6 py-12">
+        <div
+          style={{
+            fontFamily: fontPair.heading,
+            fontSize: sizeMap["lg"],
+            fontWeight: 600,
+            color: colors.text,
+            marginBottom: spacingObj["2xl"],
+          }}
+        >
+          Gradients
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginBottom: spacingObj["3xl"] }}>
+          {VIBE_GRADIENTS.find((v) => v.id === vibe.id)?.options.map((gradientId) => {
+            const gradient = getGradient(gradientId);
+            if (!gradient) return null;
+            return (
+              <div key={gradient.id} style={{ display: "flex", flexDirection: "column", gap: spacingObj.md }}>
+                <div
+                  style={{
+                    height: "120px",
+                    borderRadius: radiusMap.md,
+                    background: gradient.value,
+                    border: `1px solid ${colors.borderSubtle}`,
+                  }}
+                />
+                <div>
+                  <div
+                    style={{
+                      fontSize: sizeMap["sm"],
+                      fontWeight: 600,
+                      color: colors.text,
+                      fontFamily: fontPair.heading,
+                      marginBottom: spacingObj.xs,
+                    }}
+                  >
+                    {gradient.name}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: sizeMap["xs"],
+                      color: colors.textMuted,
+                      fontFamily: fontPair.body,
+                    }}
+                  >
+                    {gradient.description}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Textures */}
+      <section className="max-w-7xl mx-auto px-6 py-12">
+        <div
+          style={{
+            fontFamily: fontPair.heading,
+            fontSize: sizeMap["lg"],
+            fontWeight: 600,
+            color: colors.text,
+            marginBottom: spacingObj["2xl"],
+          }}
+        >
+          Textures
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginBottom: spacingObj["3xl"] }}>
+          {VIBE_TEXTURES.find((v) => v.id === vibe.id)?.options.map((textureId) => {
+            const texture = getTextureContent(textureId);
+            if (!texture) return null;
+            const dataUrl = getTextureDataUrl(textureId);
+            return (
+              <div key={texture.id} style={{ display: "flex", flexDirection: "column", gap: spacingObj.md }}>
+                <div
+                  style={{
+                    height: "120px",
+                    borderRadius: radiusMap.md,
+                    backgroundColor: colors.surface,
+                    backgroundImage: `url(${dataUrl})`,
+                    backgroundSize: "cover",
+                    border: `1px solid ${colors.borderSubtle}`,
+                  }}
+                />
+                <div>
+                  <div
+                    style={{
+                      fontSize: sizeMap["sm"],
+                      fontWeight: 600,
+                      color: colors.text,
+                      fontFamily: fontPair.heading,
+                      marginBottom: spacingObj.xs,
+                    }}
+                  >
+                    {texture.name}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: sizeMap["xs"],
+                      color: colors.textMuted,
+                      fontFamily: fontPair.body,
+                    }}
+                  >
+                    {texture.description}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
