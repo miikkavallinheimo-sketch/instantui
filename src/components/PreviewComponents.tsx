@@ -1892,6 +1892,7 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
                     backgroundColor: colors.surface,
                     backgroundImage: `url(${dataUrl})`,
                     backgroundSize: "cover",
+                    backgroundBlendMode: "multiply",
                     border: `1px solid ${colors.borderSubtle}`,
                   }}
                 />
