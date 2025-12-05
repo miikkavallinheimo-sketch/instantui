@@ -1,14 +1,14 @@
 import { VIBE_PRESETS } from "../lib/vibePresets";
-import { getAvailablePages, getAvailableMenus } from "../lib/featureFlags";
+import { getAvailableMenus } from "../lib/featureFlags";
 import { TexturePanel } from "./TexturePanel";
 import { GradientPanel } from "./GradientPanel";
+import { CollapsibleSection } from "./CollapsibleSection";
 import type {
   VibeId,
   DesignState,
   ColorLocks,
   ColorKey,
   FontLockMode,
-  PreviewPageId,
   MenuPresetId,
 } from "../lib/types";
 
@@ -30,8 +30,8 @@ interface SidebarControlsProps {
   autoRefresh?: boolean;
   onToggleAutoRefresh?: (enabled: boolean) => void;
   isOptimizing?: boolean;
-  activePage?: PreviewPageId;
-  onPageChange?: (page: PreviewPageId) => void;
+  activePage?: string;
+  onPageChange?: (page: string) => void;
   activeMenu?: MenuPresetId;
   onMenuChange?: (menu: MenuPresetId) => void;
   darkMode?: "light" | "dark";
@@ -60,8 +60,6 @@ const SidebarControls = ({
   autoRefresh = false,
   onToggleAutoRefresh,
   isOptimizing = false,
-  activePage = "dashboard",
-  onPageChange,
   activeMenu = "top-nav",
   onMenuChange,
   darkMode = "light",
@@ -72,14 +70,13 @@ const SidebarControls = ({
   onGradientOpacityChange,
 }: SidebarControlsProps) => {
   const { colors, fontPair } = designState;
-
   const vibes = Object.entries(VIBE_PRESETS);
-  const availablePages = getAvailablePages();
   const availableMenus = getAvailableMenus();
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
+    <div className="space-y-0">
+      {/* AI Refresh Section */}
+      <div className="space-y-2 py-3 px-0 border-b border-slate-700">
         <button
           onClick={onAiRefresh}
           disabled={isOptimizing || aiTuned}
@@ -118,47 +115,70 @@ const SidebarControls = ({
         </div>
       </div>
 
-      <div>
-        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
-          Theme
-        </h3>
-        {VIBE_PRESETS[vibeId].isDarkUi ? (
-          <div className="px-3 py-2 rounded-full border border-slate-700 text-[11px] text-slate-400 text-center bg-slate-900/30">
-            Locked to Dark
+      {/* Theme & Vibe Section */}
+      <CollapsibleSection title="Theme & Vibe" defaultOpen={true}>
+        <div className="space-y-4 px-0">
+          {/* Theme Selector */}
+          <div>
+            <p className="text-xs text-slate-400 mb-2 uppercase tracking-[0.1em]">Theme</p>
+            {VIBE_PRESETS[vibeId].isDarkUi ? (
+              <div className="px-3 py-2 rounded-full border border-slate-700 text-[11px] text-slate-400 text-center bg-slate-900/30">
+                Locked to Dark
+              </div>
+            ) : (
+              <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden w-full">
+                <button
+                  onClick={() => onDarkModeChange?.("light")}
+                  className={`flex-1 px-3 py-2 transition ${
+                    darkMode === "light"
+                      ? "bg-slate-700 text-slate-50"
+                      : "text-slate-300 hover:text-slate-100"
+                  }`}
+                >
+                  Light
+                </button>
+                <button
+                  onClick={() => onDarkModeChange?.("dark")}
+                  className={`flex-1 px-3 py-2 transition ${
+                    darkMode === "dark"
+                      ? "bg-slate-700 text-slate-50"
+                      : "text-slate-300 hover:text-slate-100"
+                  }`}
+                >
+                  Dark
+                </button>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden w-full">
-            <button
-              onClick={() => onDarkModeChange?.("light")}
-              className={`flex-1 px-3 py-2 transition ${
-                darkMode === "light"
-                  ? "bg-slate-700 text-slate-50"
-                  : "text-slate-300 hover:text-slate-100"
-              }`}
-            >
-              Light
-            </button>
-            <button
-              onClick={() => onDarkModeChange?.("dark")}
-              className={`flex-1 px-3 py-2 transition ${
-                darkMode === "dark"
-                  ? "bg-slate-700 text-slate-50"
-                  : "text-slate-300 hover:text-slate-100"
-              }`}
-            >
-              Dark
-            </button>
-          </div>
-        )}
-      </div>
 
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
-            Navigation Menu
-          </h2>
+          {/* Vibe Selection */}
+          <div>
+            <p className="text-xs text-slate-400 mb-2 uppercase tracking-[0.1em]">Vibe</p>
+            <div className="space-y-1">
+              {vibes.map(([id, vibe]) => (
+                <button
+                  key={id}
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-150 ${
+                    id === vibeId
+                      ? "bg-slate-700 text-slate-50 border border-slate-600"
+                      : "hover:bg-slate-800/70 text-slate-200 border border-transparent"
+                  }`}
+                  onClick={() => onChangeVibe(id as VibeId)}
+                >
+                  <div className="font-medium text-xs">{vibe.label}</div>
+                  <div className="text-[10px] text-slate-400">
+                    {vibe.description}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="space-y-1">
+      </CollapsibleSection>
+
+      {/* Navigation Menu */}
+      <CollapsibleSection title="Navigation Menu">
+        <div className="space-y-1 px-0">
           {availableMenus.map((menu) => (
             <button
               key={menu.id}
@@ -169,156 +189,126 @@ const SidebarControls = ({
               }`}
               onClick={() => onMenuChange?.(menu.id)}
             >
-              <div className="font-medium">{menu.label}</div>
-              <div className="text-[11px] text-slate-400">
+              <div className="font-medium text-xs">{menu.label}</div>
+              <div className="text-[10px] text-slate-400">
                 {menu.description}
               </div>
             </button>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      <div>
-        <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400 mb-2">
-          Vibe
-        </h2>
-        <div className="space-y-1">
-          {vibes.map(([id, vibe]) => (
-            <button
-              key={id}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-150 ${
-                id === vibeId
-                  ? "bg-slate-700 text-slate-50 border border-slate-600"
-                  : "hover:bg-slate-800/70 text-slate-200 border border-transparent"
-              }`}
-              onClick={() => onChangeVibe(id as VibeId)}
-            >
-              <div className="font-medium">{vibe.label}</div>
-              <div className="text-[11px] text-slate-400">
-                {vibe.description}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
-            Colors
-          </h2>
+      {/* Colors */}
+      <CollapsibleSection title="Colors">
+        <div className="space-y-3 px-0">
           <button
             onClick={onRandomizeColors}
-            className="text-[11px] px-2 py-1 rounded-full border border-slate-700 hover:bg-slate-800/80"
+            className="w-full text-[11px] px-3 py-2 rounded-full border border-slate-700 hover:bg-slate-800/80 text-slate-300 transition"
           >
             Randomize (keep locks)
           </button>
+          <div className="space-y-1">
+            {(
+              [
+                ["Primary", "primary", colors.primary],
+                ["Secondary", "secondary", colors.secondary],
+                ["Accent", "accent", colors.accent],
+                ["Background", "background", colors.background],
+                ["Text", "text", colors.text],
+              ] as [string, ColorKey, string][]
+            ).map(([label, key, value]) => (
+              <div
+                key={label}
+                className="flex items-center justify-between gap-2 text-xs bg-slate-900/60 rounded-md px-2 py-1.5"
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className="w-4 h-4 rounded-sm border border-slate-700 cursor-pointer"
+                    style={{ backgroundColor: value }}
+                    onClick={() => onCopyColor(value)}
+                    title="Click to copy color"
+                  />
+                  <span className="text-slate-300">{label}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => onCopyColor(value)}
+                    className="text-[10px] px-1.5 py-0.5 rounded border border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                  >
+                    Copy
+                  </button>
+                  <span className="font-mono text-[10px] text-slate-400">
+                    {value.toUpperCase()}
+                  </span>
+                  <button
+                    onClick={() => onToggleColorLock(key)}
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full border ${
+                      colorLocks[key]
+                        ? "border-emerald-400 text-emerald-300 bg-emerald-400/10"
+                        : "border-slate-600 text-slate-300 hover:bg-slate-800"
+                    }`}
+                  >
+                    {colorLocks[key] ? "🔒" : "🔓"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="space-y-1">
-          {(
-            [
-              ["Primary", "primary", colors.primary],
-              ["Secondary", "secondary", colors.secondary],
-              ["Accent", "accent", colors.accent],
-              ["Background", "background", colors.background],
-              ["Text", "text", colors.text],
-            ] as [string, ColorKey, string][]
-          ).map(([label, key, value]) => (
-            <div
-              key={label}
-              className="flex items-center justify-between gap-2 text-xs bg-slate-900/60 rounded-md px-2 py-1.5"
-            >
-              <div className="flex items-center gap-2">
-                <span
-                  className="w-4 h-4 rounded-sm border border-slate-700 cursor-pointer"
-                  style={{ backgroundColor: value }}
-                  onClick={() => onCopyColor(value)}
-                  title="Click to copy color"
-                />
-                <span className="text-slate-300">{label}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => onCopyColor(value)}
-                  className="text-[10px] px-1.5 py-0.5 rounded border border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
-                  title="Copy color"
-                >
-                  Copy
-                </button>
-                <span className="font-mono text-[11px] text-slate-400">
-                  {value.toUpperCase()}
+      </CollapsibleSection>
+
+      {/* Tone Trims */}
+      <CollapsibleSection title="Tone Trims">
+        <div className="space-y-3 px-0">
+          {[
+            {
+              label: "Hue trim",
+              value: hueShift,
+              min: -15,
+              max: 15,
+              unit: "°",
+              type: "hue",
+            },
+            {
+              label: "Saturation trim",
+              value: saturationShift,
+              min: -20,
+              max: 20,
+              unit: "%",
+              type: "saturation",
+            },
+          ].map((tone) => (
+            <div key={tone.label} className="text-xs space-y-1">
+              <div className="flex items-center justify-between text-slate-300">
+                <span className="text-xs">{tone.label}</span>
+                <span className="font-mono text-[10px] text-slate-400">
+                  {tone.value > 0 ? "+" : ""}
+                  {tone.value}
+                  {tone.unit}
                 </span>
-                <button
-                  onClick={() => onToggleColorLock(key)}
-                  className={`text-[11px] px-1.5 py-0.5 rounded-full border ${
-                    colorLocks[key]
-                      ? "border-emerald-400 text-emerald-300 bg-emerald-400/10"
-                      : "border-slate-600 text-slate-300 hover:bg-slate-800"
-                  }`}
-                  title={colorLocks[key] ? "Unlock color" : "Lock color"}
-                >
-                  {colorLocks[key] ? "🔒" : "🔓"}
-                </button>
               </div>
+              <input
+                type="range"
+                min={tone.min}
+                max={tone.max}
+                step={1}
+                value={tone.value}
+                onChange={(e) =>
+                  onToneChange(
+                    tone.type as "hue" | "saturation",
+                    Number(e.target.value)
+                  )
+                }
+                className="w-full accent-emerald-300"
+              />
             </div>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      <div className="space-y-3">
-        <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
-          Tone trims
-        </div>
-        {[
-          {
-            label: "Hue trim",
-            value: hueShift,
-            min: -15,
-            max: 15,
-            unit: "°",
-            type: "hue",
-          },
-          {
-            label: "Saturation trim",
-            value: saturationShift,
-            min: -20,
-            max: 20,
-            unit: "%",
-            type: "saturation",
-          },
-        ].map((tone) => (
-          <div key={tone.label} className="text-xs space-y-1">
-            <div className="flex items-center justify-between text-slate-300">
-              <span>{tone.label}</span>
-              <span className="font-mono text-[11px] text-slate-400">
-                {tone.value > 0 ? "+" : ""}
-                {tone.value}
-                {tone.unit}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={tone.min}
-              max={tone.max}
-              step={1}
-              value={tone.value}
-              onChange={(e) =>
-                onToneChange(
-                  tone.type as "hue" | "saturation",
-                  Number(e.target.value)
-                )
-              }
-              className="w-full accent-emerald-300"
-            />
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mt-3">
-          Extended tokens
-        </h3>
-        <div className="mt-2 grid grid-cols-1 gap-1 text-xs">
+      {/* Extended Tokens */}
+      <CollapsibleSection title="Extended Tokens">
+        <div className="grid grid-cols-1 gap-1 text-xs px-0">
           {[
             ["On Primary", colors.onPrimary],
             ["On Secondary", colors.onSecondary],
@@ -340,41 +330,38 @@ const SidebarControls = ({
                   onClick={() => onCopyColor(value)}
                   title="Click to copy color"
                 />
-                <span className="text-slate-300">{label}</span>
+                <span className="text-slate-300 text-xs">{label}</span>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => onCopyColor(value)}
                   className="text-[10px] px-1.5 py-0.5 rounded border border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
-                  title="Copy color"
                 >
                   Copy
                 </button>
-                <span className="font-mono text-[11px] text-slate-500">
+                <span className="font-mono text-[10px] text-slate-500">
                   {value.toUpperCase()}
                 </span>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-400">
-            Fonts
-          </h2>
-          <div className="inline-flex rounded-full border border-slate-700 text-[11px] overflow-hidden">
+      {/* Fonts */}
+      <CollapsibleSection title="Fonts">
+        <div className="space-y-3 px-0">
+          <div className="flex gap-1 rounded-full border border-slate-700 text-[10px] overflow-hidden">
             {[
               ["none", "Free"],
               ["heading", "Lock H"],
-              ["body", "Lock Body"],
+              ["body", "Lock B"],
               ["both", "Lock Both"],
             ].map(([mode, label]) => (
               <button
                 key={mode}
                 onClick={() => onChangeFontLock(mode as typeof fontLockMode)}
-                className={`px-2 py-1 ${
+                className={`flex-1 px-2 py-1.5 transition text-[10px] ${
                   fontLockMode === mode
                     ? "bg-slate-700 text-slate-50"
                     : "text-slate-300"
@@ -384,80 +371,88 @@ const SidebarControls = ({
               </button>
             ))}
           </div>
+
+          <div className="bg-slate-900/60 rounded-md px-3 py-2 text-xs space-y-3">
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.1em] text-slate-500">
+                Heading font
+              </div>
+              <div className="flex items-center justify-between mt-1">
+                <span className="text-slate-100 text-xs font-medium">{fontPair.heading}</span>
+                <span className="text-[10px] text-slate-400">weight {designState.typography.heading.weight}</span>
+              </div>
+              <div className="text-[10px] text-slate-500 mt-1">
+                {fontPair.source === "google"
+                  ? "Google Fonts"
+                  : fontPair.source === "system"
+                  ? "System font"
+                  : "Premium"}
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.1em] text-slate-500">
+                Body font
+              </div>
+              <div className="flex items-center justify-between mt-1">
+                <span className="text-slate-100 text-xs font-medium">{fontPair.body}</span>
+                <span className="text-[10px] text-slate-400">weight {designState.typography.body.weight}</span>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-800 pt-2 space-y-2 text-[11px] text-slate-400">
+              <div style={{ fontFamily: fontPair.heading }} className="text-xs">Heading sample</div>
+              <div style={{ fontFamily: fontPair.heading, fontWeight: Math.max(designState.typography.heading.weight - 200, 300) }} className="text-xs">
+                Secondary heading
+              </div>
+              <div style={{ fontFamily: fontPair.body }} className="text-xs">
+                Body copy preview demonstrates paragraph text.
+              </div>
+            </div>
+          </div>
         </div>
+      </CollapsibleSection>
 
-        <div className="bg-slate-900/60 rounded-md px-3 py-2 text-xs space-y-3">
-          <div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-              Heading font (H1/H2)
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-100">{fontPair.heading}</span>
-              <span className="text-[10px] text-slate-400">weight {designState.typography.heading.weight}</span>
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1">
-              {fontPair.source === "google"
-                ? "Google Fonts"
-                : fontPair.source === "system"
-                ? "System font"
-                : "Premium / licensed"}
-            </div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-              Body font
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-100">{fontPair.body}</span>
-              <span className="text-[10px] text-slate-400">weight {designState.typography.body.weight}</span>
-            </div>
-          </div>
-
-          <div className="mt-2 border-t border-slate-800 pt-2 text-[11px] text-slate-400 space-y-2">
-            <div style={{ fontFamily: fontPair.heading }}>Heading sample</div>
-            <div style={{ fontFamily: fontPair.heading, fontWeight: Math.max(designState.typography.heading.weight - 200, 300) }}>
-              Secondary heading tone
-            </div>
-            <div style={{ fontFamily: fontPair.body }}>
-              Body copy preview demonstrates paragraph text for this palette.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-3">
-          Spacing Scale
-        </h3>
-        <div className="bg-slate-900/30 rounded-lg border border-slate-800 p-3 space-y-2">
+      {/* Spacing Scale */}
+      <CollapsibleSection title="Spacing Scale">
+        <div className="bg-slate-900/30 rounded-lg border border-slate-800 p-3 space-y-2 px-0">
           <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
             Density: <span className="text-slate-300 capitalize">{designState.uiTokens.spacing?.density || "default"}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 text-[10px]">
             {(Object.entries(designState.spacing) as Array<[string, string]>).map(([token, value]) => (
               <div key={token} className="flex justify-between items-center px-2 py-1 rounded bg-slate-800/50 border border-slate-700">
-                <span className="text-slate-400 font-mono">{token}</span>
-                <span className="text-slate-300 text-xs">{value}</span>
+                <span className="text-slate-400 font-mono text-[9px]">{token}</span>
+                <span className="text-slate-300 text-[9px]">{value}</span>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
 
+      {/* Texture Panel */}
       {onTextureChange && onTextureOpacityChange && (
-        <TexturePanel
-          designState={designState}
-          onTextureChange={onTextureChange}
-          onOpacityChange={onTextureOpacityChange}
-        />
+        <CollapsibleSection title="Texture">
+          <div className="px-0">
+            <TexturePanel
+              designState={designState}
+              onTextureChange={onTextureChange}
+              onOpacityChange={onTextureOpacityChange}
+            />
+          </div>
+        </CollapsibleSection>
       )}
 
+      {/* Gradient Panel */}
       {onGradientChange && onGradientOpacityChange && (
-        <GradientPanel
-          designState={designState}
-          onGradientChange={onGradientChange}
-          onOpacityChange={onGradientOpacityChange}
-        />
+        <CollapsibleSection title="Gradient">
+          <div className="px-0">
+            <GradientPanel
+              designState={designState}
+              onGradientChange={onGradientChange}
+              onOpacityChange={onGradientOpacityChange}
+            />
+          </div>
+        </CollapsibleSection>
       )}
     </div>
   );

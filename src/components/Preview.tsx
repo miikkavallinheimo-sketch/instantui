@@ -28,12 +28,6 @@ const Preview = ({
   onColorsFixed,
   showContrastChecker = true,
 }: PreviewProps) => {
-  console.log("[Preview] designState:", {
-    textureId: designState.textureId,
-    textureOpacity: designState.textureOpacity,
-    gradientId: designState.gradientId,
-    gradientOpacity: designState.gradientOpacity,
-  });
 
   // Build texture background-image URL
   const textureContent =
@@ -68,76 +62,72 @@ const Preview = ({
   const gradientOpacity = (designState.gradientOpacity ?? 20) / 100;
   const textureOpacity = (designState.textureOpacity ?? 10) / 100;
 
-  // Build the final backgroundImage value for logging
-  const finalBackgroundImage = gradientCSS && textureBackgroundImage
-    ? `${textureBackgroundImage}, ${gradientCSS}`
-    : textureBackgroundImage
-    ? textureBackgroundImage
-    : gradientCSS
-    ? gradientCSS
-    : undefined;
 
-  console.log("[Preview] Computed values:", {
-    gradientCSS: gradientCSS ? `✓ (${gradientCSS.length} chars): ${gradientCSS.substring(0, 50)}...` : "✗ none",
-    textureBackgroundImage: textureBackgroundImage ? `✓ (${textureBackgroundImage.length} chars)` : "✗ none",
+  // Debug: check what values we have
+  console.log("Preview render:", {
+    hasGradient: !!gradientCSS,
+    hasTexture: !!textureBackgroundImage,
     gradientOpacity,
     textureOpacity,
-    finalBackgroundImage: finalBackgroundImage ? `${finalBackgroundImage.substring(0, 100)}...` : "none",
-  });
-
-  // Generate unique class name for this preview instance
-  const previewClassId = `preview-${Math.random().toString(36).substr(2, 9)}`;
-
-  // Build CSS for texture and gradient backgrounds
-  // Use simple gradient as test
-  let cssRules = `
-    background-color: ${designState.colors.background} !important;
-    background-image: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(8, 145, 178, 0.3) 100%) !important;
-    background-size: 100% 100% !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-  `;
-
-  console.log("[Preview] Generated CSS with test gradient:", {
-    previewClassId,
-    cssRules: cssRules.substring(0, 300),
   });
 
   return (
     <div className="flex flex-col gap-4 w-full h-full">
-      <style>{`
-        .${previewClassId} {
-          position: relative !important;
-          width: 100% !important;
-          height: 100% !important;
-          display: block !important;
-          ${cssRules}
-        }
-        .${previewClassId}::before {
-          content: "DEBUG: CSS Applied";
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          color: red;
-          font-size: 14px;
-          font-weight: bold;
-          background: rgba(255, 0, 0, 0.2);
-          padding: 4px 8px;
-          border-radius: 4px;
-          z-index: 999;
-        }
-      `}</style>
       {/* Main Preview Area */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div
+        style={{
+          flex: 1,
+          minWidth: 0,
+          minHeight: 0,
+          position: "relative",
+          borderRadius: "24px",
+          border: "1px solid rgba(30, 41, 59, 0.4)",
+          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+          backgroundColor: designState.colors.background,
+          overflow: "hidden",
+        }}
+      >
+        {/* Gradient overlay layer */}
+        {gradientCSS && (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: gradientCSS,
+              opacity: gradientOpacity,
+              mixBlendMode: "overlay",
+              pointerEvents: "none",
+            }}
+          />
+        )}
+
+        {/* Texture overlay layer */}
+        {textureBackgroundImage && (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: textureBackgroundImage,
+              backgroundRepeat: "repeat",
+              backgroundSize: "512px 512px",
+              opacity: textureOpacity,
+              mixBlendMode: "multiply",
+              pointerEvents: "none",
+            }}
+          />
+        )}
+
+        {/* Main content container */}
         <div
-          className={previewClassId}
           style={{
-            borderRadius: "24px",
-            border: "1px solid rgba(30, 41, 59, 0.4)",
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 2,
           }}
         >
-
           {isAnalyzing && (
             <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
               <div
