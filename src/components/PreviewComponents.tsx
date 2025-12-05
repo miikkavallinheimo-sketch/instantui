@@ -1744,6 +1744,71 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
         </div>
       </section>
 
+      {/* Palette Tokens */}
+      <section className="max-w-7xl mx-auto px-6 py-12">
+        <div
+          style={{
+            fontFamily: fontPair.heading,
+            fontSize: sizeMap["lg"],
+            fontWeight: 600,
+            color: colors.text,
+            marginBottom: spacingObj["2xl"],
+          }}
+        >
+          Color Palette
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" style={{ marginBottom: spacingObj["3xl"] }}>
+          {[
+            { name: "Primary", color: colors.primary },
+            { name: "Secondary", color: colors.secondary },
+            { name: "Accent", color: colors.accent },
+            { name: "Background", color: colors.background },
+            { name: "Surface", color: colors.surface },
+            { name: "Surface Alt", color: colors.surfaceAlt },
+            { name: "Text", color: colors.text },
+            { name: "Text Muted", color: colors.textMuted },
+            { name: "On Primary", color: colors.onPrimary },
+            { name: "On Secondary", color: colors.onSecondary },
+            { name: "On Accent", color: colors.onAccent },
+            { name: "Border Subtle", color: colors.borderSubtle },
+            { name: "Border Strong", color: colors.borderStrong },
+          ].map((swatch) => (
+            <div
+              key={swatch.name}
+              style={{
+                borderRadius: radiusMap.md,
+                border: `1px solid ${colors.borderSubtle}`,
+                backgroundColor: colors.surface,
+                padding: spacingObj.md,
+                display: "flex",
+                flexDirection: "column",
+                gap: spacingObj.sm,
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "64px",
+                  borderRadius: radiusMap.sm,
+                  backgroundColor: swatch.color,
+                  border: `1px solid ${colors.borderStrong}`,
+                }}
+              />
+              <div
+                style={{
+                  fontSize: sizeMap["xs"],
+                  fontWeight: 500,
+                  color: colors.textMuted,
+                  fontFamily: fontPair.body,
+                }}
+              >
+                {swatch.name}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Components Grid */}
       <section className="max-w-7xl mx-auto px-6 py-12">
         <div className="space-y-12">
