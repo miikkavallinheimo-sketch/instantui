@@ -79,7 +79,7 @@ const sizeMap = {
 } as const;
 
 const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboardProps) => {
-  const { colors, fontPair, typography, uiTokens } = designState;
+  const { colors, fontPair, typography, uiTokens, spacingPatterns } = designState;
   const navBg = colors.primary;
   const navAccent = designState.vibe.isDarkUi
     ? `rgba(255, 255, 255, 0.15)`
@@ -231,8 +231,15 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
       )}
       <div className="flex flex-col lg:flex-row min-h-[640px]">
         <aside
-          className="w-full lg:w-64 p-6 flex flex-col gap-6"
-          style={{ backgroundColor: navBg, color: navText }}
+          className="w-full lg:w-64 flex flex-col"
+          style={{
+            backgroundColor: navBg,
+            color: navText,
+            padding: spacingPatterns.containerPadding.sm,
+            gap: spacingPatterns.verticalRhythm.loose,
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           <div>
             <div
@@ -282,7 +289,16 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
           </div>
         </aside>
 
-        <main className="flex-1 p-6 space-y-6" style={{ backgroundColor: colors.background }}>
+        <main
+          className="flex-1"
+          style={{
+            backgroundColor: colors.background,
+            padding: spacingPatterns.containerPadding.lg,
+            display: "flex",
+            flexDirection: "column",
+            gap: spacingPatterns.verticalRhythm.loose,
+          }}
+        >
           <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div
@@ -423,7 +439,10 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
             </div>
           </section>
 
-          <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <section
+            className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
+            style={{ gap: spacingPatterns.gridGap.md }}
+          >
             {summaryCards.map((card) => (
               <div
                 key={card.label}
@@ -469,8 +488,8 @@ const PreviewDashboard = ({ designState, isAnalyzing = false }: PreviewDashboard
           </section>
 
           <section
-           className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm"
-            style={{ fontFamily: fontPair.body }}
+           className="grid grid-cols-1 md:grid-cols-2 text-sm"
+           style={{ gap: spacingPatterns.gridGap.md, fontFamily: fontPair.body }}
           >
             <div
               className="token-card p-4 space-y-3"
