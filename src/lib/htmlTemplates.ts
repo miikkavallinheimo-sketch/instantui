@@ -650,7 +650,13 @@ export function generateBlogPageHTML(state: DesignState): string {
 }
 
 export function generatePortfolioPageHTML(state: DesignState): string {
-  const { colors, fontPair, typography } = state;
+  const { colors, fontPair, typography, vibe } = state;
+  const { getGlassConfigForVibe, buildGlassBackground, buildBackdropFilter } = require("./glassTokens");
+
+  const glassConfig = getGlassConfigForVibe(vibe.id);
+  const glassBackground = buildGlassBackground(colors.surface, glassConfig);
+  const backdropBlur = buildBackdropFilter(glassConfig.blur);
+  const glassBorder = `1px solid rgba(255, 255, 255, ${glassConfig.borderOpacity})`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -735,16 +741,16 @@ export function generatePortfolioPageHTML(state: DesignState): string {
     }
 
     .portfolio-item {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      background: ${glassBackground};
+      backdrop-filter: ${backdropBlur};
       border-radius: 16px;
       overflow: hidden;
       transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: ${glassBorder};
     }
 
     .portfolio-item:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, ${Math.min(glassConfig.opacity + 0.08, 1)});
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
       transform: translateY(-8px);
       border-color: var(--primary);
