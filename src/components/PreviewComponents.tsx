@@ -1762,38 +1762,75 @@ const PreviewComponents = ({ designState }: PreviewComponentsProps) => {
               >
                 {category.title}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {category.components.map((comp, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      backgroundColor: colors.surface,
-                      border: getBorderStyle(uiTokens.card.border, colors),
-                      borderRadius: radiusMap[uiTokens.card.radius],
-                      padding: spacingObj["3xl"],
-                      boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: spacingObj.xl,
-                    }}
-                  >
+              {["Headers", "Heroes", "Footers"].includes(category.title) ? (
+                // Full-width layout for Headers, Heroes, Footers
+                <div className="space-y-4">
+                  {category.components.map((comp, idx) => (
                     <div
+                      key={idx}
                       style={{
-                        fontFamily: fontPair.body,
-                        fontSize: sizeMap["xs"],
-                        color: colors.textMuted,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.05em",
+                        backgroundColor: colors.surface,
+                        border: getBorderStyle(uiTokens.card.border, colors),
+                        borderRadius: radiusMap[uiTokens.card.radius],
+                        padding: spacingObj.xl,
+                        boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: spacingObj.md,
                       }}
                     >
-                      {comp.name}
+                      <div
+                        style={{
+                          fontFamily: fontPair.body,
+                          fontSize: sizeMap["xs"],
+                          color: colors.textMuted,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {comp.name}
+                      </div>
+                      <div style={{ overflow: "auto" }}>
+                        {comp.render()}
+                      </div>
                     </div>
-                    {comp.render()}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                // Grid layout for other categories
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {category.components.map((comp, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        backgroundColor: colors.surface,
+                        border: getBorderStyle(uiTokens.card.border, colors),
+                        borderRadius: radiusMap[uiTokens.card.radius],
+                        padding: spacingObj["3xl"],
+                        boxShadow: getShadowForMode(uiTokens.card.shadow, vibe.isDarkUi),
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: spacingObj.xl,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontFamily: fontPair.body,
+                          fontSize: sizeMap["xs"],
+                          color: colors.textMuted,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {comp.name}
+                      </div>
+                      {comp.render()}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
